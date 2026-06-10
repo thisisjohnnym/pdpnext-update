@@ -1,0 +1,58 @@
+import Image from "next/image";
+
+import { GridItem, PageGrid } from "@/components/grid/page-grid";
+
+import { PDP_HOW_TO_WEAR } from "./pdp-data";
+import { BOTTOM_CTA_OFFSET } from "./pdp-gallery-view";
+
+/** Moment #3 — editorial styling card with wear options */
+export function PdpHowToWearModule() {
+  const { moment, title, caption, styles } = PDP_HOW_TO_WEAR;
+
+  return (
+    <section
+      className="relative flex min-h-[100dvh] w-full shrink-0 flex-col justify-center bg-white py-10"
+      style={{ paddingBottom: BOTTOM_CTA_OFFSET }}
+    >
+      <PageGrid fullWidth>
+        <GridItem mobile={12} desktop={24}>
+          <div className="flex w-full flex-col gap-[13px]">
+            <div className="flex flex-col gap-1">
+              <p className="font-extended text-[10px] tracking-[0.2px] text-neutral-500">
+                {moment}
+              </p>
+              <p className="font-extended text-xs tracking-[0.2px] text-black">
+                {title}
+              </p>
+            </div>
+
+            <div className="border border-neutral-200 bg-white p-3">
+              <div className="flex flex-col gap-4">
+                {styles.map((style) => (
+                  <figure key={style.id} className="flex items-center gap-3">
+                    <div className="relative aspect-[3/4] w-[72px] shrink-0 overflow-hidden bg-neutral-100">
+                      <Image
+                        src={style.src}
+                        alt={style.alt}
+                        fill
+                        className="object-cover object-center"
+                        sizes="72px"
+                      />
+                    </div>
+                    <figcaption className="font-extended text-xs tracking-[0.2px] text-black">
+                      {style.label}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
+
+            <p className="font-extended w-full text-xs leading-[1.35] tracking-[0.2px] text-black">
+              {caption}
+            </p>
+          </div>
+        </GridItem>
+      </PageGrid>
+    </section>
+  );
+}
