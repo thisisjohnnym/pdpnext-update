@@ -1,0 +1,217 @@
+"use client";
+
+import Image from "next/image";
+import { useEffect, useId, useState } from "react";
+
+import { MaterialIcon } from "@/components/icons/material-icon";
+import { cn } from "@/lib/cn";
+
+import {
+  PDP_BAG_UPSELLS,
+  PDP_COLORS,
+  PDP_PRODUCT,
+} from "./pdp-data";
+
+type PdpAddToBagSheetProps = {
+  open: boolean;
+  onClose: () => void;
+  selectedColorId: string;
+  onQuickAdd?: () => void;
+};
+
+/** Bottom tray — add-to-bag confirmation, checkout, and quick-add upsells */
+export function PdpAddToBagSheet({
+  open,
+  onClose,
+  selectedColorId,
+  onQuickAdd,
+}: PdpAddToBagSheetProps) {
+  const titleId = useId();
+  const [quickAddedIds, setQuickAddedIds] = useState<Set<string>>(new Set());
+
+  const selectedColor =
+    PDP_COLORS.find((color) => color.id === selectedColorId) ?? PDP_COLORS[0];
+
+  useEffect(() => {
+    if (!open) {
+      setQuickAddedIds(new Set());
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose, open]);
+
+  const handleQuickAdd = (id: string) => {
+    setQuickAddedIds((current) => {
+      if (current.has(id)) {
+        return current;
+      }
+
+      onQuickAdd?.();
+      return new Set(current).add(id);
+    });
+  };
+
+  return (
+    <div
+      className={cn(
+        "fixed inset-0 z-50 flex items-end justify-center transition-opacity duration-300",
+        open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
+      )}
+      aria-hidden={!open}
+    >
+      <button
+        type="button"
+        aria-label="Close add to bag"
+        className="absolute inset-0 bg-black/45 transition-opacity"
+        onClick={onClose}
+        tabIndex={open ? 0 : -1}
+      />
+
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        className={cn(
+          "relative flex max-h-[85dvh] w-full max-w-[430px] flex-col overflow-hidden rounded-t-[20px] bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out",
+          open ? "translate-y-0" : "translate-y-full",
+        )}
+      >
+        <div className="shrink-0 px-2.5 pb-0 pt-2.5">
+          <div className="mx-auto mb-5 h-[3px] w-[50px] rounded-full bg-black/70" />
+        </div>
+
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(24px,env(safe-area-inset-bottom))]">
+          <div className="flex items-center gap-2 pb-4">
+            <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-black">
+              <MaterialIcon name="check" size={16} className="text-white" />
+            </span>
+            <h2
+              id={titleId}
+              className="font-extended translate-y-[1.5px] text-base tracking-[0.2px] text-black"
+            >
+              Added to your bag
+            </h2>
+          </div>
+
+          <div className="flex items-center gap-3.5 rounded-lg bg-[#f2f2f2] px-3 py-4">
+            <div className="relative size-[88px] shrink-0 overflow-hidden bg-neutral-100">
+              <Image
+                src={PDP_PRODUCT.imageSrc}
+                alt={PDP_PRODUCT.imageAlt}
+                fill
+                className="object-cover object-center"
+                sizes="88px"
+              />
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <p className="font-extended text-base tracking-[0.2px] text-black">
+                {PDP_PRODUCT.name}
+              </p>
+              <p className="mt-1 text-xs tracking-[0.2px] text-neutral-600">
+                {selectedColor.name} · {PDP_PRODUCT.subtitle}
+              </p>
+              <p className="font-extended mt-1.5 text-base tracking-[0.2px] text-black">
+                {PDP_PRODUCT.price}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-2 py-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="font-extended flex h-12 min-w-0 flex-1 items-center justify-center rounded-full border border-neutral-300 text-sm tracking-[0.2px] text-black"
+            >
+              <span className="translate-y-[1.5px]">Keep shopping</span>
+            </button>
+            <button
+              type="button"
+              className="font-extended flex h-12 min-w-0 flex-1 items-center justify-center rounded-full bg-black text-sm tracking-[0.2px] text-white"
+            >
+              <span className="translate-y-[1.5px]">Checkout</span>
+            </button>
+          </div>
+
+          <section className="flex flex-col gap-1.5 pt-3">
+            <p className="font-extended text-sm tracking-[0.2px] text-black">
+              Complete the look
+            </p>
+
+            <ul className="flex flex-col">
+              {PDP_BAG_UPSELLS.map((item) => {
+                const added = quickAddedIds.has(item.id);
+
+                return (
+                  <li
+                    key={item.id}
+                    className="border-t border-neutral-200 first:border-t-0"
+                  >
+                    <div className="flex items-center gap-3 py-3">
+                      <div className="relative size-20 shrink-0 overflow-hidden bg-neutral-100">
+                        <Image
+                          src={item.imageSrc}
+                          alt={item.imageAlt}
+                          fill
+                          className="object-cover object-center"
+                          sizes="80px"
+                        />
+                      </div>
+
+                      <div className="min-w-0 flex-1">
+                        <p className="font-extended truncate text-xs tracking-[0.2px] text-black">
+                          {item.name}
+                        </p>
+                        <p className="mt-1 text-xs tracking-[0.2px] text-neutral-600">
+                          {item.price}
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleQuickAdd(item.id)}
+                        disabled={added}
+                        className={cn(
+                          "font-extended inline-flex shrink-0 items-center justify-center gap-1 rounded-full px-3.5 py-2 text-xs tracking-[0.2px] transition-colors",
+                          added
+                            ? "bg-neutral-100 text-neutral-500"
+                            : "border border-neutral-300 text-black",
+                        )}
+                      >
+                        <span className="translate-y-[2.5px]">
+                          {added ? "Added" : "Quick add"}
+                        </span>
+                        {!added ? (
+                          <MaterialIcon
+                            name="add"
+                            size={18}
+                            className="text-black"
+                          />
+                        ) : null}
+                      </button>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+}

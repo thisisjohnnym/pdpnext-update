@@ -2,7 +2,63 @@ export const PDP_PRODUCT = {
   name: "Tabby 26",
   subtitle: "Shoulder bag with pillow quilting",
   price: "$575",
+  imageSrc: "/images/gallery/tabby-product-immersive.png",
+  imageAlt: "Tabby 26 black quilted shoulder bag with gold C clasp and chain strap",
 } as const;
+
+export type PdpBagUpsell = {
+  id: string;
+  name: string;
+  price: string;
+  imageSrc: string;
+  imageAlt: string;
+};
+
+/** Upsells shown in the add-to-bag confirmation tray */
+export const PDP_BAG_UPSELLS: PdpBagUpsell[] = [
+  {
+    id: "cherry-charm",
+    name: "Cherry Bag Charm",
+    price: "$45",
+    imageSrc: "/images/gallery/tabby-front-charm.png",
+    imageAlt: "Red cherry bag charm on gold chain",
+  },
+  {
+    id: "chain-strap",
+    name: "Signature Chain Strap",
+    price: "$68",
+    imageSrc: "/images/gallery/tabby-detail-clasp.png",
+    imageAlt: "Gold chain strap with leather weave detail",
+  },
+  {
+    id: "strap-extender",
+    name: "Bag Strap Extender",
+    price: "$38",
+    imageSrc: "/images/gallery/tabby-angle.png",
+    imageAlt: "Adjustable bag strap extender in black leather",
+  },
+  {
+    id: "heart-charm",
+    name: "Heart Bag Charm",
+    price: "$42",
+    imageSrc: "/images/gallery/tabby-product-immersive.png",
+    imageAlt: "Gold heart bag charm on chain",
+  },
+  {
+    id: "leather-key-ring",
+    name: "Leather Key Ring",
+    price: "$35",
+    imageSrc: "/images/gallery/tabby-back.png",
+    imageAlt: "Black leather key ring with gold hardware",
+  },
+  {
+    id: "card-case-clip",
+    name: "Card Case & Clip",
+    price: "$52",
+    imageSrc: "/images/gallery/tabby-interior-open.png",
+    imageAlt: "Compact card case with bag clip attachment",
+  },
+];
 
 /** Gallery hero — on-model lifestyle shot */
 export const PDP_GALLERY_HERO_IMAGE = "/images/gallery/hero-modelshot.png";
@@ -12,6 +68,41 @@ export const PDP_GALLERY_HERO_VIDEO = "/videos/gallery-360.webm";
 
 /** Match studio backdrop so letterboxing feels seamless */
 export const PDP_GALLERY_VIDEO_BG = "#e9e9e9";
+
+export type PdpProductHotspot = {
+  id: string;
+  /** Horizontal position within the image frame (0–100) */
+  x: number;
+  /** Vertical position within the image frame (0–100) */
+  y: number;
+  title: string;
+  body: string;
+};
+
+/** Detail hotspots — product immersive studio shot */
+export const PDP_PRODUCT_IMMERSIVE_HOTSPOTS: PdpProductHotspot[] = [
+  {
+    id: "c-clasp",
+    x: 50,
+    y: 72,
+    title: "The iconic C",
+    body: "Inspired by a turn-lock from Coach archives, the sculpted C clasp became Tabby's signature when the silhouette returned in 2018.",
+  },
+  {
+    id: "quilting",
+    x: 63,
+    y: 78,
+    title: "Pillow quilting",
+    body: "Diagonal stitching creates a padded, dimensional finish — soft to the touch with a structured silhouette.",
+  },
+  {
+    id: "chain-strap",
+    x: 30,
+    y: 66,
+    title: "Chain & leather strap",
+    body: "Interwoven metal chain and leather lets you wear Tabby on the shoulder or crossbody.",
+  },
+];
 
 export type PdpGalleryImmersiveSlide = {
   type: "immersive";
@@ -23,6 +114,7 @@ export type PdpGalleryImmersiveSlide = {
   /** Image focal point within 4:5 crop */
   objectPosition?: string;
   scale?: string;
+  hotspots?: PdpProductHotspot[];
 };
 
 export type PdpGalleryEditorialSlide = {
@@ -34,7 +126,18 @@ export type PdpGalleryEditorialSlide = {
   secondaryAlt?: string;
 };
 
-export type PdpGallerySlide = PdpGalleryImmersiveSlide | PdpGalleryEditorialSlide;
+export type PdpGalleryVideoSlide = {
+  type: "video";
+  src: string;
+  poster?: string;
+  alt: string;
+  label?: string;
+};
+
+export type PdpGallerySlide =
+  | PdpGalleryImmersiveSlide
+  | PdpGalleryEditorialSlide
+  | PdpGalleryVideoSlide;
 
 /** First portrait below hero — patio lifestyle shot */
 export const PDP_GALLERY_HERO_FOLLOWUP_IMAGE =
@@ -44,7 +147,7 @@ export const PDP_GALLERY_HERO_FOLLOWUP_IMAGE =
 export const PDP_GALLERY_PRODUCT_IMMERSIVE =
   "/images/gallery/tabby-product-immersive.png";
 
-/** Tabby 26 gallery — portrait, portrait, editorial, product immersive */
+/** Tabby 26 gallery — portrait, portrait, editorial, product immersive, 360 video */
 export const PDP_GALLERY_SLIDES: PdpGallerySlide[] = [
   {
     type: "immersive",
@@ -71,6 +174,14 @@ export const PDP_GALLERY_SLIDES: PdpGallerySlide[] = [
     alt: "Tabby 26 black quilted shoulder bag with gold C clasp, chain strap, and cherry charm",
     objectPosition: "center 78%",
     scale: "scale-100",
+    hotspots: PDP_PRODUCT_IMMERSIVE_HOTSPOTS,
+  },
+  {
+    type: "video",
+    src: PDP_GALLERY_HERO_VIDEO,
+    poster: PDP_GALLERY_PRODUCT_IMMERSIVE,
+    alt: "360° rotating view of Tabby 26 shoulder bag",
+    label: "360° view",
   },
 ];
 
@@ -391,8 +502,157 @@ export type PdpFeaturedReview = {
   rating: number;
   quote: string;
   author: string;
+  date: string;
   verified?: boolean;
+  photos?: PdpReviewPhoto[];
 };
+
+export const PDP_CUSTOMER_REVIEWS: PdpFeaturedReview[] = [
+  {
+    id: "maren",
+    rating: 5,
+    quote:
+      "The perfect everyday bag — fits everything I need without feeling bulky. The quilting feels luxe in person and the gold hardware catches the light beautifully.",
+    author: "Maren K.",
+    date: "Oct 12, 2025",
+    verified: true,
+  },
+  {
+    id: "jules",
+    rating: 5,
+    quote:
+      "Wore this on a weekend trip and it held up beautifully. Strap sits comfortably crossbody all day and the flap stays secure.",
+    author: "Jules T.",
+    date: "Sep 28, 2025",
+    verified: true,
+    photos: [
+      {
+        src: "/images/reviews/ugc-coffee-run.png",
+        alt: "Customer photo of Tabby 26 styled with a plaid coat",
+      },
+    ],
+  },
+  {
+    id: "priya",
+    rating: 5,
+    quote:
+      "Obsessed with the pillow quilting — photos do not do it justice. Looks elevated with denim and dresses alike.",
+    author: "Priya S.",
+    date: "Sep 14, 2025",
+    verified: true,
+    photos: [
+      {
+        src: "/images/reviews/ugc-on-street.png",
+        alt: "Customer photo of Tabby 26 styled with a tan jacket",
+      },
+      {
+        src: "/images/reviews/ugc-outfit-flat.png",
+        alt: "Customer outfit photo featuring Tabby 26",
+      },
+    ],
+  },
+  {
+    id: "elena",
+    rating: 4,
+    quote:
+      "Beautiful craftsmanship and the C clasp feels substantial. Wish the interior pocket were slightly larger, but still my go-to bag.",
+    author: "Elena R.",
+    date: "Aug 30, 2025",
+    verified: true,
+    photos: [
+      {
+        src: "/images/reviews/ugc-mirror-selfie.png",
+        alt: "Customer mirror selfie with Tabby 26",
+      },
+    ],
+  },
+  {
+    id: "danielle",
+    rating: 5,
+    quote:
+      "Finally a bag that fits my phone, wallet, keys, and sunglasses without looking overstuffed. The chain strap is the perfect length.",
+    author: "Danielle M.",
+    date: "Aug 18, 2025",
+    verified: true,
+  },
+  {
+    id: "sofia",
+    rating: 5,
+    quote:
+      "Got the black colorway and it goes with literally everything. Leather has a soft hand-feel but holds its shape well.",
+    author: "Sofia L.",
+    date: "Jul 22, 2025",
+    verified: true,
+  },
+  {
+    id: "hannah",
+    rating: 5,
+    quote:
+      "Bought this as a treat-yourself purchase and zero regrets. The cherry charm pairing is so fun — already getting compliments.",
+    author: "Hannah W.",
+    date: "Jul 9, 2025",
+    verified: true,
+    photos: [
+      {
+        src: "/images/reviews/ugc-outfit-flat.png",
+        alt: "Customer outfit photo featuring Tabby 26 with cherry charm",
+      },
+    ],
+  },
+  {
+    id: "taylor",
+    rating: 4,
+    quote:
+      "Classic Tabby silhouette with a modern quilted update. Chain can feel a little heavy at first but you adjust quickly.",
+    author: "Taylor B.",
+    date: "Jun 25, 2025",
+    verified: true,
+  },
+  {
+    id: "nicole",
+    rating: 5,
+    quote:
+      "Transitioned from a larger tote and this size is ideal for daily errands. Quality is what you expect from Coach.",
+    author: "Nicole A.",
+    date: "Jun 3, 2025",
+    verified: true,
+  },
+  {
+    id: "rachel",
+    rating: 5,
+    quote:
+      "The gold hardware against the black leather is stunning. Interior lining feels durable and wipes clean easily.",
+    author: "Rachel P.",
+    date: "May 19, 2025",
+    verified: true,
+    photos: [
+      {
+        src: "/images/reviews/ugc-on-street.png",
+        alt: "Customer street-style photo with Tabby 26",
+      },
+    ],
+  },
+  {
+    id: "amanda",
+    rating: 4,
+    quote:
+      "Lovely bag overall. Arrived quickly and packaged well. Strap length works for shoulder or crossbody on my frame (5'6\").",
+    author: "Amanda C.",
+    date: "May 2, 2025",
+    verified: true,
+  },
+  {
+    id: "lily",
+    rating: 5,
+    quote:
+      "This has become my default going-out bag. Structured enough for evenings, relaxed enough for daytime coffee runs.",
+    author: "Lily H.",
+    date: "Apr 14, 2025",
+    verified: true,
+  },
+];
+
+export const PDP_FEATURED_REVIEWS = PDP_CUSTOMER_REVIEWS.slice(0, 2);
 
 export const PDP_REVIEWS_SUMMARY = {
   average: 4.8,
@@ -449,21 +709,3 @@ export const PDP_REVIEW_PHOTOS: PdpReviewPhoto[] = [
   },
 ];
 
-export const PDP_FEATURED_REVIEWS: PdpFeaturedReview[] = [
-  {
-    id: "maren",
-    rating: 5,
-    quote:
-      "The perfect everyday bag — fits everything I need without feeling bulky. The quilting feels luxe in person.",
-    author: "Maren K.",
-    verified: true,
-  },
-  {
-    id: "jules",
-    rating: 5,
-    quote:
-      "Wore this on a weekend trip and it held up beautifully. Strap sits comfortably crossbody all day.",
-    author: "Jules T.",
-    verified: true,
-  },
-];

@@ -1,0 +1,97 @@
+"use client";
+
+import { useState } from "react";
+
+import type { PdpProductHotspot } from "./pdp-data";
+
+type PdpProductHotspotsProps = {
+  hotspots: PdpProductHotspot[];
+};
+
+/** Keep the info card inside the image frame */
+function getCardLeftPercent(x: number) {
+  const cardHalfWidth = 42;
+  const inset = 4;
+
+  return Math.max(
+    inset,
+    Math.min(x - cardHalfWidth, 100 - cardHalfWidth * 2 - inset),
+  );
+}
+
+/** Tappable detail markers on product photography */
+export function PdpProductHotspots({ hotspots }: PdpProductHotspotsProps) {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const activeHotspot = hotspots.find((hotspot) => hotspot.id === activeId);
+
+  const handleToggle = (id: string) => {
+    setActiveId((current) => (current === id ? null : id));
+  };
+
+  return (
+    <div className="absolute inset-0">
+      {activeId ? (
+        <button
+          type="button"
+          aria-label="Close detail"
+          className="absolute inset-0 z-10"
+          onClick={() => setActiveId(null)}
+        />
+      ) : null}
+
+      {hotspots.map((hotspot) => {
+        const isActive = activeId === hotspot.id;
+
+        if (isActive) {
+          return null;
+        }
+
+        return (
+          <div
+            key={hotspot.id}
+            className="absolute z-20 -translate-x-1/2 -translate-y-1/2"
+            style={{ left: `${hotspot.x}%`, top: `${hotspot.y}%` }}
+          >
+            <button
+              type="button"
+              aria-expanded={false}
+              aria-label={`${hotspot.title} — tap for details`}
+              onClick={(event) => {
+                event.stopPropagation();
+                handleToggle(hotspot.id);
+              }}
+              className="relative flex size-7 items-center justify-center"
+            >
+              <span
+                aria-hidden
+                className="absolute size-7 animate-hotspot-pulse rounded-full bg-white/50"
+              />
+              <span
+                aria-hidden
+                className="relative size-2.5 rounded-full border border-white/90 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.18)]"
+              />
+            </button>
+          </div>
+        );
+      })}
+
+      {activeHotspot ? (
+        <div
+          className="pointer-events-none absolute z-30 w-[min(17rem,calc(100%-1.5rem))] rounded-xl border border-white/50 bg-white/90 px-3 py-2.5 shadow-[0_4px_24px_rgba(0,0,0,0.12)] backdrop-blur-md"
+          style={{
+            left: `${getCardLeftPercent(activeHotspot.x)}%`,
+            top: `${activeHotspot.y}%`,
+            transform: "translateY(calc(-100% - 1.75rem))",
+          }}
+        >
+          <p className="font-extended text-xs tracking-[0.2px] text-black">
+            {activeHotspot.title}
+          </p>
+          <p className="mt-1 text-xs leading-[1.35] text-neutral-600">
+            {activeHotspot.body}
+          </p>
+        </div>
+      ) : null}
+    </div>
+  );
+}

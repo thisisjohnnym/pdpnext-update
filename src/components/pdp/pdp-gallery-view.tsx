@@ -1,18 +1,21 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { MaterialIcon } from "@/components/icons/material-icon";
 import { PdpGalleryEditorialSlide } from "./pdp-gallery-editorial-slide";
+import { PdpGalleryHeroVideo } from "./pdp-gallery-hero-video";
 import { PdpGalleryProductHud } from "./pdp-gallery-product-hud";
 import { PdpHeroActionRail } from "./pdp-hero-action-rail";
+import { PdpProductHotspots } from "./pdp-product-hotspots";
 import { PdpShopTheLookSheet } from "./pdp-shop-the-look-sheet";
 import {
   PDP_GALLERY_HERO_IMAGE,
   PDP_GALLERY_SLIDES,
   PDP_SHOP_THE_LOOK,
 } from "./pdp-data";
+import type { PdpProductHotspot } from "./pdp-data";
 
 /** Space for fixed bottom CTAs (54px button + pt-2.5 + pb) */
 export const BOTTOM_CTA_OFFSET =
@@ -59,6 +62,7 @@ type PdpGalleryPortraitSlideProps = {
   onOpenShopTheLook?: (lookId: string) => void;
   reserveBottomCta?: boolean;
   objectPosition?: string;
+  hotspots?: PdpProductHotspot[];
 };
 
 /** Immersive 4:5 portrait — full-bleed by default, optional 12px white inset */
@@ -72,6 +76,7 @@ function PdpGalleryPortraitSlide({
   onOpenShopTheLook,
   reserveBottomCta = false,
   objectPosition = "top",
+  hotspots,
 }: PdpGalleryPortraitSlideProps) {
   return (
     <section
@@ -93,16 +98,82 @@ function PdpGalleryPortraitSlide({
           sizes="100vw"
         />
 
+        {hotspots?.length ? <PdpProductHotspots hotspots={hotspots} /> : null}
+
         {shopTheLookId && onOpenShopTheLook ? (
           <button
             type="button"
             onClick={() => onOpenShopTheLook(shopTheLookId)}
-            className="font-extended absolute bottom-4 left-4 flex items-center gap-1.5 rounded-full border border-white/50 bg-white/75 py-2.5 pl-3 pr-4 text-xs tracking-[0.2px] text-neutral-900 backdrop-blur-md"
+            className="font-extended absolute bottom-4 left-4 flex items-center rounded-full border border-white/50 bg-white/75 py-2.5 pl-3 pr-4 text-xs tracking-[0.2px] text-neutral-900 backdrop-blur-md"
           >
-            <MaterialIcon name="checkroom" size={18} className="text-neutral-900" />
-            <span>Shop the look</span>
+            <span className="flex translate-y-[1.5px] items-center gap-1.5">
+              <MaterialIcon name="checkroom" size={18} className="text-neutral-900" />
+              Shop the look
+            </span>
           </button>
         ) : null}
+      </div>
+    </section>
+  );
+}
+
+/** Immersive 4:5 — looping 360° product video */
+function PdpGalleryVideoSlide({
+  src,
+  poster,
+  alt,
+  label = "360° view",
+  reserveBottomCta = false,
+}: {
+  src: string;
+  poster?: string;
+  alt: string;
+  label?: string;
+  reserveBottomCta?: boolean;
+}) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsActive(entry.isIntersecting && entry.intersectionRatio >= 0.35);
+      },
+      { threshold: [0, 0.35, 0.6] },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative w-full shrink-0 overflow-hidden bg-[#e9e9e9]"
+      style={reserveBottomCta ? { paddingBottom: BOTTOM_CTA_OFFSET } : undefined}
+    >
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-neutral-100">
+        <PdpGalleryHeroVideo
+          src={src}
+          poster={poster}
+          ariaLabel={alt}
+          isActive={isActive}
+          showControls
+          className="size-full object-cover object-center"
+        />
+
+        <div className="font-extended pointer-events-none absolute bottom-4 left-4 flex translate-y-[1.5px] items-center gap-1.5 rounded-full border border-white/50 bg-white/75 py-2.5 pl-3 pr-4 text-xs tracking-[0.2px] text-neutral-900 backdrop-blur-md">
+          <MaterialIcon name="360" size={18} className="text-neutral-900" />
+          {label}
+        </div>
       </div>
     </section>
   );
@@ -123,6 +194,8 @@ export function PdpGalleryView({ onOpenReviews }: { onOpenReviews?: () => void }
       />
 
       {PDP_GALLERY_SLIDES.flatMap((slide, index) => {
+        const isLastSlide = index === PDP_GALLERY_SLIDES.length - 1;
+
         if (slide.type === "editorial") {
           return [
             <PdpGalleryEditorialSlide
@@ -132,7 +205,20 @@ export function PdpGalleryView({ onOpenReviews }: { onOpenReviews?: () => void }
               caption={slide.caption}
               secondarySrc={slide.secondarySrc}
               secondaryAlt={slide.secondaryAlt}
-              reserveBottomCta={index === PDP_GALLERY_SLIDES.length - 1}
+              reserveBottomCta={isLastSlide}
+            />,
+          ];
+        }
+
+        if (slide.type === "video") {
+          return [
+            <PdpGalleryVideoSlide
+              key={`video-${slide.src}`}
+              src={slide.src}
+              poster={slide.poster}
+              alt={slide.alt}
+              label={slide.label}
+              reserveBottomCta={isLastSlide}
             />,
           ];
         }
@@ -153,8 +239,9 @@ export function PdpGalleryView({ onOpenReviews }: { onOpenReviews?: () => void }
             shopTheLookId={slide.shopTheLookId}
             onOpenShopTheLook={setShopLookId}
             insetMargins={slide.insetMargins}
-            reserveBottomCta={index === PDP_GALLERY_SLIDES.length - 1}
+            reserveBottomCta={isLastSlide}
             objectPosition={slide.objectPosition}
+            hotspots={slide.hotspots}
           />,
         ];
       })}

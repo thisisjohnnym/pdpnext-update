@@ -19,7 +19,7 @@ const HEADER_ROW_HEIGHT = 24;
 const LOGO_HEIGHT_PX = 14;
 const LOGO_WIDTH_PX = (LOGO_WIDTH / LOGO_HEIGHT) * LOGO_HEIGHT_PX;
 
-export function PdpOverlayHeader() {
+export function PdpOverlayHeader({ bagCount = 0 }: { bagCount?: number }) {
   const visible = useScrollNavVisibility();
   const gradientOpacity = useHeroScrollOpacity();
   const showGradient = isHeroOverlayVisible(gradientOpacity);
@@ -76,11 +76,26 @@ export function PdpOverlayHeader() {
 
             <button
               type="button"
-              aria-label="Shopping bag"
-              className="flex items-center justify-center justify-self-end text-neutral-900"
+              aria-label={
+                bagCount > 0
+                  ? `Shopping bag, ${bagCount} item${bagCount === 1 ? "" : "s"}`
+                  : "Shopping bag"
+              }
+              className="relative flex items-center justify-center justify-self-end text-neutral-900"
               style={{ width: HEADER_ROW_HEIGHT, height: HEADER_ROW_HEIGHT }}
             >
               <MaterialIcon name="shopping_bag" size={HEADER_ICON_SIZE} />
+              {bagCount > 0 ? (
+                <span
+                  key={bagCount}
+                  aria-hidden
+                  className="font-extended animate-bag-badge-pop absolute -right-1.5 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-black px-1 text-[10px] leading-none tracking-[0.2px] text-white"
+                >
+                  <span className="translate-y-[1.5px]">
+                    {bagCount > 9 ? "9+" : bagCount}
+                  </span>
+                </span>
+              ) : null}
             </button>
           </div>
         </GridItem>
