@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 
+import { MaterialIcon } from "@/components/icons/material-icon";
 import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
@@ -41,9 +43,16 @@ type CompareColumnProps = {
   item: CompareItemView;
   /** Pinned column — stays fixed while alternatives scroll underneath */
   pinned?: boolean;
+  added?: boolean;
+  onAddToBag?: () => void;
 };
 
-function CompareColumn({ item, pinned = false }: CompareColumnProps) {
+function CompareColumn({
+  item,
+  pinned = false,
+  added = false,
+  onAddToBag,
+}: CompareColumnProps) {
   return (
     <article
       className={cn(
@@ -119,19 +128,57 @@ function CompareColumn({ item, pinned = false }: CompareColumnProps) {
           </div>
         ))}
       </div>
+
+      {onAddToBag ? (
+        <button
+          type="button"
+          onClick={onAddToBag}
+          disabled={added}
+          className={cn(
+            "mt-2 inline-flex w-full items-center justify-center gap-1 rounded-full py-2.5 transition-colors",
+            pdpType.micro,
+            added
+              ? "bg-neutral-100 text-neutral-500"
+              : "bg-black text-white",
+          )}
+        >
+          <span className="font-extended -translate-y-px">
+            {added ? "Added" : "Add to Bag"}
+          </span>
+          {!added ? (
+            <MaterialIcon name="add" size={16} className="text-white" />
+          ) : null}
+        </button>
+      ) : null}
     </article>
   );
 }
 
 type PdpCompareModuleProps = {
   selectedColorId: string;
+  onAddToBag?: () => void;
 };
 
 /** Horizontal compare carousel — current item + alternatives with four spec categories */
-export function PdpCompareModule({ selectedColorId }: PdpCompareModuleProps) {
+export function PdpCompareModule({
+  selectedColorId,
+  onAddToBag,
+}: PdpCompareModuleProps) {
+  const [addedIds, setAddedIds] = useState<Set<string>>(new Set());
   const selectedColor =
     PDP_COLORS.find((color) => color.id === selectedColorId) ?? PDP_COLORS[0];
   const [selectedItem, ...alternativeItems] = buildCompareItems(selectedColor.name);
+
+  const handleAdd = (id: string) => {
+    setAddedIds((current) => {
+      if (current.has(id)) {
+        return current;
+      }
+
+      onAddToBag?.();
+      return new Set(current).add(id);
+    });
+  };
 
   return (
     <section
@@ -148,9 +195,19 @@ export function PdpCompareModule({ selectedColorId }: PdpCompareModuleProps) {
             className={cn("flex gap-2", pdpCarouselScrollClass)}
             aria-label="Compare bags"
           >
-            <CompareColumn item={selectedItem} pinned />
+            <CompareColumn
+              item={selectedItem}
+              pinned
+              added={addedIds.has(selectedItem.id)}
+              onAddToBag={() => handleAdd(selectedItem.id)}
+            />
             {alternativeItems.map((item) => (
-              <CompareColumn key={item.id} item={item} />
+              <CompareColumn
+                key={item.id}
+                item={item}
+                added={addedIds.has(item.id)}
+                onAddToBag={() => handleAdd(item.id)}
+              />
             ))}
           </div>
         </GridItem>

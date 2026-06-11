@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRef } from "react";
 
 import { MaterialIcon } from "@/components/icons/material-icon";
@@ -10,12 +9,31 @@ import { cn } from "@/lib/cn";
 import { useHeaderContrast } from "./use-header-contrast";
 import { useScrollNavVisibility } from "./use-scroll-nav-visibility";
 
-const LOGO_WIDTH = 640;
-const LOGO_HEIGHT = 72;
 const HEADER_ICON_SIZE = 24;
 const HEADER_ROW_HEIGHT = 24;
-const LOGO_HEIGHT_PX = 14;
-const LOGO_WIDTH_PX = (LOGO_WIDTH / LOGO_HEIGHT) * LOGO_HEIGHT_PX;
+const C_MARK_SIZE = 22;
+const COACH_C_MASK = "url(/images/coach-c-mark.png)";
+
+function CoachCMark({ className }: { className?: string }) {
+  return (
+    <span
+      aria-hidden
+      className={cn("inline-block shrink-0 bg-current", className)}
+      style={{
+        width: C_MARK_SIZE,
+        height: C_MARK_SIZE,
+        WebkitMaskImage: COACH_C_MASK,
+        WebkitMaskSize: "contain",
+        WebkitMaskRepeat: "no-repeat",
+        WebkitMaskPosition: "center",
+        maskImage: COACH_C_MASK,
+        maskSize: "contain",
+        maskRepeat: "no-repeat",
+        maskPosition: "center",
+      }}
+    />
+  );
+}
 
 export function PdpOverlayHeader({ bagCount = 0 }: { bagCount?: number }) {
   const headerRef = useRef<HTMLElement>(null);
@@ -35,7 +53,7 @@ export function PdpOverlayHeader({ bagCount = 0 }: { bagCount?: number }) {
       <PageGrid fullWidth className="pointer-events-auto relative pb-2.5 pt-[max(0.75rem,env(safe-area-inset-top))]">
         <GridItem mobile={12} desktop={24}>
           <div
-            className="grid grid-cols-[1fr_auto_1fr] items-center transition-colors duration-300"
+            className="pdp-hero-header-enter grid grid-cols-[1fr_auto_1fr] items-center transition-colors duration-300"
             style={{ height: HEADER_ROW_HEIGHT }}
           >
             <button
@@ -50,23 +68,16 @@ export function PdpOverlayHeader({ bagCount = 0 }: { bagCount?: number }) {
               <MaterialIcon name="menu" size={HEADER_ICON_SIZE} />
             </button>
 
-            <Image
-              src="/images/coach-outlet-logo.png"
-              alt="Coach Outlet"
-              width={LOGO_WIDTH}
-              height={LOGO_HEIGHT}
-              priority
-              unoptimized
+            <span
+              role="img"
+              aria-label="Coach"
               className={cn(
-                "block max-w-[min(100%,142px)] shrink-0 transition-[filter] duration-300",
-                isLight && "brightness-0 invert",
+                "flex items-center justify-center transition-colors duration-300",
+                isLight ? "text-white" : "text-neutral-900",
               )}
-              style={{
-                width: LOGO_WIDTH_PX,
-                height: LOGO_HEIGHT_PX,
-                objectFit: "contain",
-              }}
-            />
+            >
+              <CoachCMark className="-translate-y-0.5" />
+            </span>
 
             <button
               type="button"

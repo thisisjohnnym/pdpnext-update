@@ -1,0 +1,124 @@
+"use client";
+
+import Image from "next/image";
+
+import { MaterialIcon } from "@/components/icons/material-icon";
+import { GridItem, PageGrid } from "@/components/grid/page-grid";
+import { cn } from "@/lib/cn";
+
+import { PDP_SIGNATURE_SOUNDS, type PdpSignatureSound } from "./pdp-data";
+import {
+  EXPERIENCE_PANEL_BODY_CLASS,
+  EXPERIENCE_PANEL_GRID_CLASS,
+  EXPERIENCE_PANEL_HEADER_CLASS,
+  EXPERIENCE_PANEL_ITEM_CLASS,
+  experiencePanelSectionProps,
+} from "./pdp-experience-panel";
+import { pdpType } from "./pdp-type";
+import { useSignatureSound } from "./use-signature-sound";
+
+function SignatureSoundRow({
+  sound,
+  active,
+  onToggle,
+}: {
+  sound: PdpSignatureSound;
+  active: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-pressed={active}
+      aria-label={active ? `Stop ${sound.label}` : sound.label}
+      className={cn(
+        "group flex w-full items-center gap-2.5 border p-2.5 text-left transition-colors duration-200",
+        active
+          ? "border-black bg-neutral-50"
+          : "border-neutral-200 bg-white active:bg-neutral-50",
+      )}
+    >
+      <span className="relative size-12 shrink-0 overflow-hidden bg-neutral-100">
+        <Image
+          src={sound.imageSrc}
+          alt=""
+          fill
+          className="object-cover object-center"
+          sizes="48px"
+        />
+        <span
+          aria-hidden
+          className={cn(
+            "absolute inset-0 flex items-center justify-center bg-black/25 transition-opacity",
+            active ? "opacity-100" : "opacity-0 group-hover:opacity-100",
+          )}
+        >
+          <MaterialIcon
+            name={active ? "graphic_eq" : "volume_up"}
+            size={18}
+            className={cn("text-white", active && "animate-pulse")}
+          />
+        </span>
+      </span>
+
+      <span className="min-w-0 flex-1">
+        <span className="font-extended flex items-center gap-1 text-sm tracking-[0.2px] text-black">
+          <span className="-translate-y-px">{sound.label}</span>
+        </span>
+        <span className={`mt-0.5 block text-neutral-600 ${pdpType.micro}`}>
+          {active ? sound.playingHint : sound.hint}
+        </span>
+      </span>
+
+      <MaterialIcon
+        name={active ? "pause" : "play_arrow"}
+        size={24}
+        className={cn(
+          "shrink-0 transition-colors",
+          active ? "text-black" : "text-neutral-400",
+        )}
+      />
+    </button>
+  );
+}
+
+/** Tap-to-hear product sounds — turnlock, zipper, bag opening */
+export function PdpSignatureSoundsModule({
+  isLastPanel = false,
+}: {
+  isLastPanel?: boolean;
+}) {
+  const { title, intro, sounds } = PDP_SIGNATURE_SOUNDS;
+  const { toggle, isActive } = useSignatureSound();
+  const panel = experiencePanelSectionProps(isLastPanel);
+
+  return (
+    <section data-header-surface="light" className={panel.className} style={panel.style}>
+      <PageGrid fullWidth className={EXPERIENCE_PANEL_GRID_CLASS}>
+        <GridItem mobile={12} desktop={24} className={EXPERIENCE_PANEL_ITEM_CLASS}>
+          <div className={EXPERIENCE_PANEL_HEADER_CLASS}>
+            <h2 className="font-extended m-0 text-sm font-bold tracking-[0.2px] text-black">
+              {title}
+            </h2>
+            <p className={`m-0 text-neutral-600 ${pdpType.caption}`}>{intro}</p>
+          </div>
+
+          <div className={cn(EXPERIENCE_PANEL_BODY_CLASS, "justify-center")}>
+            <ul className="flex flex-col gap-2">
+              {sounds.map((sound) => (
+                <li key={sound.id}>
+                  <SignatureSoundRow
+                    sound={sound}
+                    active={isActive(sound.id)}
+                    onToggle={() => toggle(sound.id, sound.audioSrc)}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </GridItem>
+      </PageGrid>
+    </section>
+  );
+}

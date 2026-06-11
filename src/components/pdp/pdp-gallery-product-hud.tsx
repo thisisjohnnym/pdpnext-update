@@ -19,13 +19,15 @@ export function PdpGalleryProductHud() {
     <>
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black via-black/70 to-transparent"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-10"
         style={{
           height: `calc(7.5rem + ${BOTTOM_CTA_OFFSET})`,
           opacity,
           visibility: visible ? "visible" : "hidden",
         }}
-      />
+      >
+        <div className="pdp-hero-scrim-enter absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+      </div>
 
       <div
         className="pointer-events-none absolute inset-x-0 z-10"
@@ -35,23 +37,25 @@ export function PdpGalleryProductHud() {
           visibility: visible ? "visible" : "hidden",
         }}
       >
+        <div className="pdp-hero-hud-enter">
         <PageGrid fullWidth className="pb-3">
           <GridItem mobile={12} desktop={24}>
             <div className="font-extended flex items-start justify-between gap-4 tracking-[0.2px] text-white">
               <div className="flex min-w-0 flex-col gap-0.5">
-                <p className="text-lg font-bold leading-tight text-white">
+                <p className="text-base font-bold leading-tight text-white">
                   {PDP_PRODUCT.name}
                 </p>
                 <p className={`font-normal leading-snug text-white/60 ${pdpType.label}`}>
                   {PDP_PRODUCT.subtitle}
                 </p>
               </div>
-              <p className="shrink-0 pt-px text-base font-bold leading-tight">
+              <p className="shrink-0 pt-px text-sm font-bold leading-tight">
                 {PDP_PRODUCT.price}
               </p>
             </div>
           </GridItem>
         </PageGrid>
+        </div>
       </div>
     </>
   );

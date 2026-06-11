@@ -1,0 +1,91 @@
+import Image from "next/image";
+
+import { MaterialIcon } from "@/components/icons/material-icon";
+import { cn } from "@/lib/cn";
+
+import type { PdpUgcStory } from "./pdp-data";
+import { pdpType } from "./pdp-type";
+
+type PdpUgcStoryCardProps = {
+  story: PdpUgcStory;
+  variant?: "carousel" | "overlay";
+  className?: string;
+  imageSizes?: string;
+};
+
+/** UGC photo with lifestyle context — not a random customer snap */
+export function PdpUgcStoryCard({
+  story,
+  variant = "carousel",
+  className,
+  imageSizes = "48vw",
+}: PdpUgcStoryCardProps) {
+  if (variant === "overlay") {
+    return (
+      <figure className={cn("relative min-h-0 w-full overflow-hidden bg-neutral-100", className)}>
+        <Image
+          src={story.src}
+          alt={story.alt}
+          fill
+          className="object-cover object-center"
+          style={{ objectPosition: story.objectPosition ?? "center" }}
+          sizes={imageSizes}
+        />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 via-black/25 to-transparent px-3 pb-3 pt-16">
+          <p className="font-extended text-sm tracking-[0.2px] text-white">
+            {story.context}
+          </p>
+          <p className={`mt-1 text-white/85 ${pdpType.micro}`}>
+            {story.wearer}
+            {story.verified ? " · Verified" : ""}
+          </p>
+          <p className={`mt-1 text-white/75 ${pdpType.micro}`}>
+            {story.colorway} · {story.carry}
+          </p>
+        </div>
+      </figure>
+    );
+  }
+
+  return (
+    <article
+      className={cn(
+        "flex shrink-0 snap-start snap-always flex-col overflow-hidden border border-neutral-200 bg-white",
+        className,
+      )}
+    >
+      <div className="relative aspect-[4/5] w-full bg-neutral-100">
+        <Image
+          src={story.src}
+          alt={story.alt}
+          fill
+          className="object-cover object-center"
+          style={{ objectPosition: story.objectPosition ?? "center" }}
+          sizes={imageSizes}
+        />
+        <span className="font-extended absolute left-2 top-2 rounded-full bg-white/92 px-2 py-1 text-[10px] tracking-[0.2px] text-black shadow-sm">
+          {story.context}
+        </span>
+      </div>
+
+      <div className="flex flex-col gap-1.5 p-2.5">
+        <p className="font-extended text-xs tracking-[0.2px] text-black">
+          {story.wearer}
+          {story.verified ? (
+            <MaterialIcon
+              name="verified"
+              size={18}
+              className="ml-1 inline-block align-middle text-neutral-700"
+            />
+          ) : null}
+        </p>
+        <p className={`text-neutral-600 ${pdpType.micro}`}>
+          {story.colorway} · {story.carry}
+        </p>
+        {story.quote ? (
+          <p className={`text-neutral-800 ${pdpType.micro}`}>&ldquo;{story.quote}&rdquo;</p>
+        ) : null}
+      </div>
+    </article>
+  );
+}

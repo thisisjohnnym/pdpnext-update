@@ -4,14 +4,20 @@ import Image from "next/image";
 
 import { MaterialIcon } from "@/components/icons/material-icon";
 import { GridItem, PageGrid } from "@/components/grid/page-grid";
+import { cn } from "@/lib/cn";
 
+import {
+  pdpCarouselScrollClass,
+  pdpUgcStoryCardClass,
+} from "./pdp-carousel";
 import { pdpModuleSectionClass, pdpModuleHeadingClass } from "./pdp-module-section";
 import { PdpReviewLikeButton } from "./pdp-review-like-button";
+import { PdpUgcStoryCard } from "./pdp-ugc-story-card";
 import { pdpType } from "./pdp-type";
 import {
   PDP_COMMENTS_SUMMARY,
   PDP_CUSTOMER_REVIEWS,
-  PDP_REVIEW_PHOTOS,
+  PDP_UGC_REVIEW_STORIES,
   PDP_REVIEWS_AI_SUMMARY,
   PDP_REVIEWS_SUMMARY,
   type PdpFeaturedReview,
@@ -50,7 +56,9 @@ function ReviewCard({ review }: { review: PdpFeaturedReview }) {
   return (
     <article className="flex flex-col gap-2.5 border-t border-neutral-200 py-5">
       <StarRating rating={review.rating} />
-      <p className="text-sm leading-[1.35] text-[#4a4a4a]">{review.quote}</p>
+      <p className={`font-extended text-[#4a4a4a] ${pdpType.caption}`}>
+        {review.quote}
+      </p>
 
       {review.photos?.length ? (
         <div className="flex gap-2 overflow-x-auto overscroll-x-contain pt-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -89,7 +97,7 @@ type PdpReviewsModuleProps = {
 
 /** Inline reviews — summary, UGC, and featured quotes exposed on the page */
 export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleProps) {
-  const { average, recommendPercent } = PDP_REVIEWS_SUMMARY;
+  const { average } = PDP_REVIEWS_SUMMARY;
   const pageReviews = PDP_CUSTOMER_REVIEWS.slice(0, PAGE_REVIEW_COUNT);
 
   return (
@@ -98,7 +106,7 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
       className={pdpModuleSectionClass({ rhythm: "break" })}
     >
       <PageGrid fullWidth>
-        <GridItem mobile={12} desktop={24}>
+        <GridItem mobile={12} desktop={24} className="min-w-0 overflow-visible">
           <div className="flex w-full flex-col gap-8">
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between gap-3">
@@ -125,10 +133,6 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
                   </p>
                 </div>
               </div>
-
-              <p className={`font-extended m-0 text-neutral-600 ${pdpType.caption}`}>
-                {recommendPercent}% would recommend
-              </p>
             </div>
 
             <section className="flex flex-col gap-3">
@@ -147,24 +151,23 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
             </section>
 
             <section className="flex flex-col gap-4">
-              <p className="font-extended m-0 text-sm font-bold tracking-[0.2px] text-black">
-                Customer photos
-              </p>
+              <div className="flex flex-col gap-1">
+                <p className="font-extended m-0 text-sm font-bold tracking-[0.2px] text-black">
+                  In real life
+                </p>
+                <p className={`m-0 text-neutral-600 ${pdpType.caption}`}>
+                  Who&apos;s wearing it, how, and where — not random customer photos.
+                </p>
+              </div>
 
-              <div className="flex gap-2 overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {PDP_REVIEW_PHOTOS.map((photo) => (
-                  <div
-                    key={photo.src}
-                    className="relative aspect-[4/5] w-[42%] shrink-0 overflow-hidden bg-neutral-100"
-                  >
-                    <Image
-                      src={photo.src}
-                      alt={photo.alt}
-                      fill
-                      className="object-cover object-center"
-                      sizes="42vw"
-                    />
-                  </div>
+              <div className={cn("flex gap-2", pdpCarouselScrollClass)}>
+                {PDP_UGC_REVIEW_STORIES.map((story) => (
+                  <PdpUgcStoryCard
+                    key={story.id}
+                    story={story}
+                    className={pdpUgcStoryCardClass}
+                    imageSizes="72vw"
+                  />
                 ))}
               </div>
             </section>

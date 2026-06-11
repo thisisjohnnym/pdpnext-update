@@ -99,6 +99,7 @@ type RailActionProps = {
   iconClassName?: string;
   onClick?: () => void;
   pressed?: boolean;
+  className?: string;
 };
 
 function RailAction({
@@ -109,6 +110,7 @@ function RailAction({
   iconClassName,
   onClick,
   pressed,
+  className,
 }: RailActionProps) {
   return (
     <button
@@ -116,16 +118,19 @@ function RailAction({
       onClick={onClick}
       aria-label={ariaLabel ?? label}
       aria-pressed={pressed}
-      className="flex flex-col items-center gap-1 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.45)]"
+      className={cn(
+        "flex flex-col items-center gap-1 text-white",
+        className,
+      )}
     >
       <MaterialIcon
         name={icon}
-        size={26}
+        size={RAIL_ICON_SIZE}
         filled={filled}
         style={railIconStyle(filled)}
         className={cn("text-white", iconClassName)}
       />
-      <span className="font-extended text-[11px] leading-none tracking-[0.2px]">
+      <span className="font-extended text-[11px] leading-none tracking-[0.2px] text-white">
         {label}
       </span>
     </button>
@@ -137,9 +142,16 @@ type LikeRailActionProps = {
   ariaLabel: string;
   liked: boolean;
   onToggle: () => void;
+  className?: string;
 };
 
-function LikeRailAction({ label, ariaLabel, liked, onToggle }: LikeRailActionProps) {
+function LikeRailAction({
+  label,
+  ariaLabel,
+  liked,
+  onToggle,
+  className,
+}: LikeRailActionProps) {
   const [bursting, setBursting] = useState(false);
   const [burstKey, setBurstKey] = useState(0);
 
@@ -171,7 +183,10 @@ function LikeRailAction({ label, ariaLabel, liked, onToggle }: LikeRailActionPro
       onClick={handleClick}
       aria-label={ariaLabel}
       aria-pressed={liked}
-      className="flex flex-col items-center gap-1 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.45)]"
+      className={cn(
+        "flex flex-col items-center gap-1 text-white",
+        className,
+      )}
     >
       <span className="relative flex size-7 items-center justify-center overflow-visible">
         {bursting ? (
@@ -199,7 +214,7 @@ function LikeRailAction({ label, ariaLabel, liked, onToggle }: LikeRailActionPro
         ) : null}
         <MaterialIcon
           name="favorite"
-          size={26}
+          size={RAIL_ICON_SIZE}
           filled={liked}
           style={railIconStyle(liked)}
           className={cn(
@@ -209,7 +224,7 @@ function LikeRailAction({ label, ariaLabel, liked, onToggle }: LikeRailActionPro
           )}
         />
       </span>
-      <span className="font-extended text-[11px] leading-none tracking-[0.2px]">
+      <span className="font-extended text-[11px] leading-none tracking-[0.2px] text-white">
         {label}
       </span>
     </button>
@@ -236,7 +251,7 @@ export function PdpHeroActionRail({ onOpenReviews }: { onOpenReviews?: () => voi
   return (
     <>
     <div
-      className="absolute right-3 z-20 flex flex-col items-center gap-5"
+      className="absolute right-2 z-20 flex flex-col items-center gap-4 [filter:drop-shadow(0_1px_3px_rgba(0,0,0,0.45))]"
       style={{
         bottom: `calc(${BOTTOM_CTA_OFFSET} + 5.5rem)`,
         opacity,
@@ -245,18 +260,21 @@ export function PdpHeroActionRail({ onOpenReviews }: { onOpenReviews?: () => voi
       }}
     >
       <LikeRailAction
+        className="pdp-social-rail-item"
         label={PDP_LIKE_SUMMARY.label}
         ariaLabel={`Like, ${PDP_LIKE_SUMMARY.label} likes`}
         liked={liked}
         onToggle={() => setLiked((prev) => !prev)}
       />
       <RailAction
+        className="pdp-social-rail-item"
         icon="chat_bubble"
         label={PDP_COMMENTS_SUMMARY.label}
         ariaLabel={`Comments, ${PDP_COMMENTS_SUMMARY.label} comments`}
         onClick={onOpenReviews}
       />
       <RailAction
+        className="pdp-social-rail-item"
         icon="bookmark"
         label={PDP_SAVE_SUMMARY.label}
         ariaLabel={`Save, ${PDP_SAVE_SUMMARY.label} saves`}

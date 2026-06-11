@@ -19,6 +19,7 @@ export function PdpSocialView() {
   const [selectedColorId, setSelectedColorId] = useState(DEFAULT_COLOR_ID);
   const [reviewsOpen, setReviewsOpen] = useState(false);
   const [bagSheetOpen, setBagSheetOpen] = useState(false);
+  const [strapOptionsOpen, setStrapOptionsOpen] = useState(false);
   const [bagCount, setBagCount] = useState(0);
   const [bagConfirmation, setBagConfirmation] = useState<BagConfirmation>({
     type: "product",
@@ -43,13 +44,14 @@ export function PdpSocialView() {
   return (
     <div
       className="relative w-full bg-black"
-      style={{ minHeight: "var(--pdp-viewport-height, 100dvh)" }}
+      style={{ minHeight: "var(--pdp-screen-height, 100dvh)" }}
     >
       <PdpBrowserChromeSync />
       <PdpGalleryView
         onOpenReviews={() => setReviewsOpen(true)}
         onAddSimilarToBag={handleQuickAddToBag}
         onAddBundle={handleAddBundle}
+        onStrapOptionsOpenChange={setStrapOptionsOpen}
         selectedColorId={selectedColorId}
       />
 
@@ -58,6 +60,7 @@ export function PdpSocialView() {
         selectedColorId={selectedColorId}
         onColorSelect={setSelectedColorId}
         onAddToBag={handleAddToBag}
+        suppressed={reviewsOpen || bagSheetOpen || strapOptionsOpen}
       />
       <PdpReviewsSheet open={reviewsOpen} onClose={() => setReviewsOpen(false)} />
       <PdpAddToBagSheet

@@ -8,56 +8,26 @@ import { cn } from "@/lib/cn";
 
 import { PdpColorSelector } from "./pdp-color-selector";
 import { PDP_COLORS } from "./pdp-data";
-import { useScrollNavVisibility } from "./use-scroll-nav-visibility";
-
-const HERO_TOP_SCROLL = 32;
-
-const BOTTOM_BAR_PAD =
-  "calc(env(safe-area-inset-bottom, 0px) + var(--pdp-browser-bottom-inset, 0px))";
-
-function useIsScrollAtTop(threshold = HERO_TOP_SCROLL) {
-  const [atTop, setAtTop] = useState(true);
-
-  useEffect(() => {
-    let frame = 0;
-
-    const update = () => {
-      frame = 0;
-      setAtTop(window.scrollY <= threshold);
-    };
-
-    const handleScroll = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, [threshold]);
-
-  return atTop;
-}
+import { BOTTOM_CHROME_OFFSET } from "./pdp-viewport-chrome";
+import { useBottomBarDocked } from "./use-bottom-bar-docked";
 
 type PdpBottomActionsProps = {
   selectedColorId: string;
   onColorSelect: (id: string) => void;
   onAddToBag: () => void;
+  /** Hide while a sheet/modal is open */
+  suppressed?: boolean;
 };
 
-/** Fixed bottom chrome — portaled to body so nothing in the page tree can clip it */
+/** Fixed bottom chrome — docked flush on hero, floating pills on scroll */
 export function PdpBottomActions({
   selectedColorId,
   onColorSelect,
   onAddToBag,
+  suppressed = false,
 }: PdpBottomActionsProps) {
   const [mounted, setMounted] = useState(false);
-  const isHeroTop = useIsScrollAtTop();
-  const navVisible = useScrollNavVisibility();
+  const docked = useBottomBarDocked();
 
   useEffect(() => {
     setMounted(true);
@@ -67,40 +37,61 @@ export function PdpBottomActions({
     return null;
   }
 
+  const bar = (
+    <div
+      className={cn(
+        "pdp-hero-bottom-enter transition-[gap,padding] duration-300 ease-out",
+        docked ? "grid w-full grid-cols-2 gap-0" : "flex gap-1",
+      )}
+    >
+      <PdpColorSelector
+        colors={PDP_COLORS}
+        selectedId={selectedColorId}
+        onSelect={onColorSelect}
+        inline
+        flush={docked}
+        compactPill={!docked}
+      />
+
+      <button
+        type="button"
+        onClick={onAddToBag}
+        className={cn(
+          "font-extended flex w-full min-w-0 items-center justify-center text-center leading-none tracking-[0.2px] transition-[border-radius] duration-300",
+          docked
+            ? "h-[54px] rounded-none border-0 bg-white px-4 text-sm text-neutral-950"
+            : "pdp-glass-light h-12 flex-1 rounded-full px-3.5 text-xs",
+        )}
+      >
+        Add to Bag
+      </button>
+    </div>
+  );
+
   return createPortal(
     <footer
       className={cn(
-        "pointer-events-none fixed inset-x-0 bottom-0 z-[100] transition-transform duration-300 ease-out",
-        navVisible ? "translate-y-0" : "translate-y-full",
+        "pointer-events-none fixed inset-x-0 z-40 transition-[transform,padding] duration-300 ease-out",
+        suppressed ? "translate-y-full" : "translate-y-0",
       )}
-      style={{ paddingBottom: BOTTOM_BAR_PAD }}
+      style={{
+        bottom: BOTTOM_CHROME_OFFSET,
+        paddingBottom: docked ? 0 : "0.625rem",
+      }}
     >
-      <div className="relative bg-transparent pt-2.5">
-        <PageGrid fullWidth className="pointer-events-auto">
-          <GridItem mobile={12} desktop={24}>
-            <div className="flex gap-1.5">
-              <PdpColorSelector
-                colors={PDP_COLORS}
-                selectedId={selectedColorId}
-                onSelect={onColorSelect}
-                inline
-              />
-
-              <button
-                type="button"
-                onClick={onAddToBag}
-                className={cn(
-                  "flex h-[54px] min-w-0 flex-1 items-center justify-center rounded-full border px-4 text-sm tracking-[0.2px] text-neutral-900 transition-colors duration-300",
-                  isHeroTop
-                    ? "border-white bg-white"
-                    : "border-white/50 bg-white/75 backdrop-blur-md",
-                )}
-              >
-                <span className="font-extended -translate-y-px">Add to Bag</span>
-              </button>
-            </div>
-          </GridItem>
-        </PageGrid>
+      <div
+        className={cn(
+          "relative transition-[padding] duration-300 ease-out",
+          docked ? "pt-0" : "bg-transparent pt-2.5",
+        )}
+      >
+        {docked ? (
+          <div className="pointer-events-auto w-full">{bar}</div>
+        ) : (
+          <PageGrid fullWidth className="pointer-events-auto">
+            <GridItem mobile={12} desktop={24}>{bar}</GridItem>
+          </PageGrid>
+        )}
       </div>
     </footer>,
     document.body,

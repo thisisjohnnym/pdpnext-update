@@ -7,15 +7,21 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
 
 import {
+  pdpCarouselScrollClass,
+  pdpUgcStoryCardClass,
+} from "./pdp-carousel";
+import {
   PDP_COMMENTS_SUMMARY,
   PDP_CUSTOMER_REVIEWS,
-  PDP_REVIEW_PHOTOS,
+  PDP_UGC_REVIEW_STORIES,
   PDP_REVIEWS_AI_SUMMARY,
   PDP_REVIEWS_RATING_BREAKDOWN,
   PDP_REVIEWS_SUMMARY,
   type PdpFeaturedReview,
 } from "./pdp-data";
 import { PdpReviewLikeButton } from "./pdp-review-like-button";
+import { PdpUgcStoryCard } from "./pdp-ugc-story-card";
+import { pdpType } from "./pdp-type";
 
 type PdpReviewsSheetProps = {
   open: boolean;
@@ -83,7 +89,9 @@ function CustomerReviewCard({ review }: { review: PdpFeaturedReview }) {
   return (
     <article className="flex flex-col gap-2 border-t border-neutral-200 py-4">
       <StarRating rating={review.rating} />
-      <p className="text-sm leading-[1.35] text-[#4a4a4a]">{review.quote}</p>
+      <p className="font-extended text-sm leading-[1.35] tracking-[0.2px] text-[#4a4a4a]">
+        {review.quote}
+      </p>
 
       {review.photos?.length ? (
         <div className="flex gap-2 overflow-x-auto overscroll-x-contain pt-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -265,33 +273,32 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
             </section>
 
             <section className="flex flex-col gap-4 pt-1">
-              <div className="flex items-center justify-between gap-4">
-                <p className="font-extended text-base font-bold tracking-[0.4px] text-black">
-                  Customer photos
-                </p>
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-1">
+                  <p className="font-extended text-base font-bold tracking-[0.4px] text-black">
+                    In real life
+                  </p>
+                  <p className={`m-0 text-neutral-600 ${pdpType.caption}`}>
+                    Context for who&apos;s wearing it, how, and where.
+                  </p>
+                </div>
                 <button
                   type="button"
-                  className="flex items-center gap-0.5 text-sm leading-[1.35] text-black"
+                  className="flex shrink-0 items-center gap-0.5 text-sm leading-[1.35] text-black"
                 >
                   View all
                   <MaterialIcon name="arrow_forward" size={18} className="text-black" />
                 </button>
               </div>
 
-              <div className="flex gap-2 overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {PDP_REVIEW_PHOTOS.map((photo) => (
-                  <div
-                    key={photo.src}
-                    className="relative h-[295px] w-[236px] shrink-0 overflow-hidden bg-neutral-100"
-                  >
-                    <Image
-                      src={photo.src}
-                      alt={photo.alt}
-                      fill
-                      className="object-cover object-center"
-                      sizes="236px"
-                    />
-                  </div>
+              <div className={cn("flex gap-2", pdpCarouselScrollClass)}>
+                {PDP_UGC_REVIEW_STORIES.map((story) => (
+                  <PdpUgcStoryCard
+                    key={story.id}
+                    story={story}
+                    className={pdpUgcStoryCardClass}
+                    imageSizes="72vw"
+                  />
                 ))}
               </div>
             </section>

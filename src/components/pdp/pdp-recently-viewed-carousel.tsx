@@ -56,7 +56,7 @@ export function PdpRecentlyViewedCarousel() {
                     />
 
                     <span
-                      className={`font-extended absolute left-1.5 top-1.5 rounded-full bg-white/90 px-2 py-0.5 text-neutral-700 shadow-sm backdrop-blur-sm ${pdpType.micro}`}
+                      className={`font-extended absolute left-1.5 top-1.5 inline-flex items-center rounded-full bg-white/90 px-2.5 py-1 leading-none text-neutral-700 shadow-sm backdrop-blur-sm ${pdpType.micro}`}
                     >
                       {item.viewedLabel}
                     </span>

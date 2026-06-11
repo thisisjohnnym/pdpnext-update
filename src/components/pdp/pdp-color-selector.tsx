@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 import { MaterialIcon } from "@/components/icons/material-icon";
+import { cn } from "@/lib/cn";
 
 import type { PdpColor } from "./pdp-data";
 
@@ -17,9 +18,13 @@ type PdpColorSelectorProps = {
   compact?: boolean;
   /** Drop-up picker inside bottom bar pill */
   inline?: boolean;
+  /** Flush docked bar — square join with ATB at hero rest */
+  flush?: boolean;
+  /** Slightly smaller floating bottom-bar pill */
+  compactPill?: boolean;
 };
 
-/** Swatch assets are full product shots — crop to bag body in circle */
+/** Swatch assets are full product shots — zoom to bag body so color fills the circle */
 function ColorSwatchImage({
   src,
   sizes,
@@ -32,7 +37,7 @@ function ColorSwatchImage({
       src={src}
       alt=""
       fill
-      className="object-cover object-center scale-[1.75]"
+      className="object-cover object-[center_82%] origin-[center_82%] scale-[4.5]"
       sizes={sizes}
     />
   );
@@ -58,7 +63,9 @@ function PdpColorDropup({
   colors,
   selectedId,
   onSelect,
-}: Pick<PdpColorSelectorProps, "colors" | "selectedId" | "onSelect">) {
+  flush = false,
+  compact = false,
+}: Pick<PdpColorSelectorProps, "colors" | "selectedId" | "onSelect" | "flush" | "compact">) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const selected =
@@ -92,12 +99,12 @@ function PdpColorDropup({
   };
 
   return (
-    <div ref={rootRef} className="relative min-w-0 flex-1">
+    <div ref={rootRef} className={cn("relative min-w-0", flush ? "w-full" : "flex-1")}>
       {open && (
         <ul
           role="listbox"
           aria-label="Select color"
-          className="absolute inset-x-0 bottom-[calc(100%+0.375rem)] max-h-[min(50vh,16rem)] overflow-y-auto overscroll-y-contain rounded-2xl border border-white/10 bg-[#353535] py-1.5 shadow-[0_-8px_32px_rgba(0,0,0,0.35)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="absolute inset-x-0 bottom-[calc(100%+0.375rem)] max-h-[min(50vh,16rem)] overflow-y-auto overscroll-y-contain rounded-2xl pdp-glass-dark py-1.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {colors.map((color) => {
             const isSelected = color.id === selectedId;
@@ -138,19 +145,25 @@ function PdpColorDropup({
         aria-expanded={open}
         aria-label={`Color: ${selected.name}. Choose another color.`}
         onClick={() => setOpen((prev) => !prev)}
-        className="font-extended flex h-[54px] w-full items-center gap-2.5 rounded-full bg-[#353535] px-3 text-xs tracking-[0.2px] text-white"
+        className={cn(
+          "font-extended flex w-full items-center tracking-[0.2px] transition-[border-radius] duration-300",
+          compact ? "h-12 text-[11px]" : "h-[54px] text-xs",
+          flush
+            ? "pdp-glass-dark justify-center gap-2 rounded-none border-0 border-r border-white/25 px-3"
+            : cn("pdp-glass-dark rounded-full px-3", compact ? "gap-2" : "gap-2.5"),
+        )}
       >
         <ColorSwatchButton
           color={selected}
-          sizeClass="size-8"
+          sizeClass={compact ? "size-7" : "size-8"}
         />
-        <span className="min-w-0 flex-1 truncate text-left">
+        <span className={cn("truncate", flush ? "shrink-0" : "min-w-0 flex-1 text-left")}>
           {selected.name}
         </span>
         <MaterialIcon
           name={open ? "expand_less" : "expand_more"}
-          size={20}
-          className="shrink-0 text-white/80"
+          size={compact ? 18 : 20}
+          className="shrink-0 text-white"
         />
       </button>
     </div>
@@ -164,9 +177,12 @@ export function PdpColorSelector({
   variant = "default",
   compact = false,
   inline = false,
+  flush = false,
+  compactPill = false,
 }: PdpColorSelectorProps) {
   const selected = colors.find((color) => color.id === selectedId) ?? colors[0];
   const isOverlay = variant === "overlay";
+  const dropupCompact = compactPill && inline && !flush;
 
   if (inline) {
     return (
@@ -174,6 +190,8 @@ export function PdpColorSelector({
         colors={colors}
         selectedId={selectedId}
         onSelect={onSelect}
+        flush={flush}
+        compact={dropupCompact}
       />
     );
   }

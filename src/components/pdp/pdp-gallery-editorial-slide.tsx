@@ -4,6 +4,8 @@ import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
 import { BOTTOM_CTA_OFFSET } from "./pdp-gallery-view";
+import { galleryPanelClassName } from "./pdp-gallery-panel";
+import { SCREEN_HEIGHT_STYLE } from "./pdp-viewport-chrome";
 import { pdpType } from "./pdp-type";
 
 type PdpGalleryEditorialSlideProps = {
@@ -17,6 +19,9 @@ type PdpGalleryEditorialSlideProps = {
     label: string;
     href: string;
   };
+  /** Full-viewport snap panel (experimental) */
+  panelScroll?: boolean;
+  isLastPanel?: boolean;
   /** Extra bottom inset for the fixed add-to-bag bar */
   reserveBottomCta?: boolean;
 };
@@ -30,18 +35,46 @@ export function PdpGalleryEditorialSlide({
   secondarySrc,
   secondaryAlt,
   learnMore,
+  panelScroll = false,
+  isLastPanel = false,
   reserveBottomCta = false,
 }: PdpGalleryEditorialSlideProps) {
   return (
     <section
       data-header-surface="light"
-      className="relative flex w-full shrink-0 flex-col bg-white py-10 lg:py-14"
-      style={reserveBottomCta ? { paddingBottom: BOTTOM_CTA_OFFSET } : undefined}
+      className={cn(
+        "relative flex w-full shrink-0 flex-col bg-white",
+        panelScroll
+          ? cn("items-center justify-center px-3", galleryPanelClassName(isLastPanel))
+          : "py-10 lg:py-14",
+      )}
+      style={
+        panelScroll
+          ? SCREEN_HEIGHT_STYLE
+          : reserveBottomCta
+            ? { paddingBottom: BOTTOM_CTA_OFFSET }
+            : undefined
+      }
     >
-      <PageGrid fullWidth>
-        <GridItem mobile={10} mobileStart={2} desktop={14} desktopStart={6}>
-          <div className="flex w-full flex-col gap-4 lg:gap-5">
-            <div className="relative aspect-[4/5] w-full overflow-hidden bg-neutral-100">
+      <PageGrid fullWidth className={panelScroll ? "w-full" : undefined}>
+        <GridItem
+          mobile={panelScroll ? 12 : 10}
+          mobileStart={panelScroll ? 1 : 2}
+          desktop={panelScroll ? 24 : 14}
+          desktopStart={panelScroll ? 1 : 6}
+        >
+          <div
+            className={cn(
+              "flex w-full flex-col gap-4 lg:gap-5",
+              panelScroll && "max-h-[calc(var(--pdp-screen-height,100dvh)-7rem)] justify-center",
+            )}
+          >
+            <div
+              className={cn(
+                "relative w-full overflow-hidden bg-neutral-100",
+                panelScroll ? "aspect-[4/5] max-h-[52dvh]" : "aspect-[4/5]",
+              )}
+            >
               <Image
                 src={src}
                 alt={alt}
@@ -74,7 +107,7 @@ export function PdpGalleryEditorialSlide({
               ) : null}
             </div>
 
-            {secondarySrc ? (
+            {secondarySrc && !panelScroll ? (
               <div className="relative aspect-[4/5] w-full overflow-hidden bg-neutral-100">
                 <Image
                   src={secondarySrc}
