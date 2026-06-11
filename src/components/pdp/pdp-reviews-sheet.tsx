@@ -11,6 +11,10 @@ import {
   pdpUgcStoryCardClass,
 } from "./pdp-carousel";
 import {
+  pdpModuleHeadingClass,
+  pdpSheetHeadingClass,
+} from "./pdp-module-section";
+import {
   PDP_COMMENTS_SUMMARY,
   PDP_CUSTOMER_REVIEWS,
   PDP_UGC_REVIEW_STORIES,
@@ -198,10 +202,7 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(24px,env(safe-area-inset-bottom))]">
           <div className="flex flex-col items-start gap-3 pb-6">
-            <h2
-              id={titleId}
-              className="font-extended text-xl tracking-[0.4px] text-black"
-            >
+            <h2 id={titleId} className={pdpSheetHeadingClass()}>
               Reviews
             </h2>
 
@@ -254,7 +255,7 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
 
           <div className="flex flex-col gap-6">
             <section className="flex flex-col gap-2.5">
-              <p className="font-extended text-base font-bold tracking-[0.4px] text-black">
+              <p className={pdpModuleHeadingClass({ lead: false })}>
                 {PDP_REVIEWS_AI_SUMMARY.headline}
               </p>
               <p className="font-extended text-sm leading-[1.35] tracking-[0.2px] text-[#4a4a4a]">
@@ -275,11 +276,8 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
             <section className="flex flex-col gap-4 pt-1">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex flex-col gap-1">
-                  <p className="font-extended text-base font-bold tracking-[0.4px] text-black">
+                  <p className={pdpModuleHeadingClass({ lead: false })}>
                     In real life
-                  </p>
-                  <p className={`m-0 text-neutral-600 ${pdpType.caption}`}>
-                    Context for who&apos;s wearing it, how, and where.
                   </p>
                 </div>
                 <button

@@ -11,6 +11,11 @@ type ExplorePosition = {
   yPct: number;
 };
 
+type ContainerSize = {
+  width: number;
+  height: number;
+};
+
 function getActiveZone(
   xPct: number,
   yPct: number,
@@ -32,6 +37,7 @@ export function useMaterialExplore(zones: readonly PdpMaterialExploreZone[]) {
   const containerRef = useRef<HTMLDivElement>(null);
   const isExploringRef = useRef(false);
   const [position, setPosition] = useState<ExplorePosition | null>(null);
+  const [containerSize, setContainerSize] = useState<ContainerSize>({ width: 0, height: 0 });
   const [isExploring, setIsExploring] = useState(false);
 
   const updatePosition = useCallback((clientX: number, clientY: number) => {
@@ -44,6 +50,7 @@ export function useMaterialExplore(zones: readonly PdpMaterialExploreZone[]) {
     const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
     const y = Math.max(0, Math.min(clientY - rect.top, rect.height));
 
+    setContainerSize({ width: rect.width, height: rect.height });
     setPosition({
       x,
       y,
@@ -93,6 +100,7 @@ export function useMaterialExplore(zones: readonly PdpMaterialExploreZone[]) {
   return {
     containerRef,
     position,
+    containerSize,
     isExploring,
     activeZone,
     handlePointerDown,

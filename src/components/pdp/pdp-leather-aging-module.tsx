@@ -10,7 +10,6 @@ import { PDP_LEATHER_AGING } from "./pdp-data";
 import {
   EXPERIENCE_PANEL_BODY_CLASS,
   EXPERIENCE_PANEL_GRID_CLASS,
-  EXPERIENCE_PANEL_HEADER_CLASS,
   EXPERIENCE_PANEL_ITEM_CLASS,
   EXPERIENCE_PANEL_MEDIA_CLASS,
   experiencePanelSectionProps,
@@ -23,7 +22,7 @@ export function PdpLeatherAgingModule({
 }: {
   isLastPanel?: boolean;
 }) {
-  const { title, image, stages } = PDP_LEATHER_AGING;
+  const { image, stages } = PDP_LEATHER_AGING;
   const panel = experiencePanelSectionProps(isLastPanel);
   const [stageIndex, setStageIndex] = useState(0);
   const stage = stages[stageIndex]!;
@@ -38,10 +37,6 @@ export function PdpLeatherAgingModule({
     <section data-header-surface="light" className={panel.className} style={panel.style}>
       <PageGrid fullWidth className={EXPERIENCE_PANEL_GRID_CLASS}>
         <GridItem mobile={12} desktop={24} className={EXPERIENCE_PANEL_ITEM_CLASS}>
-          <div className={EXPERIENCE_PANEL_HEADER_CLASS}>
-            <p className="font-extended text-xs tracking-[0.2px] text-black">{title}</p>
-          </div>
-
           <div className={EXPERIENCE_PANEL_BODY_CLASS}>
             <div className={cn(EXPERIENCE_PANEL_MEDIA_CLASS, "bg-neutral-900")}>
               <Image
@@ -85,34 +80,33 @@ export function PdpLeatherAgingModule({
               />
 
               <div
-                aria-hidden
-                className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent px-3 pb-3 pt-12"
+                className="absolute inset-x-0 bottom-0 z-[2] bg-gradient-to-t from-black/60 via-black/25 to-transparent px-3 pb-3 pt-16"
               >
-                <p className="font-extended text-[11px] tracking-[0.2px] text-white/90">
-                  {stage.timeline}
-                </p>
-                <p className={`mt-0.5 text-white/75 ${pdpType.micro}`}>{stage.summary}</p>
-              </div>
-            </div>
+                <div className="mb-2.5 grid grid-cols-3 gap-1" aria-live="polite">
+                  {stages.map((item, index) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setStageIndex(index)}
+                      aria-pressed={stageIndex === index}
+                      className={cn(
+                        "font-extended rounded-lg px-1 py-1.5 text-center text-[10px] tracking-[0.2px] transition-colors",
+                        stageIndex === index
+                          ? "bg-white text-black"
+                          : "bg-black/40 text-white/90 backdrop-blur-sm hover:bg-black/55",
+                      )}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
 
-            <div className="shrink-0">
-              <div className="grid grid-cols-3 gap-1">
-                {stages.map((item, index) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setStageIndex(index)}
-                    aria-pressed={stageIndex === index}
-                    className={cn(
-                      "font-extended rounded-lg px-1 py-1.5 text-center text-[10px] tracking-[0.2px] transition-colors",
-                      stageIndex === index
-                        ? "bg-black text-white"
-                        : "text-neutral-500 hover:bg-neutral-100 hover:text-black",
-                    )}
-                  >
-                    {item.label}
-                  </button>
-                ))}
+                <div aria-hidden className="pointer-events-none">
+                  <p className="font-extended text-[11px] tracking-[0.2px] text-white/90">
+                    {stage.timeline}
+                  </p>
+                  <p className={`mt-0.5 text-white/75 ${pdpType.micro}`}>{stage.summary}</p>
+                </div>
               </div>
             </div>
           </div>

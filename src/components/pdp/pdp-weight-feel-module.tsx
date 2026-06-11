@@ -10,7 +10,6 @@ import { PDP_WEIGHT_FEEL } from "./pdp-data";
 import {
   EXPERIENCE_PANEL_BODY_CLASS,
   EXPERIENCE_PANEL_GRID_CLASS,
-  EXPERIENCE_PANEL_HEADER_CLASS,
   EXPERIENCE_PANEL_ITEM_CLASS,
   EXPERIENCE_PANEL_MEDIA_CLASS,
   experiencePanelSectionProps,
@@ -30,8 +29,7 @@ export function PdpWeightFeelModule({
 }: {
   isLastPanel?: boolean;
 }) {
-  const { title, intro, hint, holdMs, image, reveal, hapticPattern } =
-    PDP_WEIGHT_FEEL;
+  const { hint, holdMs, image, reveal, hapticPattern } = PDP_WEIGHT_FEEL;
   const panel = experiencePanelSectionProps(isLastPanel);
 
   const { progress, lifted, revealed, handlePointerDown, handlePointerEnd } =
@@ -47,11 +45,6 @@ export function PdpWeightFeelModule({
     <section data-header-surface="light" className={panel.className} style={panel.style}>
       <PageGrid fullWidth className={EXPERIENCE_PANEL_GRID_CLASS}>
         <GridItem mobile={12} desktop={24} className={EXPERIENCE_PANEL_ITEM_CLASS}>
-          <div className={EXPERIENCE_PANEL_HEADER_CLASS}>
-            <p className="font-extended text-xs tracking-[0.2px] text-black">{title}</p>
-            <p className={`text-neutral-600 ${pdpType.caption}`}>{intro}</p>
-          </div>
-
           <div className={EXPERIENCE_PANEL_BODY_CLASS}>
             <button
               type="button"
@@ -67,33 +60,31 @@ export function PdpWeightFeelModule({
               <div
                 aria-hidden
                 className={cn(
-                  "pdp-weight-lift__stage absolute inset-x-0 bottom-[12%] top-[8%] flex items-end justify-center transition-transform duration-300 ease-out",
+                  "pdp-weight-lift__stage absolute inset-0 transition-transform duration-300 ease-out",
                   lifted && "pdp-weight-lift__stage--lifted",
                 )}
               >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  className="object-cover"
+                  style={{ objectPosition: image.objectPosition ?? "center 62%" }}
+                  sizes="100vw"
+                  draggable={false}
+                />
                 <div
                   className={cn(
-                    "pdp-weight-lift__shadow absolute bottom-[6%] left-1/2 h-4 w-[50%] -translate-x-1/2 rounded-[100%] bg-black/20 blur-md transition-all duration-300",
+                    "pdp-weight-lift__shadow absolute bottom-[8%] left-1/2 h-5 w-[55%] -translate-x-1/2 rounded-[100%] bg-black/25 blur-md transition-all duration-300",
                     lifted && "pdp-weight-lift__shadow--lifted",
                   )}
                 />
-                <div className="relative h-full w-[72%] max-w-xs">
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    fill
-                    className="object-contain object-bottom"
-                    style={{ objectPosition: image.objectPosition ?? "center bottom" }}
-                    sizes="72vw"
-                    draggable={false}
-                  />
-                </div>
               </div>
 
               {!showReveal ? (
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center gap-2 bg-gradient-to-t from-[#ececec] via-[#ececec]/95 to-transparent px-4 pb-4 pt-10"
+                  className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center gap-2 bg-gradient-to-t from-black/45 via-black/10 to-transparent px-4 pb-4 pt-12"
                 >
                   <span
                     className={cn(
@@ -131,22 +122,22 @@ export function PdpWeightFeelModule({
                     <MaterialIcon
                       name="back_hand"
                       size={20}
-                      className="relative text-neutral-700"
+                      className="relative text-neutral-800"
                     />
                   </span>
-                  <span className="font-extended text-[11px] tracking-[0.2px] text-neutral-600">
+                  <span className="font-extended text-[11px] tracking-[0.2px] text-white/90">
                     {isHolding ? "Keep holding…" : hint}
                   </span>
                 </div>
               ) : (
                 <div
-                  className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#ececec] via-[#ececec]/98 to-transparent px-4 pb-4 pt-12 text-left"
+                  className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 via-black/20 to-transparent px-4 pb-4 pt-12 text-left"
                   aria-live="polite"
                 >
-                  <p className="font-extended text-sm leading-snug tracking-[0.2px] text-black">
+                  <p className="font-extended text-sm leading-snug tracking-[0.2px] text-white">
                     {reveal.headline}
                   </p>
-                  <p className={`mt-1 text-neutral-600 ${pdpType.micro}`}>
+                  <p className={`mt-1 text-white/80 ${pdpType.micro}`}>
                     {reveal.subline}
                   </p>
                 </div>

@@ -7,6 +7,7 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
 
 import type { PdpStrapOptionsSet } from "./pdp-data";
+import { pdpSheetHeadingClass } from "./pdp-module-section";
 import { pdpType } from "./pdp-type";
 
 type PdpStrapOptionsSheetProps = {
@@ -107,10 +108,7 @@ export function PdpStrapOptionsSheet({
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(24px,env(safe-area-inset-bottom))]">
-          <h2
-            id={titleId}
-            className="font-extended mb-1 text-xl tracking-[0.4px] text-black"
-          >
+          <h2 id={titleId} className={cn(pdpSheetHeadingClass(), "mb-1")}>
             {set.title}
           </h2>
           <p className={`mb-4 text-neutral-600 ${pdpType.caption}`}>
@@ -162,7 +160,7 @@ export function PdpStrapOptionsSheet({
                   >
                     <span className="-translate-y-px">{added ? "Added" : "Add"}</span>
                     {!added ? (
-                      <MaterialIcon name="add" size={16} className="text-white" />
+                      <MaterialIcon name="add" size={18} className="text-white" />
                     ) : null}
                   </button>
                 </li>

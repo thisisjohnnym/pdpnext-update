@@ -7,6 +7,7 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
 
 import type { PdpShopTheLookLook } from "./pdp-data";
+import { pdpSheetHeadingClass } from "./pdp-module-section";
 
 type PdpShopTheLookSheetProps = {
   look: PdpShopTheLookLook | null;
@@ -74,10 +75,7 @@ export function PdpShopTheLookSheet({ look, open, onClose }: PdpShopTheLookSheet
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(24px,env(safe-area-inset-bottom))]">
-          <h2
-            id={titleId}
-            className="font-extended mb-4 text-xl tracking-[0.4px] text-black"
-          >
+          <h2 id={titleId} className={cn(pdpSheetHeadingClass(), "mb-4")}>
             {look.title}
           </h2>
 

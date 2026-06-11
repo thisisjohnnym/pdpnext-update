@@ -146,19 +146,22 @@ function PdpColorDropup({
         aria-label={`Color: ${selected.name}. Choose another color.`}
         onClick={() => setOpen((prev) => !prev)}
         className={cn(
-          "font-extended flex w-full items-center tracking-[0.2px] transition-[border-radius] duration-300",
+          "font-extended flex w-full items-center overflow-hidden tracking-[0.2px] transition-[border-radius] duration-300",
           compact ? "h-12 text-[11px]" : "h-[54px] text-xs",
           flush
-            ? "pdp-glass-dark justify-center gap-2 rounded-none border-0 border-r border-white/25 px-3"
-            : cn("pdp-glass-dark rounded-full px-3", compact ? "gap-2" : "gap-2.5"),
+            ? "pdp-glass-dark justify-center gap-2 rounded-none border-0 px-3"
+            : cn(
+                "pdp-glass-dark justify-between rounded-full px-3",
+                compact ? "gap-2" : "gap-2.5",
+              ),
         )}
       >
-        <ColorSwatchButton
-          color={selected}
-          sizeClass={compact ? "size-7" : "size-8"}
-        />
-        <span className={cn("truncate", flush ? "shrink-0" : "min-w-0 flex-1 text-left")}>
-          {selected.name}
+        <span className="flex min-w-0 items-center gap-2">
+          <ColorSwatchButton
+            color={selected}
+            sizeClass={compact ? "size-7" : "size-8"}
+          />
+          <span className="truncate">{selected.name}</span>
         </span>
         <MaterialIcon
           name={open ? "expand_less" : "expand_more"}

@@ -61,15 +61,15 @@ export function PdpProductHotspots({ hotspots }: PdpProductHotspotsProps) {
                 event.stopPropagation();
                 handleToggle(hotspot.id);
               }}
-              className="relative flex size-7 items-center justify-center"
+              className="relative flex size-9 items-center justify-center"
             >
               <span
                 aria-hidden
-                className="absolute size-7 animate-hotspot-pulse rounded-full bg-white/50"
+                className="absolute size-9 animate-hotspot-pulse rounded-full border-2 border-white/35 bg-white/45 shadow-[0_0_0_6px_rgba(255,255,255,0.1)]"
               />
               <span
                 aria-hidden
-                className="relative size-2.5 rounded-full border border-white/90 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.18)]"
+                className="relative size-3 rounded-full border-2 border-white bg-white shadow-[0_2px_6px_rgba(0,0,0,0.22)]"
               />
             </button>
           </div>

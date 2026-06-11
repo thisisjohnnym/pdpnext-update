@@ -8,12 +8,12 @@ import { cn } from "@/lib/cn";
 
 import { PDP_SIGNATURE_SOUNDS, type PdpSignatureSound } from "./pdp-data";
 import {
-  EXPERIENCE_PANEL_BODY_CLASS,
   EXPERIENCE_PANEL_GRID_CLASS,
   EXPERIENCE_PANEL_HEADER_CLASS,
   EXPERIENCE_PANEL_ITEM_CLASS,
   experiencePanelSectionProps,
 } from "./pdp-experience-panel";
+import { pdpModuleHeadingClass } from "./pdp-module-section";
 import { pdpType } from "./pdp-type";
 import { useSignatureSound } from "./use-signature-sound";
 
@@ -96,15 +96,19 @@ export function PdpSignatureSoundsModule({
   return (
     <section data-header-surface="light" className={panel.className} style={panel.style}>
       <PageGrid fullWidth className={EXPERIENCE_PANEL_GRID_CLASS}>
-        <GridItem mobile={12} desktop={24} className={EXPERIENCE_PANEL_ITEM_CLASS}>
-          <div className={EXPERIENCE_PANEL_HEADER_CLASS}>
-            <h2 className="font-extended m-0 text-sm font-bold tracking-[0.2px] text-black">
-              {title}
-            </h2>
-            <p className={`m-0 text-neutral-600 ${pdpType.caption}`}>{intro}</p>
-          </div>
+        <GridItem
+          mobile={12}
+          desktop={24}
+          className={cn(EXPERIENCE_PANEL_ITEM_CLASS, "justify-center")}
+        >
+          <div className="flex w-full min-h-0 flex-col gap-3">
+            <div className={EXPERIENCE_PANEL_HEADER_CLASS}>
+              <h2 className={pdpModuleHeadingClass({ lead: false })}>
+                {title}
+              </h2>
+              <p className={`m-0 text-neutral-600 ${pdpType.caption}`}>{intro}</p>
+            </div>
 
-          <div className={cn(EXPERIENCE_PANEL_BODY_CLASS, "justify-center")}>
             <ul className="flex flex-col gap-2">
               {sounds.map((sound) => (
                 <li key={sound.id}>

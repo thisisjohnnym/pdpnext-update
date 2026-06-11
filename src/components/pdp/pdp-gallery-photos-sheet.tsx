@@ -7,6 +7,7 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
 
 import { PDP_GALLERY_MORE_PHOTOS } from "./pdp-data";
+import { pdpSheetHeadingClass } from "./pdp-module-section";
 
 type PdpGalleryPhotosSheetProps = {
   open: boolean;
@@ -69,10 +70,7 @@ export function PdpGalleryPhotosSheet({ open, onClose }: PdpGalleryPhotosSheetPr
         </div>
 
         <div className="flex shrink-0 items-center justify-between px-3 pb-4">
-          <h2
-            id={titleId}
-            className="font-extended m-0 text-xl tracking-[0.4px] text-black"
-          >
+          <h2 id={titleId} className={pdpSheetHeadingClass()}>
             All media
           </h2>
           <button

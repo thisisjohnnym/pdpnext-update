@@ -391,7 +391,6 @@ export type PdpAiConciergePrompt = {
 /** AI Concierge — experiential prompts with inline answers */
 export const PDP_AI_CONCIERGE = {
   title: "AI Concierge",
-  subtitle: "Styling, occasions, pairings — ask like you're talking to a specialist.",
   placeholder: "Ask anything about Tabby — styling, sizing, charms, real customer photos…",
   fallbackResponse: {
     headline: "I'm on it",
@@ -573,6 +572,8 @@ export type PdpGalleryImmersiveSlide = {
   /** Header icon contrast when this frame is active */
   headerSurface?: "light" | "dark";
   hotspots?: PdpProductHotspot[];
+  /** Tap-to-hear product sound layered on this still */
+  signatureSoundId?: string;
 };
 
 export type PdpGalleryEditorialSlide = {
@@ -587,6 +588,7 @@ export type PdpGalleryEditorialSlide = {
     label: string;
     href: string;
   };
+  signatureSoundId?: string;
 };
 
 export type PdpGalleryVideoSlide = {
@@ -628,6 +630,16 @@ export type PdpGalleryUgcContextSlide = {
   type: "ugc-context";
 };
 
+export type PdpGalleryProductCollageSlide = {
+  type: "product-collage";
+};
+
+export type PdpGalleryProductCollageTile = {
+  src: string;
+  alt: string;
+  objectPosition?: string;
+};
+
 export type PdpGallerySlide =
   | PdpGalleryImmersiveSlide
   | PdpGalleryEditorialSlide
@@ -638,7 +650,29 @@ export type PdpGallerySlide =
   | PdpGalleryWeightFeelSlide
   | PdpGalleryBagStoriesSlide
   | PdpGalleryStrapSimulationSlide
-  | PdpGalleryUgcContextSlide;
+  | PdpGalleryUgcContextSlide
+  | PdpGalleryProductCollageSlide;
+
+/** Back, angle, and gusset — one collage panel in the product scroll */
+export const PDP_GALLERY_PRODUCT_DETAIL_COLLAGE = {
+  hero: {
+    src: "/images/gallery/tabby-leather-back.png",
+    alt: "Tabby Shoulder Bag 26 straight back view with zip pocket and leather straps",
+    objectPosition: "center 58%",
+  },
+  secondary: [
+    {
+      src: "/images/gallery/tabby-leather-back-angle.png",
+      alt: "Tabby Shoulder Bag 26 back view at an angle showing pebbled leather and zip pocket",
+      objectPosition: "center 62%",
+    },
+    {
+      src: "/images/gallery/tabby-leather-side-gusset.png",
+      alt: "Tabby Shoulder Bag 26 side view showing accordion gussets and gold C clasp",
+      objectPosition: "center center",
+    },
+  ] satisfies PdpGalleryProductCollageTile[],
+} as const;
 
 /** First portrait below hero — lifestyle follow-up */
 export const PDP_GALLERY_HERO_FOLLOWUP_IMAGE =
@@ -676,6 +710,7 @@ export const PDP_GALLERY_ON_MODEL_FULL_DENIM_SLIDE: PdpGalleryImmersiveSlide = {
   src: "/images/gallery/tabby-leather-on-model-trench.png",
   alt: "Model wearing Tabby Shoulder Bag 26 with a tan trench coat and plaid mini skirt",
   objectPosition: "center top",
+  signatureSoundId: "tabby-turnlock",
 };
 
 /** Interior open — fourth frame below hero */
@@ -684,6 +719,7 @@ export const PDP_GALLERY_INTERIOR_OPEN_SLIDE: PdpGalleryImmersiveSlide = {
   src: "/images/gallery/tabby-leather-interior-open.png",
   alt: "Tabby Shoulder Bag 26 interior open showing accordion compartments and gold hardware",
   objectPosition: "center center",
+  signatureSoundId: "tabby-bag-open",
 };
 
 /** Capacity editorial break — lifestyle carry */
@@ -694,6 +730,7 @@ export const PDP_GALLERY_CAPACITY_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
   objectPosition: "center center",
   caption:
     "Three compartments — room for the whole day, never overstuffed.",
+  signatureSoundId: "tabby-zipper",
 };
 
 /** Craftsmanship editorial break — glovetanned leather story */
@@ -703,17 +740,11 @@ export const PDP_GALLERY_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
   alt: "Close-up of Tabby Shoulder Bag 26 full-grain leather and gold C clasp hardware",
   caption:
     "Glovetanned full-grain leather with signature hardware — soft, rich, and made to last.",
+  signatureSoundId: "tabby-turnlock",
 };
 
-/** Standard studio + on-model product photography */
-export const PDP_GALLERY_PRODUCT_SHOTS: PdpGalleryImmersiveSlide[] = [
-  {
-    type: "immersive",
-    src: "/images/gallery/tabby-leather-product-alt.png",
-    alt: "Tabby Shoulder Bag 26 in black full-grain leather with shoulder and crossbody straps",
-    objectPosition: "center 62%",
-    strapOptionsId: "tabby-straps",
-  },
+/** Standard studio product photography — front, detail collage, hardware */
+export const PDP_GALLERY_PRODUCT_SHOTS: PdpGallerySlide[] = [
   {
     type: "immersive",
     src: "/images/gallery/tabby-leather-front-charm.png",
@@ -721,30 +752,14 @@ export const PDP_GALLERY_PRODUCT_SHOTS: PdpGalleryImmersiveSlide[] = [
     objectPosition: "center 78%",
     scale: "scale-100",
   },
-  {
-    type: "immersive",
-    src: "/images/gallery/tabby-leather-back-angle.png",
-    alt: "Tabby Shoulder Bag 26 back view at an angle showing pebbled leather and zip pocket",
-    objectPosition: "center 62%",
-  },
-  {
-    type: "immersive",
-    src: "/images/gallery/tabby-leather-back.png",
-    alt: "Tabby Shoulder Bag 26 straight back view with zip pocket and leather straps",
-    objectPosition: "center 58%",
-  },
-  {
-    type: "immersive",
-    src: "/images/gallery/tabby-leather-side-gusset.png",
-    alt: "Tabby Shoulder Bag 26 side view showing accordion gussets and gold C clasp",
-    objectPosition: "center center",
-  },
+  { type: "product-collage" },
   {
     type: "immersive",
     src: "/images/gallery/tabby-leather-detail-hardware.png",
     alt: "Close-up of Tabby Shoulder Bag 26 full-grain leather, gold C clasp, and accordion interior",
     objectPosition: "center center",
     hotspots: PDP_PRODUCT_IMMERSIVE_HOTSPOTS,
+    signatureSoundId: "tabby-turnlock",
   },
 ];
 
@@ -774,6 +789,7 @@ export const PDP_GALLERY_MEDIA_SLIDES: PdpGallerySlide[] = [
     src: "/images/gallery/tabby-leather-on-model-trench.png",
     alt: "Model wearing Tabby Shoulder Bag 26 with a tan trench coat and plaid mini skirt",
     shopTheLookId: "trench-daytime",
+    signatureSoundId: "tabby-turnlock",
   },
   {
     type: "video",
@@ -795,10 +811,8 @@ export const PDP_GALLERY_EXPERIENCE_SLIDES: PdpGallerySlide[] = [
   { type: "material-exploration" },
   { type: "leather-aging" },
   { type: "weight-feel" },
-  { type: "signature-sounds" },
   { type: "bag-stories" },
   { type: "strap-simulation" },
-  { type: "ugc-context" },
 ];
 
 /** Tabby Shoulder Bag 26 gallery — media first, interactive modules below */
@@ -1002,74 +1016,77 @@ export type PdpStrapSimulationMode = {
   label: string;
   detail: string;
   answer: string;
+  /** Included with bag vs add-on price */
+  priceLabel?: string;
+  /** Matches PDP_STRAP_OPTIONS id — enables quick add on this preview */
+  quickAddOptionId?: string;
   image: {
     src: string;
     alt: string;
     objectPosition?: string;
+    fit?: "cover" | "contain";
   };
-  /** Animated bag offset within frame (%) */
-  bagOffsetY: number;
-  bagScale: number;
 };
 
-/** Strap simulation — drag across wear modes for crossbody bags */
+/** Strap swap simulator — preview detachable carry setups on the bag */
 export const PDP_STRAP_SIMULATION = {
-  moment: "Wear",
-  title: "Strap simulation",
-  intro: "How will you wear it? Drag across shoulder, crossbody, and strap lengths.",
-  hint: "Drag to try on",
+  moment: "Customize",
+  title: "Swap the straps",
+  intro: "Detachable clips — tap a strap to preview it on your Tabby.",
+  hint: "Tap to swap straps",
   modes: [
     {
-      id: "shoulder",
-      label: "Shoulder",
-      detail: "High on the shoulder — polished and everyday.",
-      answer: "Classic shoulder carry — sits close, reads refined for work and weekends.",
-      image: {
-        src: "/images/gallery/tabby-leather-on-model-tee.png",
-        alt: "Tabby Shoulder Bag 26 worn on the shoulder",
-        objectPosition: "center 18%",
-      },
-      bagOffsetY: 0,
-      bagScale: 1,
-    },
-    {
-      id: "crossbody",
-      label: "Crossbody",
-      detail: "Across the body — hands-free all day.",
-      answer: "Crossbody keeps you hands-free — commuting, travel, dinner, all covered.",
-      image: {
-        src: "/images/gallery/tabby-on-model-denim.png",
-        alt: "Tabby Shoulder Bag 26 worn crossbody with denim",
-        objectPosition: "center 22%",
-      },
-      bagOffsetY: 2,
-      bagScale: 1,
-    },
-    {
-      id: "short-strap",
-      label: "Short strap",
-      detail: "Tighter to the hip — elevated, evening-ready.",
-      answer: "Short strap sits higher on the frame — neat silhouette, easy reach.",
+      id: "included-dual",
+      label: "Dual leather",
+      detail: "Shoulder + crossbody straps included.",
+      answer: "Both leather straps clip on — wear shoulder or crossbody out of the box.",
+      priceLabel: "Included",
       image: {
         src: "/images/gallery/tabby-leather-product-alt.png",
-        alt: "Tabby Shoulder Bag 26 with a shorter strap drop",
-        objectPosition: "center 68%",
+        alt: "Tabby Shoulder Bag 26 with included shoulder and crossbody leather straps",
+        objectPosition: "center center",
+        fit: "contain",
       },
-      bagOffsetY: 8,
-      bagScale: 1.05,
     },
     {
-      id: "long-strap",
-      label: "Long strap",
-      detail: "Lower drop — relaxed hang over layers.",
-      answer: "Long strap falls lower on the torso — relaxed with coats and taller frames.",
+      id: "chain-strap",
+      label: "Chain",
+      detail: "Gold chain crossbody carry.",
+      answer: "Signature chain strap swaps onto the same hardware — dressier, hands-free.",
+      priceLabel: "$68",
+      quickAddOptionId: "chain-strap",
       image: {
-        src: "/images/gallery/tabby-on-model-full-denim.png",
-        alt: "Tabby Shoulder Bag 26 with a longer strap drop",
-        objectPosition: "center 28%",
+        src: "/images/similar/tabby-chain-crossbody.png",
+        alt: "Tabby Shoulder Bag 26 with signature gold chain crossbody strap",
+        objectPosition: "center center",
+        fit: "contain",
       },
-      bagOffsetY: -4,
-      bagScale: 0.98,
+    },
+    {
+      id: "slim-shoulder",
+      label: "Slim strap",
+      detail: "Cleaner shoulder silhouette.",
+      answer: "Slim leather strap for a tighter shoulder carry — less bulk at the collar.",
+      priceLabel: "$45",
+      image: {
+        src: "/images/gallery/tabby-product-front-916.jpg",
+        alt: "Tabby Shoulder Bag 26 with slim shoulder strap",
+        objectPosition: "center center",
+        fit: "contain",
+      },
+    },
+    {
+      id: "strap-extender",
+      label: "Extender",
+      detail: "Extra drop for layers.",
+      answer: "Strap extender adds length for coats and taller frames — same clips, longer hang.",
+      priceLabel: "$38",
+      image: {
+        src: "/images/gallery/tabby-leather-product-front.png",
+        alt: "Tabby Shoulder Bag 26 with extended strap drop",
+        objectPosition: "center center",
+        fit: "contain",
+      },
     },
   ] satisfies PdpStrapSimulationMode[],
 } as const;
@@ -1201,7 +1218,7 @@ export const PDP_MATERIAL_EXPLORATION = {
   title: "Material exploration",
   intro:
     "Drag across the leather to reveal grain, stitching, edge paint, and burnishing.",
-  hint: "Drag to explore",
+  hint: "Drag anywhere to zoom",
   overview: {
     src: "/images/gallery/tabby-leather-back-angle.png",
     alt: "Tabby Shoulder Bag 26 leather surface for touch exploration",
@@ -1434,7 +1451,7 @@ export const PDP_WEIGHT_FEEL = {
   image: {
     src: "/images/gallery/tabby-leather-product-alt.png",
     alt: "Tabby Shoulder Bag 26 in black full-grain leather with detachable straps",
-    objectPosition: "center bottom",
+    objectPosition: "center 62%",
   },
   reveal: {
     headline: "Comparable to carrying a water bottle.",
@@ -1520,6 +1537,10 @@ export const PDP_SIGNATURE_SOUNDS = {
     },
   ] satisfies PdpSignatureSound[],
 } as const;
+
+export function getPdpSignatureSound(id: string): PdpSignatureSound | undefined {
+  return PDP_SIGNATURE_SOUNDS.sounds.find((sound) => sound.id === id);
+}
 
 /** Moment #5 — brand heritage */
 export const PDP_HERITAGE_STORY = {
@@ -1654,8 +1675,8 @@ export const PDP_UGC_CONTEXT = {
     {
       id: "coffee-run",
       src: "/images/reviews/ugc-coffee-run.png",
-      alt: "Customer wearing Tabby Shoulder Bag 26 on a Saturday coffee run",
-      objectPosition: "center 40%",
+      alt: "Customer in a brown track jacket and plaid skirt with Tabby Shoulder Bag 26 outside a coffee shop",
+      objectPosition: "center 42%",
       context: "Saturday coffee run",
       scenario: "Farmers market loop — crossbody, hands free for an iced latte.",
       wearer: "Jordan L. · Brooklyn",
@@ -1667,7 +1688,8 @@ export const PDP_UGC_CONTEXT = {
     {
       id: "city-commute",
       src: "/images/reviews/ugc-on-street.png",
-      alt: "Customer styling Tabby Shoulder Bag 26 on a city street",
+      alt: "Customer at Spring St subway station with Tabby Shoulder Bag 26 and coffee in hand",
+      objectPosition: "center 38%",
       context: "City commute",
       scenario: "Subway to office — shoulder carry, structured enough for meetings.",
       wearer: "Alex R. · NYC",
@@ -1969,7 +1991,7 @@ export const PDP_REVIEWS_RATING_BREAKDOWN = [
   { stars: 1, percent: 1 },
 ] as const;
 
-/** Reviews carousel — contextual UGC (gallery module uses full PDP_UGC_CONTEXT set) */
+/** Reviews carousel — contextual UGC from PDP_UGC_CONTEXT */
 export const PDP_UGC_REVIEW_STORIES: PdpUgcStory[] = [
   PDP_UGC_CONTEXT.stories[0]!,
   PDP_UGC_CONTEXT.stories[1]!,

@@ -40,10 +40,30 @@ export function pdpModuleSectionClass({
   );
 }
 
-/** Module title — bold extended for section anchoring */
-export function pdpModuleHeadingClass({ lead = true }: { lead?: boolean } = {}) {
+/** Primary page title — modules, sheets, drawers (matches Shop the look) */
+export function pdpPageHeadingClass({ lead = true }: { lead?: boolean } = {}) {
   return cn(
-    "font-extended m-0 text-base font-bold tracking-[0.2px] text-black",
+    "font-extended m-0 text-xl font-normal tracking-[0.4px] text-black",
     lead && "mb-5",
   );
+}
+
+/** Sheet / drawer title — same scale as module H1s */
+export function pdpSheetHeadingClass() {
+  return pdpPageHeadingClass({ lead: false });
+}
+
+/** Module section title — defaults to primary page title scale */
+export function pdpModuleHeadingClass({
+  lead = true,
+  size = "lg",
+}: { lead?: boolean; size?: "lg" | "sm" } = {}) {
+  if (size === "sm") {
+    return cn(
+      "font-extended m-0 text-base font-normal tracking-[0.2px] text-black",
+      lead && "mb-3",
+    );
+  }
+
+  return pdpPageHeadingClass({ lead });
 }

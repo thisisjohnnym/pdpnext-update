@@ -15,7 +15,7 @@ import {
 
 const LIKE_RED = "#FE2C55";
 const BURST_DURATION_MS = 650;
-const RAIL_ICON_SIZE = 28;
+const RAIL_ICON_SIZE = 26;
 
 function railIconStyle(filled = false): CSSProperties {
   return {

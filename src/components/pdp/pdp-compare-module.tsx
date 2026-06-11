@@ -146,7 +146,7 @@ function CompareColumn({
             {added ? "Added" : "Add to Bag"}
           </span>
           {!added ? (
-            <MaterialIcon name="add" size={16} className="text-white" />
+            <MaterialIcon name="add" size={18} className="text-white" />
           ) : null}
         </button>
       ) : null}

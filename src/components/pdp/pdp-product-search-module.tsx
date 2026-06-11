@@ -87,7 +87,7 @@ function ConciergeResponse({
 
 /** AI Concierge — experiential prompts with inline styling answers */
 export function PdpAiConciergeModule() {
-  const { title, subtitle, placeholder, prompts, fallbackResponse } = PDP_AI_CONCIERGE;
+  const { title, placeholder, prompts, fallbackResponse } = PDP_AI_CONCIERGE;
   const [query, setQuery] = useState("");
   const [activePromptId, setActivePromptId] = useState<string | null>(null);
   const [submittedQuery, setSubmittedQuery] = useState<string | null>(null);
@@ -131,10 +131,7 @@ export function PdpAiConciergeModule() {
       <PageGrid fullWidth>
         <GridItem mobile={12} desktop={24}>
           <div className="flex flex-col gap-5">
-            <div className="flex flex-col gap-1.5">
-              <h2 className={pdpModuleHeadingClass({ lead: false })}>{title}</h2>
-              <p className={`m-0 text-neutral-600 ${pdpType.caption}`}>{subtitle}</p>
-            </div>
+            <h2 className={pdpModuleHeadingClass({ lead: false })}>{title}</h2>
 
             <form
               className="rounded-2xl bg-white p-3 shadow-sm"
@@ -195,7 +192,7 @@ export function PdpAiConciergeModule() {
                     onClick={() => runPrompt(prompt)}
                     aria-pressed={isActive}
                     className={cn(
-                      "flex w-full items-start gap-3 rounded-2xl border p-3 text-left transition-colors duration-200",
+                      "flex w-full items-start gap-3 border p-3 text-left transition-colors duration-200",
                       isActive
                         ? "border-black bg-white shadow-sm"
                         : "border-neutral-200 bg-white active:bg-neutral-50",
@@ -203,7 +200,7 @@ export function PdpAiConciergeModule() {
                   >
                     <span
                       className={cn(
-                        "flex size-9 shrink-0 items-center justify-center rounded-xl transition-colors",
+                        "flex size-9 shrink-0 items-center justify-center transition-colors",
                         isActive ? "bg-black text-white" : "bg-neutral-100 text-neutral-600",
                       )}
                     >

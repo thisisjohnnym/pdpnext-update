@@ -136,7 +136,7 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
             </div>
 
             <section className="flex flex-col gap-3">
-              <p className="font-extended m-0 text-sm font-bold tracking-[0.2px] text-black">
+              <p className={pdpModuleHeadingClass({ lead: false, size: "sm" })}>
                 {PDP_REVIEWS_AI_SUMMARY.headline}
               </p>
               <p className="font-extended m-0 text-sm leading-[1.35] tracking-[0.2px] text-[#4a4a4a]">
@@ -151,14 +151,9 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
             </section>
 
             <section className="flex flex-col gap-4">
-              <div className="flex flex-col gap-1">
-                <p className="font-extended m-0 text-sm font-bold tracking-[0.2px] text-black">
-                  In real life
-                </p>
-                <p className={`m-0 text-neutral-600 ${pdpType.caption}`}>
-                  Who&apos;s wearing it, how, and where — not random customer photos.
-                </p>
-              </div>
+              <p className={pdpModuleHeadingClass({ lead: false, size: "sm" })}>
+                In real life
+              </p>
 
               <div className={cn("flex gap-2", pdpCarouselScrollClass)}>
                 {PDP_UGC_REVIEW_STORIES.map((story) => (

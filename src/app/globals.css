@@ -53,6 +53,10 @@ body {
   top: 2px;
 }
 
+.font-extended.font-bold {
+  font-weight: 700;
+}
+
 /* Preserve transform-driven motion on extended labels */
 .font-extended[class*="animate-"] {
   top: 0;
@@ -309,32 +313,40 @@ body {
   transition-duration: 700ms;
 }
 
-/* Floating bottom pills — frosted glass with ADA-safe contrast */
+/* Floating bottom pills — heavy frosted glass */
 .pdp-glass-dark {
-  border: 0;
-  background-color: rgb(23 23 23 / 0.78);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  backdrop-filter: blur(20px) saturate(160%);
-  box-shadow: 0 4px 24px rgb(0 0 0 / 0.2);
+  border: 1px solid rgb(255 255 255 / 0.28);
+  background-color: rgb(32 32 32 / 0.92);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  box-shadow:
+    0 8px 32px rgb(0 0 0 / 0.28),
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    inset 0 -1px 0 rgb(0 0 0 / 0.12);
   color: #fff;
 }
 
 .pdp-glass-light {
-  border: 0;
-  background-color: rgb(255 255 255 / 0.9);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  backdrop-filter: blur(20px) saturate(160%);
-  box-shadow: 0 4px 24px rgb(0 0 0 / 0.12);
+  border: 1px solid rgb(255 255 255 / 0.72);
+  background-color: rgb(255 255 255 / 0.48);
+  -webkit-backdrop-filter: blur(48px) saturate(200%) brightness(1.1);
+  backdrop-filter: blur(48px) saturate(200%) brightness(1.1);
+  box-shadow:
+    0 8px 32px rgb(0 0 0 / 0.14),
+    inset 0 1px 0 rgb(255 255 255 / 0.85),
+    inset 0 -1px 0 rgb(0 0 0 / 0.04);
   color: #0a0a0a;
 }
 
 @supports not (backdrop-filter: blur(1px)) {
   .pdp-glass-dark {
-    background-color: rgb(23 23 23 / 0.96);
+    background-color: rgb(23 23 23 / 0.94);
+    border-color: rgb(255 255 255 / 0.15);
   }
 
   .pdp-glass-light {
-    background-color: #fff;
+    background-color: rgb(255 255 255 / 0.96);
+    border-color: rgb(255 255 255 / 0.5);
   }
 }
 

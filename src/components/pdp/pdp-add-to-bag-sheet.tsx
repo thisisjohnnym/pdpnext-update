@@ -13,6 +13,7 @@ import {
   PDP_PRODUCT,
   type PdpBundleAddPayload,
 } from "./pdp-data";
+import { pdpSheetHeadingClass } from "./pdp-module-section";
 
 type BagConfirmation =
   | { type: "product" }
@@ -119,10 +120,7 @@ export function PdpAddToBagSheet({
             <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-black">
               <MaterialIcon name="check" size={18} className="text-white" />
             </span>
-            <h2
-              id={titleId}
-              className="font-extended text-base tracking-[0.2px] text-black"
-            >
+            <h2 id={titleId} className={pdpSheetHeadingClass()}>
               {isBundle ? "Bundle added to your bag" : "Added to your bag"}
             </h2>
           </div>

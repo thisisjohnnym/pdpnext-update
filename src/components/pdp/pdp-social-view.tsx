@@ -51,6 +51,7 @@ export function PdpSocialView() {
         onOpenReviews={() => setReviewsOpen(true)}
         onAddSimilarToBag={handleQuickAddToBag}
         onAddBundle={handleAddBundle}
+        onQuickAddStrap={() => handleQuickAddToBag()}
         onStrapOptionsOpenChange={setStrapOptionsOpen}
         selectedColorId={selectedColorId}
       />
