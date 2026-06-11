@@ -10,6 +10,7 @@ type PdpGalleryEditorialSlideProps = {
   src: string;
   alt: string;
   caption: string;
+  objectPosition?: string;
   secondarySrc?: string;
   secondaryAlt?: string;
   learnMore?: {
@@ -20,11 +21,12 @@ type PdpGalleryEditorialSlideProps = {
   reserveBottomCta?: boolean;
 };
 
-/** Inset 4:5 editorial break — image, caption, optional second image */
+/** Inset editorial break — narrowed image + caption with generous margins */
 export function PdpGalleryEditorialSlide({
   src,
   alt,
   caption,
+  objectPosition = "center top",
   secondarySrc,
   secondaryAlt,
   learnMore,
@@ -33,26 +35,27 @@ export function PdpGalleryEditorialSlide({
   return (
     <section
       data-header-surface="light"
-      className="relative flex w-full shrink-0 flex-col bg-white py-3 lg:py-5"
+      className="relative flex w-full shrink-0 flex-col bg-white py-10 lg:py-14"
       style={reserveBottomCta ? { paddingBottom: BOTTOM_CTA_OFFSET } : undefined}
     >
       <PageGrid fullWidth>
-        <GridItem mobile={12} desktop={24}>
-          <div className="flex w-full flex-col gap-3 lg:gap-5">
+        <GridItem mobile={10} mobileStart={2} desktop={14} desktopStart={6}>
+          <div className="flex w-full flex-col gap-4 lg:gap-5">
             <div className="relative aspect-[4/5] w-full overflow-hidden bg-neutral-100">
               <Image
                 src={src}
                 alt={alt}
                 fill
-                className="object-cover object-top"
-                sizes="100vw"
+                className="object-cover"
+                style={{ objectPosition }}
+                sizes="(max-width: 1023px) 78vw, 42vw"
               />
             </div>
 
             <div
               className={cn(
                 "flex w-full flex-col items-start gap-3",
-                learnMore && "pb-6 lg:pb-8",
+                learnMore && "pb-2 lg:pb-4",
               )}
             >
               <p className={`font-extended m-0 w-full text-black ${pdpType.caption}`}>
@@ -78,7 +81,7 @@ export function PdpGalleryEditorialSlide({
                   alt={secondaryAlt ?? ""}
                   fill
                   className="object-cover object-top scale-[1.12]"
-                  sizes="100vw"
+                  sizes="(max-width: 1023px) 78vw, 42vw"
                 />
               </div>
             ) : null}

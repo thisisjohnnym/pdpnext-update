@@ -6,7 +6,6 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
-import { BOTTOM_CTA_OFFSET } from "./pdp-gallery-view";
 import { PDP_PRODUCT_SEARCH } from "./pdp-data";
 import { pdpModuleSectionClass, pdpModuleHeadingClass } from "./pdp-module-section";
 import { pdpType } from "./pdp-type";
@@ -20,7 +19,6 @@ export function PdpProductSearchModule() {
     <section
       data-header-surface="light"
       className={pdpModuleSectionClass({ variant: "muted", rhythm: "compact" })}
-      style={{ paddingBottom: BOTTOM_CTA_OFFSET }}
     >
       <PageGrid fullWidth>
         <GridItem mobile={12} desktop={24}>

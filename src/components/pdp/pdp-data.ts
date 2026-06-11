@@ -1,9 +1,10 @@
 export const PDP_PRODUCT = {
-  name: "Tabby 26",
-  subtitle: "Our staple shoulder bag with pillow quilting.",
-  price: "$575",
-  imageSrc: "/images/gallery/tabby-product-immersive.png",
-  imageAlt: "Tabby 26 black quilted shoulder bag with gold C clasp and chain strap",
+  name: "Tabby Shoulder Bag 26",
+  subtitle: "Our signature shoulder bag in full-grain leather.",
+  price: "$550",
+  imageSrc: "/images/gallery/tabby-leather-product-front.png",
+  imageAlt:
+    "Tabby Shoulder Bag 26 in black full-grain leather with gold C clasp and detachable straps",
 } as const;
 
 export type PdpBagUpsell = {
@@ -20,42 +21,42 @@ export const PDP_BAG_UPSELLS: PdpBagUpsell[] = [
     id: "cherry-charm",
     name: "Cherry Bag Charm",
     price: "$45",
-    imageSrc: "/images/gallery/tabby-front-charm.png",
+    imageSrc: "/images/gallery/tabby-leather-front-charm.png",
     imageAlt: "Red cherry bag charm on gold chain",
   },
   {
     id: "chain-strap",
     name: "Signature Chain Strap",
     price: "$68",
-    imageSrc: "/images/gallery/tabby-detail-clasp.png",
+    imageSrc: "/images/gallery/tabby-leather-detail-hardware.png",
     imageAlt: "Gold chain strap with leather weave detail",
   },
   {
     id: "strap-extender",
     name: "Bag Strap Extender",
     price: "$38",
-    imageSrc: "/images/gallery/tabby-angle.png",
+    imageSrc: "/images/gallery/tabby-leather-side-gusset.png",
     imageAlt: "Adjustable bag strap extender in black leather",
   },
   {
     id: "heart-charm",
     name: "Heart Bag Charm",
     price: "$42",
-    imageSrc: "/images/gallery/tabby-product-immersive.png",
+    imageSrc: "/images/gallery/tabby-leather-front-charm.png",
     imageAlt: "Gold heart bag charm on chain",
   },
   {
     id: "leather-key-ring",
     name: "Leather Key Ring",
     price: "$35",
-    imageSrc: "/images/gallery/tabby-back.png",
+    imageSrc: "/images/gallery/tabby-leather-back.png",
     imageAlt: "Black leather key ring with gold hardware",
   },
   {
     id: "card-case-clip",
     name: "Card Case & Clip",
     price: "$52",
-    imageSrc: "/images/gallery/tabby-interior-open.png",
+    imageSrc: "/images/gallery/tabby-leather-interior-packed.png",
     imageAlt: "Compact card case with bag clip attachment",
   },
 ];
@@ -85,7 +86,7 @@ export const PDP_BUNDLE_ITEMS: PdpBundleItem[] = [
   {
     id: "tabby-26",
     name: PDP_PRODUCT.name,
-    price: 575,
+    price: 550,
     imageSrc: PDP_PRODUCT.imageSrc,
     imageAlt: PDP_PRODUCT.imageAlt,
     defaultSelected: true,
@@ -95,7 +96,7 @@ export const PDP_BUNDLE_ITEMS: PdpBundleItem[] = [
     id: "cherry-charm",
     name: "Cherry Bag Charm",
     price: 45,
-    imageSrc: "/images/gallery/tabby-front-charm.png",
+    imageSrc: "/images/gallery/tabby-leather-front-charm.png",
     imageAlt: "Red cherry bag charm on gold chain",
     defaultSelected: true,
   },
@@ -103,7 +104,7 @@ export const PDP_BUNDLE_ITEMS: PdpBundleItem[] = [
     id: "chain-strap",
     name: "Signature Chain Strap",
     price: 68,
-    imageSrc: "/images/gallery/tabby-detail-clasp.png",
+    imageSrc: "/images/gallery/tabby-leather-detail-hardware.png",
     imageAlt: "Gold chain strap with leather weave detail",
     defaultSelected: false,
   },
@@ -111,7 +112,7 @@ export const PDP_BUNDLE_ITEMS: PdpBundleItem[] = [
     id: "heart-charm",
     name: "Heart Bag Charm",
     price: 42,
-    imageSrc: "/images/gallery/tabby-product-immersive.png",
+    imageSrc: "/images/gallery/tabby-leather-front-charm.png",
     imageAlt: "Gold heart bag charm on chain",
     defaultSelected: false,
   },
@@ -119,7 +120,7 @@ export const PDP_BUNDLE_ITEMS: PdpBundleItem[] = [
     id: "card-case-clip",
     name: "Card Case & Clip",
     price: 52,
-    imageSrc: "/images/gallery/tabby-interior-open.png",
+    imageSrc: "/images/gallery/tabby-leather-interior-packed.png",
     imageAlt: "Compact card case with bag clip attachment",
     defaultSelected: false,
   },
@@ -157,7 +158,7 @@ export const PDP_BAG_SIZE = {
       x: 48,
       y: 42,
       label: "Bag size",
-      title: "Tabby 26 dimensions",
+      title: "Tabby Shoulder Bag 26 dimensions",
       body: "Structured at a mid-size scale — roomy enough for daily essentials, compact enough for evenings out.",
       fits: ['10.5" wide', '6.5" tall', '3" deep'],
     },
@@ -211,12 +212,12 @@ export const PDP_COMPARE_SELECTED: PdpCompareItem = {
   imageSrc: PDP_PRODUCT.imageSrc,
   imageAlt: PDP_PRODUCT.imageAlt,
   size: '10" W x 6" H x 3" D',
-  strap: "Chain & leather",
-  material: "Quilted leather",
+  strap: "Detachable leather",
+  material: "Full-grain leather",
   materialSwatch: {
-    src: "/images/gallery/tabby-angle.png",
-    alt: "Close-up of quilted leather texture",
-    objectPosition: "center 40%",
+    src: "/images/gallery/tabby-leather-back.png",
+    alt: "Close-up of full-grain pebbled leather texture",
+    objectPosition: "center 45%",
   },
   closure: "C clasp turn-lock",
 };
@@ -235,7 +236,7 @@ export const PDP_COMPARE_OPTIONS: PdpCompareItem[] = [
     materialSwatch: {
       src: "/images/gallery/tabby-angle.png",
       alt: "Close-up of quilted leather texture",
-      objectPosition: "center 40%",
+      objectPosition: "center 55%",
     },
     closure: "C clasp turn-lock",
   },
@@ -283,7 +284,7 @@ export const PDP_COMPARE_OPTIONS: PdpCompareItem[] = [
     materialSwatch: {
       src: "/images/gallery/tabby-back.png",
       alt: "Close-up of pillow-quilted leather texture",
-      objectPosition: "center 35%",
+      objectPosition: "center 50%",
     },
     closure: "C clasp turn-lock",
   },
@@ -396,21 +397,24 @@ export const PDP_PRODUCT_SEARCH = {
   ],
 } as const;
 
-/** Gallery hero — on-model city street lifestyle shot */
-export const PDP_GALLERY_HERO_IMAGE = "/images/gallery/hero-city-street.png";
+/** Gallery hero — 9:16 TikTok-style lifestyle shot */
+export const PDP_GALLERY_HERO_IMAGE = "/images/gallery/4k-hero1.png";
 
-/** Hero crop — nudge up so the bag sits above bottom chrome */
+/** Hero framing — native 9:16 asset, centered cover fill */
 export const PDP_GALLERY_HERO_IMAGE_FOCUS = {
-  objectPosition: "center 46%",
-  scale: 1.08,
+  objectPosition: "center center",
+  scale: 1,
   translateY: "0%",
 } as const;
 
 /** Full-bleed rotating product video for Gallery tab */
-export const PDP_GALLERY_HERO_VIDEO = "/videos/gallery-360.webm";
+export const PDP_GALLERY_HERO_VIDEO = "/videos/soft-tabby-360.webm";
 
-/** Product detail clip — follows the immersive hotspot slide */
-export const PDP_GALLERY_DETAIL_VIDEO = "/videos/tabby-detail.mp4";
+/** Capacity showcase — what fits inside the bag */
+export const PDP_GALLERY_WHAT_FITS_INSIDE_VIDEO = "/videos/what-fits-inside.webm";
+
+/** Highlight montage — styling, details, and product moments */
+export const PDP_GALLERY_SHOWCASE_VIDEO = "/videos/soft-tabby-showcase.webm";
 
 /** Match studio backdrop so letterboxing feels seamless */
 export const PDP_GALLERY_VIDEO_BG = "#e9e9e9";
@@ -425,28 +429,28 @@ export type PdpProductHotspot = {
   body: string;
 };
 
-/** Detail hotspots — product immersive studio shot */
+/** Detail hotspots — quilt close-up studio shot */
 export const PDP_PRODUCT_IMMERSIVE_HOTSPOTS: PdpProductHotspot[] = [
   {
     id: "c-clasp",
     x: 50,
-    y: 72,
+    y: 62,
     title: "The iconic C",
     body: "Inspired by a turn-lock from Coach archives, the sculpted C clasp became Tabby's signature when the silhouette returned in 2018.",
   },
   {
-    id: "quilting",
-    x: 63,
-    y: 78,
-    title: "Pillow quilting",
-    body: "Diagonal stitching creates a padded, dimensional finish — soft to the touch with a structured silhouette.",
+    id: "full-grain-leather",
+    x: 50,
+    y: 38,
+    title: "Full-grain leather",
+    body: "Genuine full-grain leather with a refined pebbled finish — structured, durable, and made to age beautifully.",
   },
   {
-    id: "chain-strap",
-    x: 30,
-    y: 66,
-    title: "Chain & leather strap",
-    body: "Interwoven metal chain and leather lets you wear Tabby on the shoulder or crossbody.",
+    id: "accordion-interior",
+    x: 50,
+    y: 16,
+    title: "Accordion interior",
+    body: "Three gusseted compartments expand to hold your everyday essentials without losing shape.",
   },
 ];
 
@@ -475,6 +479,7 @@ export type PdpGalleryEditorialSlide = {
   src: string;
   alt: string;
   caption: string;
+  objectPosition?: string;
   secondarySrc?: string;
   secondaryAlt?: string;
   learnMore?: {
@@ -488,6 +493,10 @@ export type PdpGalleryVideoSlide = {
   src: string;
   poster?: string;
   alt: string;
+  /** Hide mute toggle — 360 spins are silent by default */
+  showMuteControl?: boolean;
+  /** Frame ratio — 9:16 for TikTok-style clips, 4:5 for product spins */
+  aspect?: "4/5" | "9/16";
 };
 
 export type PdpGallerySlide =
@@ -495,62 +504,140 @@ export type PdpGallerySlide =
   | PdpGalleryEditorialSlide
   | PdpGalleryVideoSlide;
 
-/** First portrait below hero — patio lifestyle shot */
+/** First portrait below hero — lifestyle follow-up */
 export const PDP_GALLERY_HERO_FOLLOWUP_IMAGE =
-  "/images/gallery/tabby-patio-pink-dress.png";
+  "/images/gallery/tabby-leather-on-model-laugh.png";
 
-/** Product immersive — below details editorial */
+/** Product hero — front view with charm (posters, compare, hotspots) */
 export const PDP_GALLERY_PRODUCT_IMMERSIVE =
-  "/images/gallery/tabby-product-immersive.png";
+  "/images/gallery/tabby-leather-front-charm.png";
 
-/** Tabby 26 gallery — 360 video, portrait, portrait, editorial, product immersive */
+/** Lead product shot — first frame below hero */
+export const PDP_GALLERY_PRODUCT_FRONT_SLIDE: PdpGalleryImmersiveSlide = {
+  type: "immersive",
+  src: "/images/gallery/tabby-leather-product-front.png",
+  alt: "Tabby Shoulder Bag 26 in black full-grain leather, front view with gold C clasp and detachable straps",
+  objectPosition: "center 62%",
+};
+
+/** On-model — second frame below hero */
+export const PDP_GALLERY_ON_MODEL_DENIM_SLIDE: PdpGalleryImmersiveSlide = {
+  type: "immersive",
+  src: "/images/gallery/tabby-leather-on-model-tee.png",
+  alt: "Model wearing Tabby Shoulder Bag 26 crossbody with a Coach tee and suede mini skirt",
+  objectPosition: "center top",
+};
+
+/** Full-length on-model — third frame below hero */
+export const PDP_GALLERY_ON_MODEL_FULL_DENIM_SLIDE: PdpGalleryImmersiveSlide = {
+  type: "immersive",
+  src: "/images/gallery/tabby-leather-on-model-trench.png",
+  alt: "Model wearing Tabby Shoulder Bag 26 with a tan trench coat and plaid mini skirt",
+  objectPosition: "center top",
+};
+
+/** Interior open — fourth frame below hero */
+export const PDP_GALLERY_INTERIOR_OPEN_SLIDE: PdpGalleryImmersiveSlide = {
+  type: "immersive",
+  src: "/images/gallery/tabby-leather-interior-open.png",
+  alt: "Tabby Shoulder Bag 26 interior open showing accordion compartments and gold hardware",
+  objectPosition: "center center",
+};
+
+/** Capacity editorial break — what fits inside */
+export const PDP_GALLERY_CAPACITY_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
+  type: "editorial",
+  src: "/images/gallery/tabby-leather-interior-packed.png",
+  alt: "Tabby Shoulder Bag 26 interior packed with phone, wallet, AirPods, and essentials",
+  objectPosition: "center center",
+  caption:
+    "Designed for every day. Tabby 26's accordion interior holds your phone, wallet, keys, AirPods, and a few extras — organized across three compartments without feeling overstuffed.",
+};
+
+/** Craftsmanship editorial break — glovetanned leather story */
+export const PDP_GALLERY_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
+  type: "editorial",
+  src: "/images/gallery/tabby-leather-detail-hardware.png",
+  alt: "Close-up of Tabby Shoulder Bag 26 full-grain leather and gold C clasp hardware",
+  caption:
+    "Crafted in glovetanned full-grain leather, Tabby 26 is defined by its richness, softness, and enduring character. Finished with signature hardware and meticulous detailing, every element reflects the craftsmanship at the heart of Coach.",
+};
+
+/** Standard studio + on-model product photography */
+export const PDP_GALLERY_PRODUCT_SHOTS: PdpGalleryImmersiveSlide[] = [
+  {
+    type: "immersive",
+    src: "/images/gallery/tabby-leather-front-charm.png",
+    alt: "Tabby Shoulder Bag 26 front view with gold C clasp, leather straps, and cherry charm",
+    objectPosition: "center 78%",
+    scale: "scale-100",
+  },
+  {
+    type: "immersive",
+    src: "/images/gallery/tabby-leather-back-angle.png",
+    alt: "Tabby Shoulder Bag 26 back view at an angle showing pebbled leather and zip pocket",
+    objectPosition: "center 62%",
+  },
+  {
+    type: "immersive",
+    src: "/images/gallery/tabby-leather-back.png",
+    alt: "Tabby Shoulder Bag 26 straight back view with zip pocket and leather straps",
+    objectPosition: "center 58%",
+  },
+  {
+    type: "immersive",
+    src: "/images/gallery/tabby-leather-side-gusset.png",
+    alt: "Tabby Shoulder Bag 26 side view showing accordion gussets and gold C clasp",
+    objectPosition: "center center",
+  },
+  {
+    type: "immersive",
+    src: "/images/gallery/tabby-leather-detail-hardware.png",
+    alt: "Close-up of Tabby Shoulder Bag 26 full-grain leather, gold C clasp, and accordion interior",
+    objectPosition: "center center",
+    hotspots: PDP_PRODUCT_IMMERSIVE_HOTSPOTS,
+  },
+];
+
+/** Tabby Shoulder Bag 26 gallery — product front, on-model, editorial, interiors, video, lifestyle, product shots */
 export const PDP_GALLERY_SLIDES: PdpGallerySlide[] = [
+  PDP_GALLERY_PRODUCT_FRONT_SLIDE,
+  PDP_GALLERY_ON_MODEL_DENIM_SLIDE,
+  PDP_GALLERY_EDITORIAL_SLIDE,
+  PDP_GALLERY_ON_MODEL_FULL_DENIM_SLIDE,
+  PDP_GALLERY_INTERIOR_OPEN_SLIDE,
+  PDP_GALLERY_CAPACITY_EDITORIAL_SLIDE,
+  {
+    type: "video",
+    src: PDP_GALLERY_WHAT_FITS_INSIDE_VIDEO,
+    poster: "/images/gallery/tabby-leather-interior-packed.png",
+    alt: "What fits inside Tabby Shoulder Bag 26",
+  },
   {
     type: "video",
     src: PDP_GALLERY_HERO_VIDEO,
     poster: PDP_GALLERY_PRODUCT_IMMERSIVE,
-    alt: "360° rotating view of Tabby 26 shoulder bag",
+    alt: "360° rotating view of Tabby Shoulder Bag 26",
+    showMuteControl: false,
   },
   {
     type: "immersive",
-    src: PDP_GALLERY_HERO_FOLLOWUP_IMAGE,
-    alt: "Model in a pink tiered dress carrying Tabby 26 on a patio",
-    influencer: {
-      handle: "@jordanlee",
-      profileUrl: "https://www.instagram.com/jordanlee/",
-      platform: "instagram",
-    },
-  },
-  {
-    type: "immersive",
-    src: "/images/gallery/tabby-model-full.png",
-    alt: "Model wearing Tabby 26 with denim jacket and wide-leg jeans",
-    shopTheLookId: "denim-daytime",
-  },
-  {
-    type: "editorial",
-    src: "/images/gallery/tabby-front-charm.png",
-    alt: "Tabby 26 front view with gold C clasp and chain strap",
-    caption:
-      "The details behind the icon – explore the quilting, craftsmanship, and signature finishes that make Tabby unmistakably Coach.",
-    learnMore: {
-      label: "Learn more",
-      href: "https://www.coach.com/shop/women/bags/shoulder-bags/tabby-shoulder-bag-26/CCZ47.html",
-    },
-  },
-  {
-    type: "immersive",
-    src: PDP_GALLERY_PRODUCT_IMMERSIVE,
-    alt: "Tabby 26 black quilted shoulder bag with gold C clasp, chain strap, and cherry charm",
-    objectPosition: "center 78%",
-    scale: "scale-100",
-    hotspots: PDP_PRODUCT_IMMERSIVE_HOTSPOTS,
+    src: "/images/gallery/tabby-leather-on-model-trench.png",
+    alt: "Model wearing Tabby Shoulder Bag 26 with a tan trench coat and plaid mini skirt",
+    shopTheLookId: "trench-daytime",
   },
   {
     type: "video",
-    src: PDP_GALLERY_DETAIL_VIDEO,
-    poster: PDP_GALLERY_PRODUCT_IMMERSIVE,
-    alt: "Tabby 26 shoulder bag detail video",
+    src: PDP_GALLERY_SHOWCASE_VIDEO,
+    poster: "/images/gallery/tabby-leather-on-model-tee.png",
+    alt: "Tabby Shoulder Bag 26 highlight montage",
+    aspect: "9/16",
+  },
+  ...PDP_GALLERY_PRODUCT_SHOTS,
+  {
+    type: "immersive",
+    src: PDP_GALLERY_HERO_FOLLOWUP_IMAGE,
+    alt: "Model in a tan trench coat and plaid skirt carrying Tabby Shoulder Bag 26",
   },
 ];
 
@@ -563,79 +650,64 @@ export type PdpGalleryPhoto = {
 /** Extended gallery — opened from the bottom "View more photos" affordance */
 export const PDP_GALLERY_MORE_PHOTOS: PdpGalleryPhoto[] = [
   {
-    id: "model-denim",
-    src: "/images/gallery/tabby-model-full.png",
-    alt: "Model wearing Tabby 26 with denim jacket and wide-leg jeans",
+    id: "on-model-tee",
+    src: "/images/gallery/tabby-leather-on-model-tee.png",
+    alt: "Model wearing Tabby Shoulder Bag 26 with a Coach tee and suede mini skirt",
+  },
+  {
+    id: "on-model-trench",
+    src: "/images/gallery/tabby-leather-on-model-trench.png",
+    alt: "Model wearing Tabby Shoulder Bag 26 with a tan trench coat and plaid mini skirt",
+  },
+  {
+    id: "on-model-laugh",
+    src: "/images/gallery/tabby-leather-on-model-laugh.png",
+    alt: "Model laughing while wearing Tabby Shoulder Bag 26 with a trench coat and plaid skirt",
   },
   {
     id: "interior-open",
-    src: "/images/gallery/tabby-interior-open.png",
-    alt: "Tabby 26 interior open with compartments and gold hardware",
+    src: "/images/gallery/tabby-leather-interior-open.png",
+    alt: "Tabby Shoulder Bag 26 interior open with accordion compartments and gold hardware",
   },
   {
     id: "interior-packed",
-    src: "/images/gallery/tabby-interior-packed.png",
-    alt: "Tabby 26 interior packed with phone, wallet, and everyday essentials",
+    src: "/images/gallery/tabby-leather-interior-packed.png",
+    alt: "Tabby Shoulder Bag 26 interior packed with phone, wallet, and everyday essentials",
   },
   {
-    id: "hero-city",
-    src: "/images/gallery/hero-city-street.png",
-    alt: "Model in a black leather jacket carrying Tabby 26 on a city street",
-  },
-  {
-    id: "patio-lifestyle",
-    src: "/images/gallery/tabby-patio-pink-dress.png",
-    alt: "Model in a pink tiered dress carrying Tabby 26 on a patio",
-  },
-  {
-    id: "product-immersive",
-    src: "/images/gallery/tabby-product-immersive.png",
-    alt: "Tabby 26 black quilted shoulder bag with gold C clasp and chain strap",
+    id: "product-front",
+    src: "/images/gallery/tabby-leather-product-front.png",
+    alt: "Tabby Shoulder Bag 26 in black full-grain leather, front view",
   },
   {
     id: "front-charm",
-    src: "/images/gallery/tabby-front-charm.png",
-    alt: "Tabby 26 front view with gold C clasp and cherry charm",
+    src: "/images/gallery/tabby-leather-front-charm.png",
+    alt: "Tabby Shoulder Bag 26 front view with gold C clasp and cherry charm",
   },
   {
-    id: "on-model-front",
-    src: "/images/gallery/tabby-on-model-front.png",
-    alt: "Model wearing Tabby 26 crossbody with a casual outfit",
-  },
-  {
-    id: "on-model-back",
-    src: "/images/gallery/tabby-on-model-back.png",
-    alt: "Model from behind wearing Tabby 26 on the shoulder",
-  },
-  {
-    id: "on-model-plaid",
-    src: "/images/gallery/tabby-on-model-plaid.png",
-    alt: "Model styled with Tabby 26 and a plaid coat",
-  },
-  {
-    id: "hero-model",
-    src: "/images/gallery/tabby-hero-model.png",
-    alt: "Model wearing Tabby 26 with a grey sweater and light-wash jeans",
-  },
-  {
-    id: "angle",
-    src: "/images/gallery/tabby-angle.png",
-    alt: "Tabby 26 angled product shot showing quilting detail",
+    id: "back-angle",
+    src: "/images/gallery/tabby-leather-back-angle.png",
+    alt: "Tabby Shoulder Bag 26 back view at an angle",
   },
   {
     id: "back",
-    src: "/images/gallery/tabby-back.png",
-    alt: "Tabby 26 back view with chain strap detail",
+    src: "/images/gallery/tabby-leather-back.png",
+    alt: "Tabby Shoulder Bag 26 straight back view with zip pocket",
   },
   {
-    id: "clasp-detail",
-    src: "/images/gallery/tabby-detail-clasp.png",
-    alt: "Close-up of Tabby 26 gold C clasp hardware",
+    id: "side-gusset",
+    src: "/images/gallery/tabby-leather-side-gusset.png",
+    alt: "Tabby Shoulder Bag 26 side view showing accordion gussets",
   },
   {
-    id: "interior",
-    src: "/images/gallery/tabby-interior.png",
-    alt: "Tabby 26 interior lining and organization",
+    id: "detail-hardware",
+    src: "/images/gallery/tabby-leather-detail-hardware.png",
+    alt: "Close-up of Tabby Shoulder Bag 26 full-grain leather and gold C clasp",
+  },
+  {
+    id: "product-alt",
+    src: "/images/gallery/tabby-leather-product-alt.png",
+    alt: "Tabby Shoulder Bag 26 alternate front product shot",
   },
 ];
 
@@ -655,49 +727,49 @@ export type PdpShopTheLookLook = {
 };
 
 export const PDP_SHOP_THE_LOOK: Record<string, PdpShopTheLookLook> = {
-  "denim-daytime": {
-    id: "denim-daytime",
+  "trench-daytime": {
+    id: "trench-daytime",
     title: "Shop the look",
     items: [
       {
         id: "tabby-26",
-        name: "Tabby 26 Shoulder Bag",
-        price: "$575",
-        href: "https://www.coach.com/shop/women/bags/shoulder-bags/tabby-shoulder-bag-26/CCZ47.html",
-        imageSrc: "/images/gallery/tabby-front-charm.png",
-        imageAlt: "Tabby 26 shoulder bag in black",
+        name: "Tabby Shoulder Bag 26",
+        price: "$550",
+        href: "https://www.coach.com/shop/women/bags/shoulder-bags/tabby-shoulder-bag/CCZ47.html",
+        imageSrc: "/images/gallery/tabby-leather-front-charm.png",
+        imageAlt: "Tabby Shoulder Bag 26 in black full-grain leather",
       },
       {
-        id: "denim-jacket",
-        name: "Denim Trucker Jacket",
-        price: "$395",
-        href: "https://www.coach.com/shop/women/ready-to-wear/jackets",
-        imageSrc: "/images/gallery/tabby-model-full.png",
-        imageAlt: "Dark-wash denim trucker jacket",
+        id: "trench-coat",
+        name: "Heritage Trench Coat",
+        price: "$695",
+        href: "https://www.coach.com/shop/women/ready-to-wear/coats",
+        imageSrc: "/images/gallery/tabby-leather-on-model-trench.png",
+        imageAlt: "Tan trench coat with leather trim",
       },
       {
-        id: "wide-leg-jean",
-        name: "Wide-Leg Jean",
-        price: "$195",
-        href: "https://www.coach.com/shop/women/ready-to-wear/jeans",
-        imageSrc: "/images/gallery/tabby-model-full.png",
-        imageAlt: "Light-wash wide-leg jeans",
+        id: "plaid-skirt",
+        name: "Plaid Pleated Mini Skirt",
+        price: "$225",
+        href: "https://www.coach.com/shop/women/ready-to-wear/skirts",
+        imageSrc: "/images/gallery/tabby-leather-on-model-laugh.png",
+        imageAlt: "Brown plaid pleated mini skirt",
       },
       {
         id: "essential-tee",
         name: "Essential Cotton Tee",
         price: "$75",
         href: "https://www.coach.com/shop/women/ready-to-wear/tops",
-        imageSrc: "/images/gallery/hero-modelshot.png",
-        imageAlt: "White cotton tee",
+        imageSrc: "/images/gallery/tabby-leather-on-model-tee.png",
+        imageAlt: "Grey cotton tee with Coach logo",
       },
       {
-        id: "leather-boot",
-        name: "Leather Ankle Boot",
-        price: "$295",
-        href: "https://www.coach.com/shop/women/shoes/boots",
-        imageSrc: "/images/gallery/tabby-on-model-front.png",
-        imageAlt: "Black leather ankle boot",
+        id: "hoop-earring",
+        name: "Gold Hoop Earring",
+        price: "$85",
+        href: "https://www.coach.com/shop/women/jewelry/earrings",
+        imageSrc: "/images/gallery/tabby-leather-on-model-laugh.png",
+        imageAlt: "Gold hoop earring",
       },
     ],
   },
@@ -705,10 +777,10 @@ export const PDP_SHOP_THE_LOOK: Record<string, PdpShopTheLookLook> = {
 
 /** Editorial — everyday carry capacity */
 export const PDP_EVERYDAY_CARRY = {
-  src: "/images/gallery/interior-packed-bleed.png",
-  alt: "Tabby 26 interior packed with phone, wallet, keys, and everyday essentials",
+  src: "/images/gallery/tabby-leather-interior-packed.png",
+  alt: "Tabby Shoulder Bag 26 interior packed with phone, wallet, keys, and everyday essentials",
   caption:
-    "Designed for every day. Tabby 26 comfortably fits your phone, wallet, keys, sunglasses, and a few essentials.",
+    "Designed for every day. Tabby comfortably fits your phone, wallet, keys, sunglasses, and a few essentials.",
 } as const;
 
 export type PdpWearStyle = {
@@ -727,32 +799,32 @@ export const PDP_HOW_TO_WEAR = {
     {
       id: "shoulder",
       label: "Shoulder carry",
-      src: "/images/gallery/hero-modelshot.png",
-      alt: "Tabby 26 worn on the shoulder",
+      src: "/images/gallery/tabby-leather-on-model-tee.png",
+      alt: "Tabby Shoulder Bag 26 worn on the shoulder",
     },
     {
       id: "crossbody",
       label: "Crossbody",
-      src: "/images/gallery/tabby-model-full.png",
-      alt: "Tabby 26 worn crossbody with denim",
+      src: "/images/gallery/tabby-leather-on-model-trench.png",
+      alt: "Tabby Shoulder Bag 26 worn crossbody with a trench coat",
     },
     {
       id: "tucked-chain",
-      label: "Tucked chain",
-      src: "/images/gallery/tabby-front-charm.png",
-      alt: "Tabby 26 with tucked chain strap detail",
+      label: "Strap detail",
+      src: "/images/gallery/tabby-leather-product-alt.png",
+      alt: "Tabby Shoulder Bag 26 with detachable leather strap detail",
     },
     {
       id: "dressed-up",
       label: "Dressed up",
-      src: "/images/gallery/tabby-on-model-plaid.png",
-      alt: "Tabby 26 styled with a plaid coat",
+      src: "/images/gallery/tabby-leather-on-model-laugh.png",
+      alt: "Tabby Shoulder Bag 26 styled with a trench coat and plaid skirt",
     },
     {
       id: "casual-denim",
-      label: "Casual denim",
-      src: "/images/gallery/tabby-on-model-front.png",
-      alt: "Tabby 26 with casual denim outfit",
+      label: "Coach tee",
+      src: "/images/gallery/tabby-leather-on-model-tee.png",
+      alt: "Tabby Shoulder Bag 26 with a Coach logo tee and suede skirt",
     },
   ] satisfies PdpWearStyle[],
 } as const;
@@ -766,32 +838,32 @@ export type PdpMaterialDetail = {
 
 /** Craftsmanship editorial — Material Story follows this slide */
 export const PDP_CRAFTSMANSHIP_EDITORIAL_SRC =
-  "/images/gallery/tabby-front-charm.png";
+  "/images/gallery/tabby-leather-front-charm.png";
 
 /** Moment #4 — material & construction details */
 export const PDP_MATERIAL_STORY = {
   moment: "Moment #4",
   title: "Material story",
   caption:
-    "Pillow quilting creates the dimensional softness that defines Tabby.",
+    "Full-grain leather and accordion construction define Tabby's structured finish.",
   details: [
     {
-      id: "quilting",
-      label: "Close crop of quilting",
-      src: "/images/gallery/tabby-angle.png",
-      alt: "Close crop of Tabby 26 pillow quilting",
+      id: "gusset",
+      label: "Accordion gusset",
+      src: "/images/gallery/tabby-leather-side-gusset.png",
+      alt: "Close crop of Tabby Shoulder Bag 26 accordion gussets",
     },
     {
       id: "leather",
       label: "Macro leather texture",
-      src: "/images/gallery/tabby-back.png",
-      alt: "Macro leather texture on Tabby 26",
+      src: "/images/gallery/tabby-leather-back.png",
+      alt: "Macro full-grain leather texture on Tabby Shoulder Bag 26",
     },
     {
       id: "hardware",
       label: "Hardware detail",
-      src: "/images/gallery/tabby-detail-clasp.png",
-      alt: "Gold hardware detail on Tabby 26 C clasp",
+      src: "/images/gallery/tabby-leather-detail-hardware.png",
+      alt: "Gold hardware detail on Tabby Shoulder Bag 26 C clasp",
     },
   ] satisfies PdpMaterialDetail[],
 } as const;
@@ -800,8 +872,8 @@ export const PDP_MATERIAL_STORY = {
 export const PDP_HERITAGE_STORY = {
   moment: "Moment #5",
   title: "Heritage story",
-  src: "/images/gallery/tabby-front-charm.png",
-  alt: "Tabby 26 — a Coach icon reimagined for today",
+  src: "/images/gallery/tabby-leather-front-charm.png",
+  alt: "Tabby Shoulder Bag 26 — a Coach icon reimagined for today",
   caption:
     "Inspired by a Coach design from the 1970s and reimagined for today.",
 } as const;
@@ -816,78 +888,78 @@ export type PdpColor = {
 
 export const PDP_COLORS: PdpColor[] = [
   {
-    id: "chalk",
-    name: "Chalk",
-    swatch: "/images/colors/chalk.png",
-    hero: "/images/gallery-hero.png",
-    heroAlt: "Tabby 26 in chalk on model",
-  },
-  {
     id: "black",
     name: "Black",
-    swatch: "/images/colors/black.png",
-    hero: "/images/gallery-hero.png",
-    heroAlt: "Tabby 26 in black on model",
+    swatch: "/images/colors/soft-tabby/black.png",
+    hero: "/images/colors/soft-tabby/black.png",
+    heroAlt: "Tabby Shoulder Bag 26 in black leather",
   },
   {
-    id: "brown",
-    name: "Brown",
-    swatch: "/images/colors/brown.png",
-    hero: "/images/hero-community.png",
-    heroAlt: "Tabby 26 in brown on model",
+    id: "canyon",
+    name: "Canyon",
+    swatch: "/images/colors/soft-tabby/canyon.png",
+    hero: "/images/colors/soft-tabby/canyon.png",
+    heroAlt: "Tabby Shoulder Bag 26 in canyon suede",
   },
   {
-    id: "ivory",
-    name: "Ivory",
-    swatch: "/images/colors/chalk.png",
-    hero: "/images/gallery-hero.png",
-    heroAlt: "Tabby 26 in ivory on model",
+    id: "oxblood",
+    name: "Oxblood",
+    swatch: "/images/colors/soft-tabby/oxblood.png",
+    hero: "/images/colors/soft-tabby/oxblood.png",
+    heroAlt: "Tabby Shoulder Bag 26 in oxblood leather",
   },
   {
-    id: "oak",
-    name: "Oak",
-    swatch: "/images/colors/brown.png",
-    hero: "/images/hero-community.png",
-    heroAlt: "Tabby 26 in oak on model",
+    id: "black-charm",
+    name: "Black Charm",
+    swatch: "/images/colors/soft-tabby/black-charm.png",
+    hero: "/images/colors/soft-tabby/black-charm.png",
+    heroAlt: "Tabby Shoulder Bag 26 in black with bag charms",
   },
   {
-    id: "stone",
-    name: "Stone",
-    swatch: "/images/colors/chalk.png",
-    hero: "/images/gallery-hero.png",
-    heroAlt: "Tabby 26 in stone on model",
+    id: "beaded",
+    name: "Beaded Floral",
+    swatch: "/images/colors/soft-tabby/beaded.png",
+    hero: "/images/colors/soft-tabby/beaded.png",
+    heroAlt: "Tabby Shoulder Bag 26 in beaded floral",
   },
   {
-    id: "mahogany",
-    name: "Mahogany",
-    swatch: "/images/colors/brown.png",
-    hero: "/images/hero-community.png",
-    heroAlt: "Tabby 26 in mahogany on model",
+    id: "tan-fringe",
+    name: "Tan Fringe",
+    swatch: "/images/colors/soft-tabby/tan-fringe.png",
+    hero: "/images/colors/soft-tabby/tan-fringe.png",
+    heroAlt: "Tabby Shoulder Bag 26 in tan suede with fringe",
   },
   {
-    id: "onyx",
-    name: "Onyx",
-    swatch: "/images/colors/black.png",
-    hero: "/images/gallery-hero.png",
-    heroAlt: "Tabby 26 in onyx on model",
+    id: "black-fringe",
+    name: "Black Fringe",
+    swatch: "/images/colors/soft-tabby/black-fringe.png",
+    hero: "/images/colors/soft-tabby/black-fringe.png",
+    heroAlt: "Tabby Shoulder Bag 26 in black suede with fringe",
   },
   {
-    id: "sand",
-    name: "Sand",
-    swatch: "/images/colors/chalk.png",
-    hero: "/images/gallery-hero.png",
-    heroAlt: "Tabby 26 in sand on model",
+    id: "olive",
+    name: "Olive",
+    swatch: "/images/colors/soft-tabby/olive.png",
+    hero: "/images/colors/soft-tabby/olive.png",
+    heroAlt: "Tabby Shoulder Bag 26 in olive suede",
+  },
+  {
+    id: "mustard",
+    name: "Mustard",
+    swatch: "/images/colors/soft-tabby/mustard.png",
+    hero: "/images/colors/soft-tabby/mustard.png",
+    heroAlt: "Tabby Shoulder Bag 26 in mustard suede",
   },
 ];
 
 export const PDP_MEDIA_SLIDES = [
   {
-    src: "/images/hero-community.png",
-    alt: "Model wearing a black quilted Coach Tabby bag",
+    src: "/images/gallery/tabby-leather-on-model-trench.png",
+    alt: "Model wearing Tabby Shoulder Bag 26 in black full-grain leather",
   },
   {
-    src: "/images/gallery-hero.png",
-    alt: "Tabby 26 shoulder bag styled on model",
+    src: "/images/gallery/tabby-leather-on-model-tee.png",
+    alt: "Tabby Shoulder Bag 26 styled on model",
   },
   {
     src: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=1200&q=80",
@@ -925,7 +997,7 @@ export const PDP_COMMUNITY_VALIDATION = {
       label: "Real customer photo",
       type: "photo",
       src: "/images/reviews/ugc-on-street.png",
-      alt: "Customer styling Tabby 26 on the street",
+      alt: "Customer styling Tabby Shoulder Bag 26 on the street",
     },
     {
       id: "creator-video",
@@ -933,7 +1005,7 @@ export const PDP_COMMUNITY_VALIDATION = {
       type: "video",
       src: "/videos/gallery-360.webm",
       poster: "/images/gallery/hero-modelshot.png",
-      alt: "Creator styling Tabby 26 in a short video",
+      alt: "Creator styling Tabby Shoulder Bag 26 in a short video",
     },
     {
       id: "influencer-clip",
@@ -941,7 +1013,7 @@ export const PDP_COMMUNITY_VALIDATION = {
       type: "video",
       src: "/videos/gallery-360.webm",
       poster: "/images/gallery/tabby-model-full.png",
-      alt: "Influencer clip featuring Tabby 26",
+      alt: "Influencer clip featuring Tabby Shoulder Bag 26",
     },
   ] satisfies PdpCommunityMediaItem[],
 } as const;
@@ -985,7 +1057,7 @@ export const PDP_CUSTOMER_REVIEWS: PdpFeaturedReview[] = [
     photos: [
       {
         src: "/images/reviews/ugc-coffee-run.png",
-        alt: "Customer photo of Tabby 26 styled with a plaid coat",
+        alt: "Customer photo of Tabby Shoulder Bag 26 styled with a plaid coat",
       },
     ],
   },
@@ -993,7 +1065,7 @@ export const PDP_CUSTOMER_REVIEWS: PdpFeaturedReview[] = [
     id: "priya",
     rating: 5,
     quote:
-      "Obsessed with the pillow quilting — photos do not do it justice. Looks elevated with denim and dresses alike.",
+      "Obsessed with the leather finish — photos do not do it justice. Looks elevated with denim and dresses alike.",
     author: "Priya S.",
     date: "Sep 14, 2025",
     verified: true,
@@ -1001,11 +1073,11 @@ export const PDP_CUSTOMER_REVIEWS: PdpFeaturedReview[] = [
     photos: [
       {
         src: "/images/reviews/ugc-on-street.png",
-        alt: "Customer photo of Tabby 26 styled with a tan jacket",
+        alt: "Customer photo of Tabby Shoulder Bag 26 styled with a tan jacket",
       },
       {
         src: "/images/reviews/ugc-outfit-flat.png",
-        alt: "Customer outfit photo featuring Tabby 26",
+        alt: "Customer outfit photo featuring Tabby Shoulder Bag 26",
       },
     ],
   },
@@ -1021,7 +1093,7 @@ export const PDP_CUSTOMER_REVIEWS: PdpFeaturedReview[] = [
     photos: [
       {
         src: "/images/reviews/ugc-mirror-selfie.png",
-        alt: "Customer mirror selfie with Tabby 26",
+        alt: "Customer mirror selfie with Tabby Shoulder Bag 26",
       },
     ],
   },
@@ -1057,7 +1129,7 @@ export const PDP_CUSTOMER_REVIEWS: PdpFeaturedReview[] = [
     photos: [
       {
         src: "/images/reviews/ugc-outfit-flat.png",
-        alt: "Customer outfit photo featuring Tabby 26 with cherry charm",
+        alt: "Customer outfit photo featuring Tabby Shoulder Bag 26 with cherry charm",
       },
     ],
   },
@@ -1065,7 +1137,7 @@ export const PDP_CUSTOMER_REVIEWS: PdpFeaturedReview[] = [
     id: "taylor",
     rating: 4,
     quote:
-      "Classic Tabby silhouette with a modern quilted update. Chain can feel a little heavy at first but you adjust quickly.",
+      "Classic Tabby silhouette with a modern leather update. Straps are easy to swap between shoulder and crossbody carry.",
     author: "Taylor B.",
     date: "Jun 25, 2025",
     verified: true,
@@ -1093,7 +1165,7 @@ export const PDP_CUSTOMER_REVIEWS: PdpFeaturedReview[] = [
     photos: [
       {
         src: "/images/reviews/ugc-on-street.png",
-        alt: "Customer street-style photo with Tabby 26",
+        alt: "Customer street-style photo with Tabby Shoulder Bag 26",
       },
     ],
   },
@@ -1144,7 +1216,7 @@ export const PDP_COMMENTS_SUMMARY = {
 
 export const PDP_REVIEWS_AI_SUMMARY = {
   headline: "What our customers think",
-  body: "Many note that Tabby 26 is a refined, well-crafted bag that strikes an appealing balance between structure and style. The polished pebble leather and signature “C” plaque closure stand out as premium touches.",
+  body: "Many note that Tabby Shoulder Bag 26 is a refined, well-crafted bag that strikes an appealing balance between structure and style. The full-grain pebbled leather and signature C clasp stand out as premium touches.",
   attribution: "Buyer highlights, summarized by AI",
 } as const;
 
@@ -1160,19 +1232,19 @@ export const PDP_REVIEWS_RATING_BREAKDOWN = [
 export const PDP_REVIEW_PHOTOS: PdpReviewPhoto[] = [
   {
     src: "/images/reviews/ugc-on-street.png",
-    alt: "Customer photo of Tabby 26 styled with a tan jacket",
+    alt: "Customer photo of Tabby Shoulder Bag 26 styled with a tan jacket",
   },
   {
     src: "/images/reviews/ugc-coffee-run.png",
-    alt: "Customer photo of Tabby 26 with plaid coat",
+    alt: "Customer photo of Tabby Shoulder Bag 26 with plaid coat",
   },
   {
     src: "/images/reviews/ugc-mirror-selfie.png",
-    alt: "Customer mirror selfie with Tabby 26",
+    alt: "Customer mirror selfie with Tabby Shoulder Bag 26",
   },
   {
     src: "/images/reviews/ugc-outfit-flat.png",
-    alt: "Customer outfit photo featuring Tabby 26",
+    alt: "Customer outfit photo featuring Tabby Shoulder Bag 26",
   },
 ];
 

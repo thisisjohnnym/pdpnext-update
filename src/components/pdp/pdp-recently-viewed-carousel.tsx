@@ -42,7 +42,10 @@ export function PdpRecentlyViewedCarousel() {
                   className="group relative w-full text-left"
                   aria-label={`View again: ${item.name}, viewed ${item.viewedLabel}`}
                 >
-                  <div className="relative aspect-square w-full overflow-hidden bg-neutral-100">
+                  <div
+                    className="relative w-full overflow-hidden bg-neutral-100"
+                    style={{ aspectRatio: "4 / 5" }}
+                  >
                     <Image
                       src={item.imageSrc}
                       alt={item.imageAlt}

@@ -30,7 +30,10 @@ export function PdpMaterialStoryModule() {
               <div className="grid grid-cols-3 gap-1">
                 {details.map((detail) => (
                   <figure key={detail.id} className="flex min-w-0 flex-col gap-2">
-                    <div className="relative aspect-square w-full overflow-hidden bg-neutral-100">
+                    <div
+                      className="relative w-full overflow-hidden bg-neutral-100"
+                      style={{ aspectRatio: "4 / 5" }}
+                    >
                       <Image
                         src={detail.src}
                         alt={detail.alt}

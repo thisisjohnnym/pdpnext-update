@@ -41,7 +41,10 @@ export function PdpSocialView() {
   };
 
   return (
-    <div className="relative min-h-[100dvh] w-full bg-black">
+    <div
+      className="relative w-full bg-black"
+      style={{ minHeight: "var(--pdp-viewport-height, 100dvh)" }}
+    >
       <PdpBrowserChromeSync />
       <PdpGalleryView
         onOpenReviews={() => setReviewsOpen(true)}

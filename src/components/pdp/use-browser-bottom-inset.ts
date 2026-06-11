@@ -53,18 +53,46 @@ export function useBrowserBottomInset() {
   return inset;
 }
 
-/** Sync --pdp-browser-bottom-inset for scroll padding / HUD offsets */
-export function useBrowserBottomInsetCssVar() {
-  const inset = useBrowserBottomInset();
+function syncViewportCssVars() {
+  if (typeof window === "undefined") {
+    return;
+  }
 
+  const viewport = window.visualViewport;
+  const height = viewport?.height ?? window.innerHeight;
+
+  document.documentElement.style.setProperty(
+    "--pdp-viewport-height",
+    `${height}px`,
+  );
+  document.documentElement.style.setProperty(
+    "--pdp-browser-bottom-inset",
+    `${readBrowserBottomInset()}px`,
+  );
+}
+
+/** Sync viewport height + browser chrome inset CSS vars on <html> */
+export function useBrowserBottomInsetCssVar() {
   useEffect(() => {
-    document.documentElement.style.setProperty(
-      "--pdp-browser-bottom-inset",
-      `${inset}px`,
-    );
+    const update = () => {
+      syncViewportCssVars();
+    };
+
+    update();
+
+    const viewport = window.visualViewport;
+    viewport?.addEventListener("resize", update);
+    viewport?.addEventListener("scroll", update);
+    window.addEventListener("resize", update);
+    window.addEventListener("orientationchange", update);
 
     return () => {
+      viewport?.removeEventListener("resize", update);
+      viewport?.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+      window.removeEventListener("orientationchange", update);
+      document.documentElement.style.removeProperty("--pdp-viewport-height");
       document.documentElement.style.removeProperty("--pdp-browser-bottom-inset");
     };
-  }, [inset]);
+  }, []);
 }

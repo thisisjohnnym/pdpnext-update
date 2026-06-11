@@ -19,7 +19,7 @@ type PdpColorSelectorProps = {
   inline?: boolean;
 };
 
-/** Swatch assets are full product shots — anchor on bag hardware, shift up in circle */
+/** Swatch assets are full product shots — crop to bag body in circle */
 function ColorSwatchImage({
   src,
   sizes,
@@ -32,7 +32,7 @@ function ColorSwatchImage({
       src={src}
       alt=""
       fill
-      className="object-cover object-[50%_100%] origin-[50%_94%] scale-[4.5] -translate-y-[38%]"
+      className="object-cover object-center scale-[1.75]"
       sizes={sizes}
     />
   );
@@ -138,11 +138,11 @@ function PdpColorDropup({
         aria-expanded={open}
         aria-label={`Color: ${selected.name}. Choose another color.`}
         onClick={() => setOpen((prev) => !prev)}
-        className="font-extended flex h-[54px] w-full items-center gap-2.5 rounded-full border border-white/10 bg-[#353535] px-3 text-xs tracking-[0.2px] text-white"
+        className="font-extended flex h-[54px] w-full items-center gap-2.5 rounded-full bg-[#353535] px-3 text-xs tracking-[0.2px] text-white"
       >
         <ColorSwatchButton
           color={selected}
-          sizeClass="size-8 ring-2 ring-white/70 ring-offset-1 ring-offset-[#353535]"
+          sizeClass="size-8"
         />
         <span className="min-w-0 flex-1 truncate text-left">
           {selected.name}

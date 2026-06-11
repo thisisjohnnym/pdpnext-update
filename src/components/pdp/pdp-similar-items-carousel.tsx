@@ -58,7 +58,10 @@ export function PdpSimilarItemsCarousel({ onAddToBag }: PdpSimilarItemsCarouselP
                   key={item.id}
                   className={cn("flex flex-col", pdpCarouselCard15Class)}
                 >
-                  <div className="relative aspect-square w-full overflow-hidden bg-neutral-100">
+                  <div
+                    className="relative w-full overflow-hidden bg-neutral-100"
+                    style={{ aspectRatio: "4 / 5" }}
+                  >
                     <Image
                       src={item.imageSrc}
                       alt={item.imageAlt}
@@ -80,14 +83,14 @@ export function PdpSimilarItemsCarousel({ onAddToBag }: PdpSimilarItemsCarouselP
                     onClick={() => handleAdd(item.id)}
                     disabled={added}
                     className={cn(
-                      "font-extended mt-3 inline-flex w-full items-center justify-center gap-1 rounded-full py-3 transition-colors",
+                      "mt-3 inline-flex w-full items-center justify-center gap-1 rounded-full py-3 transition-colors",
                       pdpType.body,
                       added
                         ? "bg-neutral-100 text-neutral-500"
                         : "bg-black text-white",
                     )}
                   >
-                    <span>
+                    <span className="font-extended -translate-y-px">
                       {added ? "Added" : "Add to Bag"}
                     </span>
                     {!added ? (

@@ -219,13 +219,13 @@ export function PdpBundleModule({ onAddBundle }: PdpBundleModuleProps) {
               onClick={handleAddBundle}
               disabled={selectedItems.length === 0 || justAdded}
               className={cn(
-                "font-extended inline-flex w-full items-center justify-center gap-1.5 rounded-full py-3.5 text-sm tracking-[0.2px] transition-colors",
+                "inline-flex w-full items-center justify-center gap-1.5 rounded-full py-3.5 text-sm tracking-[0.2px] transition-colors",
                 justAdded
                   ? "bg-neutral-100 text-neutral-500"
                   : "bg-black text-white",
               )}
             >
-              <span>
+              <span className="font-extended -translate-y-px">
                 {justAdded
                   ? "Added to bag"
                   : `Add bundle to bag (${selectedItems.length})`}

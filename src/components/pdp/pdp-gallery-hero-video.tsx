@@ -22,6 +22,7 @@ type PdpGalleryHeroVideoProps = {
   poster?: string;
   ariaLabel?: string;
   showControls?: boolean;
+  showMuteControl?: boolean;
 };
 
 export function PdpGalleryHeroVideo({
@@ -29,8 +30,9 @@ export function PdpGalleryHeroVideo({
   isActive = true,
   src = PDP_GALLERY_HERO_VIDEO,
   poster,
-  ariaLabel = "360° product view of Tabby 26 shoulder bag",
+  ariaLabel = "360° product view of Tabby Shoulder Bag 26",
   showControls = false,
+  showMuteControl = true,
 }: PdpGalleryHeroVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const userPausedRef = useRef(false);
@@ -125,22 +127,24 @@ export function PdpGalleryHeroVideo({
 
       {showControls ? (
         <div className="absolute bottom-4 right-4 flex items-center gap-2">
-          <button
-            type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              toggleMute();
-            }}
-            aria-label={isMuted ? "Unmute video" : "Mute video"}
-            aria-pressed={!isMuted}
-            className={controlButtonClass}
-          >
-            <MaterialIcon
-              name={isMuted ? "volume_off" : "volume_up"}
-              size={24}
-              className="text-neutral-900"
-            />
-          </button>
+          {showMuteControl ? (
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                toggleMute();
+              }}
+              aria-label={isMuted ? "Unmute video" : "Mute video"}
+              aria-pressed={!isMuted}
+              className={controlButtonClass}
+            >
+              <MaterialIcon
+                name={isMuted ? "volume_off" : "volume_up"}
+                size={24}
+                className="text-neutral-900"
+              />
+            </button>
+          ) : null}
           <button
             type="button"
             onClick={(event) => {

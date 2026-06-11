@@ -39,31 +39,26 @@ function buildCompareItems(colorLabel: string): CompareItemView[] {
 
 type CompareColumnProps = {
   item: CompareItemView;
+  /** Pinned column — stays fixed while alternatives scroll underneath */
+  pinned?: boolean;
 };
 
-function CompareColumn({ item }: CompareColumnProps) {
+function CompareColumn({ item, pinned = false }: CompareColumnProps) {
   return (
     <article
       className={cn(
         "flex shrink-0 snap-start flex-col snap-always",
         CARD_WIDTH_CLASS,
+        pinned &&
+          "sticky left-0 z-10 bg-white shadow-[6px_0_16px_-8px_rgba(0,0,0,0.18)]",
       )}
     >
-      <p
-        className={cn(
-          "font-extended mb-1 h-3",
-          pdpType.micro,
-          item.selected ? "text-black uppercase tracking-[0.6px]" : "invisible",
-        )}
-      >
-        This item
-      </p>
-
       <div
         className={cn(
-          "relative aspect-square w-full overflow-hidden bg-neutral-100",
+          "relative w-full overflow-hidden bg-neutral-100",
           item.selected && "ring-1 ring-inset ring-black",
         )}
+        style={{ aspectRatio: "4 / 5" }}
       >
         <Image
           src={item.imageSrc}
@@ -103,12 +98,12 @@ function CompareColumn({ item }: CompareColumnProps) {
               {category.label}
             </p>
             {category.id === "material" ? (
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded bg-neutral-100">
+              <div className="relative h-8 w-full overflow-hidden rounded-sm bg-neutral-100">
                 <Image
                   src={item.materialSwatch.src}
                   alt={item.materialSwatch.alt}
                   fill
-                  className="object-cover scale-[1.35]"
+                  className="object-cover scale-[3.25]"
                   style={{
                     objectPosition: item.materialSwatch.objectPosition ?? "center",
                   }}
@@ -136,7 +131,7 @@ type PdpCompareModuleProps = {
 export function PdpCompareModule({ selectedColorId }: PdpCompareModuleProps) {
   const selectedColor =
     PDP_COLORS.find((color) => color.id === selectedColorId) ?? PDP_COLORS[0];
-  const items = buildCompareItems(selectedColor.name);
+  const [selectedItem, ...alternativeItems] = buildCompareItems(selectedColor.name);
 
   return (
     <section
@@ -153,7 +148,8 @@ export function PdpCompareModule({ selectedColorId }: PdpCompareModuleProps) {
             className={cn("flex gap-2", pdpCarouselScrollClass)}
             aria-label="Compare bags"
           >
-            {items.map((item) => (
+            <CompareColumn item={selectedItem} pinned />
+            {alternativeItems.map((item) => (
               <CompareColumn key={item.id} item={item} />
             ))}
           </div>
