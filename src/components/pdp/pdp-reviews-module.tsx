@@ -12,6 +12,7 @@ import {
 } from "./pdp-carousel";
 import { pdpModuleSectionClass, pdpModuleHeadingClass } from "./pdp-module-section";
 import { PdpReviewLikeButton } from "./pdp-review-like-button";
+import { PdpAiInsightCard } from "./pdp-ai-insight-card";
 import { PdpUgcStoryCard } from "./pdp-ugc-story-card";
 import { pdpType } from "./pdp-type";
 import {
@@ -135,20 +136,12 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
               </div>
             </div>
 
-            <section className="flex flex-col gap-3">
-              <p className={pdpModuleHeadingClass({ lead: false, size: "sm" })}>
-                {PDP_REVIEWS_AI_SUMMARY.headline}
-              </p>
-              <p className="font-extended m-0 text-sm leading-[1.35] tracking-[0.2px] text-[#4a4a4a]">
-                {PDP_REVIEWS_AI_SUMMARY.body}
-              </p>
-              <div className="flex items-center gap-2">
-                <MaterialIcon name="auto_awesome" size={18} className="text-black" />
-                <p className="font-extended m-0 text-sm leading-[1.35] tracking-[0.2px] text-black">
-                  {PDP_REVIEWS_AI_SUMMARY.attribution}
-                </p>
-              </div>
-            </section>
+            <PdpAiInsightCard
+              variant="minimal"
+              eyebrow={PDP_REVIEWS_AI_SUMMARY.attribution}
+              title={PDP_REVIEWS_AI_SUMMARY.headline}
+              body={PDP_REVIEWS_AI_SUMMARY.body}
+            />
 
             <section className="flex flex-col gap-4">
               <p className={pdpModuleHeadingClass({ lead: false, size: "sm" })}>

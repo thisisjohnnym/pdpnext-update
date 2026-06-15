@@ -11,6 +11,8 @@ import { useMaterialExplore } from "./use-material-explore";
 
 const LENS_SIZE = 132;
 const MAGNIFICATION = 2.75;
+/** Lift lens above touch point so the thumb does not cover the magnified area */
+const TOUCH_LENS_OFFSET_Y = 96;
 
 type PdpGalleryDragZoomImageProps = {
   src: string;
@@ -39,6 +41,7 @@ export function PdpGalleryDragZoomImage({
     position,
     containerSize,
     isExploring,
+    pointerType,
     handlePointerDown,
     handlePointerMove,
     handlePointerEnd,
@@ -54,6 +57,17 @@ export function PdpGalleryDragZoomImage({
   const lensImageTop =
     position && magnifiedHeight > 0
       ? LENS_SIZE / 2 - position.y * MAGNIFICATION
+      : 0;
+
+  const lensHalf = LENS_SIZE / 2;
+  const lensOffsetY = pointerType === "touch" ? TOUCH_LENS_OFFSET_Y : 0;
+  const lensLeft =
+    position && containerSize.width > 0
+      ? Math.max(lensHalf, Math.min(position.x, containerSize.width - lensHalf))
+      : 0;
+  const lensTop =
+    position && containerSize.height > 0
+      ? Math.max(lensHalf, Math.min(position.y - lensOffsetY, containerSize.height - lensHalf))
       : 0;
 
   return (
@@ -108,8 +122,8 @@ export function PdpGalleryDragZoomImage({
           aria-hidden
           className="pdp-material-lens pointer-events-none absolute z-10"
           style={{
-            left: position.x,
-            top: position.y,
+            left: lensLeft,
+            top: lensTop,
             width: LENS_SIZE,
             height: LENS_SIZE,
             transform: "translate(-50%, -50%)",

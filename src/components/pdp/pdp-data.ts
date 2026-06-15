@@ -1688,12 +1688,20 @@ export type PdpLeatherAgingTrait = {
   detail: string;
 };
 
+export type PdpLeatherAgingStageImage = {
+  src: string;
+  alt: string;
+  objectPosition?: string;
+};
+
 export type PdpLeatherAgingStage = {
   id: string;
   label: string;
   timeline: string;
   summary: string;
   traits: PdpLeatherAgingTrait[];
+  /** Optional stage photo — skips simulated wear overlays when set */
+  image?: PdpLeatherAgingStageImage;
   visual: {
     brightness: number;
     contrast: number;
@@ -1716,9 +1724,9 @@ export const PDP_LEATHER_AGING = {
   intro:
     "See how glovetanned full-grain leather evolves — patina, softening, and honest wear over years of daily carry.",
   image: {
-    src: "/images/gallery/tabby-leather-front-charm.png",
-    alt: "Tabby Shoulder Bag 26 in black full-grain leather — aging simulation",
-    objectPosition: "center 72%",
+    src: "/images/gallery/tabby-leather-aging-new.png",
+    alt: "Tabby Shoulder Bag 26 in black leather with gold hardware — new, day one",
+    objectPosition: "center 42%",
   },
   stages: [
     {
@@ -1762,6 +1770,11 @@ export const PDP_LEATHER_AGING = {
       label: "6 months",
       timeline: "Six months in",
       summary: "Warm highlights emerge; leather relaxes into daily rhythm.",
+      image: {
+        src: "/images/gallery/tabby-leather-aging-six-months.png",
+        alt: "Tabby Shoulder Bag 26 after six months of daily carry — softened leather with creasing and warm patina",
+        objectPosition: "center 68%",
+      },
       traits: [
         {
           id: "patina",
@@ -1780,20 +1793,17 @@ export const PDP_LEATHER_AGING = {
         },
       ],
       visual: {
-        brightness: 0.97,
-        contrast: 1.03,
-        saturate: 0.94,
-        sepia: 0.14,
-        patinaOpacity: 0.55,
-        patinaGradient:
-          "radial-gradient(ellipse 42% 28% at 72% 18%, rgba(196, 148, 88, 0.42), transparent 72%), radial-gradient(ellipse 36% 24% at 24% 82%, rgba(168, 124, 72, 0.32), transparent 70%), radial-gradient(ellipse 28% 20% at 50% 46%, rgba(140, 108, 68, 0.18), transparent 68%)",
-        wearOpacity: 0.42,
-        wearGradient:
-          "linear-gradient(158deg, transparent 44%, rgba(0, 0, 0, 0.12) 49%, transparent 54%), linear-gradient(24deg, transparent 58%, rgba(0, 0, 0, 0.1) 63%, transparent 68%), radial-gradient(ellipse 18% 10% at 68% 34%, rgba(0, 0, 0, 0.16), transparent 72%)",
-        softenOpacity: 0.35,
-        softenBlur: 0.6,
-        softenMask:
-          "radial-gradient(ellipse 30% 18% at 68% 32%, black, transparent 72%), radial-gradient(ellipse 24% 14% at 28% 78%, black, transparent 70%)",
+        brightness: 1,
+        contrast: 1,
+        saturate: 1,
+        sepia: 0,
+        patinaOpacity: 0,
+        patinaGradient: "transparent",
+        wearOpacity: 0,
+        wearGradient: "transparent",
+        softenOpacity: 0,
+        softenBlur: 0,
+        softenMask: "none",
       },
     },
     {
@@ -1836,6 +1846,11 @@ export const PDP_LEATHER_AGING = {
       },
     },
   ] satisfies PdpLeatherAgingStage[],
+  /** Subtle care upsell — hidden at New, reveals on later timeline stages */
+  careNudge: {
+    productId: "coach-leather-cleaner",
+    label: "Leather cleaner",
+  },
 } as const;
 
 export type PdpLeatherCleanerProduct = {
@@ -1936,9 +1951,9 @@ export const PDP_WEIGHT_FEEL = {
   holdMs: 720,
   hapticPattern: [14, 36, 18, 52, 22],
   image: {
-    src: "/images/gallery/tabby-leather-product-alt.png",
-    alt: "Tabby Shoulder Bag 26 in black full-grain leather with detachable straps",
-    objectPosition: "center 62%",
+    src: "/images/gallery/tabby-weight-lift-press-hold.jpg",
+    alt: "Tabby Shoulder Bag 26 in black leather with gold C clasp and detachable straps on a light gray background",
+    objectPosition: "center 72%",
   },
   reveal: {
     headline: "Comparable to carrying a water bottle.",
@@ -2601,9 +2616,6 @@ export const PDP_REVIEWS_RATING_BREAKDOWN = [
 
 /** Reviews carousel — contextual UGC from PDP_UGC_CONTEXT */
 export const PDP_UGC_REVIEW_STORIES: PdpUgcStory[] = [
-  PDP_UGC_CONTEXT.stories[0]!,
-  PDP_UGC_CONTEXT.stories[1]!,
-  PDP_UGC_CONTEXT.stories[2]!,
   {
     id: "desk-to-gym",
     src: "/images/reviews/ugc-pink-tabby-stanley.png",
@@ -2626,6 +2638,9 @@ export const PDP_UGC_REVIEW_STORIES: PdpUgcStory[] = [
     carry: "Shoulder",
     quote: "The charm makes it feel personal.",
   },
+  PDP_UGC_CONTEXT.stories[0]!,
+  PDP_UGC_CONTEXT.stories[1]!,
+  PDP_UGC_CONTEXT.stories[2]!,
 ];
 
 /** @deprecated Use PDP_UGC_REVIEW_STORIES — plain src/alt for legacy callers */

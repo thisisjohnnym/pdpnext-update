@@ -27,10 +27,11 @@ export function PdpScrollReveal({
     <div
       ref={ref}
       className={cn(
-        "pdp-scroll-reveal overflow-hidden",
+        "pdp-scroll-reveal isolate overflow-hidden",
         resolvedSurface === "dark" && "bg-black",
         resolvedSurface === "light" && "bg-white",
         resolvedSurface === "muted" && "bg-neutral-100",
+        resolvedSurface === "transparent" && "bg-transparent",
         variant === "subtle" && "pdp-scroll-reveal--subtle",
         className,
       )}

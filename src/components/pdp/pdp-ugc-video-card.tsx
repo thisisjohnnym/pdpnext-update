@@ -52,7 +52,7 @@ export function PdpUgcVideoCard({
         className,
       )}
     >
-      <div className="relative aspect-[9/16] w-full overflow-hidden bg-neutral-900">
+      <div className="relative mx-auto aspect-[9/16] w-full max-h-[85svh] max-w-[calc(85svh*9/16)] overflow-hidden bg-neutral-900">
         <PdpGalleryHeroVideo
           src={video.src}
           poster={video.poster}
@@ -63,10 +63,7 @@ export function PdpUgcVideoCard({
           className="size-full object-cover object-center"
         />
 
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] bg-gradient-to-t from-black/70 via-black/25 to-transparent px-3 pb-12 pt-10"
-        >
+        <div className="pointer-events-none absolute bottom-12 left-3 z-[1] max-w-[calc(100%-4.5rem)] drop-shadow-[0_1px_4px_rgba(0,0,0,0.65)]">
           <p className="font-extended text-sm tracking-[0.2px] text-white">
             {video.handle}
             {video.verified ? (

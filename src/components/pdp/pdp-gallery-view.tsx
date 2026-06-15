@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
@@ -56,17 +56,39 @@ import { usePanelScrollRelease } from "./use-panel-scroll-release";
 export { BOTTOM_CTA_OFFSET } from "./pdp-viewport-chrome";
 export { PDP_PANEL_SCROLL } from "./pdp-panel-scroll";
 
-const GALLERY_CLASS = "w-full overflow-x-clip";
+const GALLERY_CLASS = "w-full overflow-x-clip bg-white";
 
 /** Reserve scroll space so modules aren't hidden behind the fixed bottom bar */
 const GALLERY_SCROLL_PAD = {
   paddingBottom: BOTTOM_CTA_OFFSET,
 } as const;
 
-/** Suit Supply-style 2px hairline between stacked gallery frames (off in panel mode) */
+/** Stacked gallery frames — gap removed so scroll-reveal shells do not expose page chrome */
 const GALLERY_MEDIA_STACK_CLASS = PDP_PANEL_SCROLL
   ? "flex flex-col bg-white"
-  : "flex flex-col gap-[2px] bg-white";
+  : "flex flex-col bg-white";
+
+type GalleryRevealSurface = "dark" | "light" | "muted" | "transparent";
+
+function galleryScrollReveal(
+  key: string,
+  child: ReactNode,
+  options: {
+    variant?: "rise" | "subtle";
+    surface?: GalleryRevealSurface;
+  } = {},
+) {
+  return (
+    <PdpScrollReveal
+      key={key}
+      className="w-full shrink-0"
+      variant={options.variant ?? "subtle"}
+      surface={options.surface ?? "light"}
+    >
+      {child}
+    </PdpScrollReveal>
+  );
+}
 
 /** Hero only — full-screen immersive using layout viewport (innerHeight) */
 function PdpHeroSlide({
@@ -419,100 +441,120 @@ export function PdpGalleryView({
 
           if (slide.type === "editorial") {
             return [
-              <PdpGalleryEditorialSlide
-                key={`editorial-${index}-${slide.src}`}
-                src={slide.src}
-                alt={slide.alt}
-                caption={slide.caption}
-                objectPosition={slide.objectPosition}
-                secondarySrc={slide.secondarySrc}
-                secondaryAlt={slide.secondaryAlt}
-                learnMore={slide.learnMore}
-                panelScroll={PDP_PANEL_SCROLL}
-                isLastPanel={isLastPanel}
-              />,
+              galleryScrollReveal(
+                `editorial-${index}-${slide.src}`,
+                <PdpGalleryEditorialSlide
+                  src={slide.src}
+                  alt={slide.alt}
+                  caption={slide.caption}
+                  objectPosition={slide.objectPosition}
+                  secondarySrc={slide.secondarySrc}
+                  secondaryAlt={slide.secondaryAlt}
+                  learnMore={slide.learnMore}
+                  panelScroll={PDP_PANEL_SCROLL}
+                  isLastPanel={isLastPanel}
+                />,
+                { surface: "light" },
+              ),
             ];
           }
 
           if (slide.type === "signature-sounds") {
             return [
-              <PdpSignatureSoundsModule key={`signature-sounds-${index}`} />,
+              galleryScrollReveal(
+                `signature-sounds-${index}`,
+                <PdpSignatureSoundsModule />,
+                { surface: "muted", variant: "rise" },
+              ),
             ];
           }
 
           if (slide.type === "leather-aging") {
             return [
-              <PdpLeatherAgingModule
-                key={`leather-aging-${index}`}
-                isLastPanel={isLastPanel}
-              />,
+              galleryScrollReveal(
+                `leather-aging-${index}`,
+                <PdpLeatherAgingModule
+                  isLastPanel={isLastPanel}
+                  onQuickAdd={() => onAddSimilarToBag?.()}
+                />,
+              ),
             ];
           }
 
           if (slide.type === "weight-feel") {
             return [
-              <PdpWeightFeelModule
-                key={`weight-feel-${index}`}
-                isLastPanel={isLastPanel}
-              />,
+              galleryScrollReveal(
+                `weight-feel-${index}`,
+                <PdpWeightFeelModule isLastPanel={isLastPanel} />,
+              ),
             ];
           }
 
           if (slide.type === "bag-stories") {
             return [
-              <PdpBagStoriesModule
-                key={`bag-stories-${index}`}
-                isLastPanel={isLastPanel}
-              />,
+              galleryScrollReveal(
+                `bag-stories-${index}`,
+                <PdpBagStoriesModule isLastPanel={isLastPanel} />,
+              ),
             ];
           }
 
           if (slide.type === "strap-simulation") {
             return [
-              <PdpStrapSimulationModule
-                key={`strap-simulation-${index}`}
-                isLastPanel={isLastPanel}
-                onQuickAddStrap={onQuickAddStrap}
-              />,
+              galleryScrollReveal(
+                `strap-simulation-${index}`,
+                <PdpStrapSimulationModule
+                  isLastPanel={isLastPanel}
+                  onQuickAddStrap={onQuickAddStrap}
+                />,
+              ),
             ];
           }
 
           if (slide.type === "product-collage") {
             return [
-              <PdpGalleryProductCollage
-                key={`product-collage-${index}`}
-                isLastPanel={isLastPanel}
-              />,
+              galleryScrollReveal(
+                `product-collage-${index}`,
+                <PdpGalleryProductCollage isLastPanel={isLastPanel} />,
+              ),
             ];
           }
 
           if (slide.type === "video") {
             return [
-              <PdpGalleryVideoSlide
-                key={`video-${index}-${slide.src}`}
-                src={slide.src}
-                poster={slide.poster}
-                alt={slide.alt}
-                showMuteControl={slide.showMuteControl}
-                aspect={slide.aspect}
-                caption={slide.caption}
-                isLastPanel={isLastPanel}
-              />,
+              galleryScrollReveal(
+                `video-${index}-${slide.src}`,
+                <PdpGalleryVideoSlide
+                  src={slide.src}
+                  poster={slide.poster}
+                  alt={slide.alt}
+                  showMuteControl={slide.showMuteControl}
+                  aspect={slide.aspect}
+                  caption={slide.caption}
+                  isLastPanel={isLastPanel}
+                />,
+                { surface: "light" },
+              ),
             ];
           }
 
           if (slide.type === "ugc-videos") {
             return [
-              <PdpUgcVideoCarouselModule key={`ugc-videos-${index}`} />,
+              galleryScrollReveal(
+                `ugc-videos-${index}`,
+                <PdpUgcVideoCarouselModule />,
+                { surface: "light", variant: "rise" },
+              ),
             ];
           }
 
           if (slide.type === "as-seen-on") {
             return [
-              <PdpAsSeenOnModule
-                key={`as-seen-on-${index}`}
-                isLastPanel={isLastPanel}
-              />,
+              galleryScrollReveal(
+                `as-seen-on-${index}`,
+                <PdpAsSeenOnModule isLastPanel={isLastPanel} />,
+                { surface: "light", variant: "rise" },
+              ),
             ];
           }
 
@@ -521,44 +563,50 @@ export function PdpGalleryView({
           }
 
           return [
-            <PdpGalleryPortraitSlide
-              key={`immersive-${index}-${slide.src}`}
-              src={slide.src}
-              alt={slide.alt}
-              priority={index === 0}
-              scale={
-                slide.scale ??
-                (PDP_PANEL_SCROLL
-                  ? "scale-100"
-                  : slide.src.includes("interior-packed") ||
-                      slide.src.includes("interior-packed-bleed")
-                    ? "scale-[1.12]"
-                    : "scale-[1.08]")
-              }
-              shopTheLookId={slide.shopTheLookId}
-              strapOptionsId={slide.strapOptionsId}
-              influencer={slide.influencer}
-              onOpenShopTheLook={setShopLookId}
-              onOpenStrapOptions={setStrapOptionsId}
-              insetMargins={slide.insetMargins}
-              objectPosition={slide.objectPosition}
-              hotspots={slide.hotspots}
-              isLastPanel={isLastPanel}
-              panelContain={slide.panelContain}
-              headerSurface={slide.headerSurface}
-              aspect={slide.aspect}
-              dragZoom={slide.dragZoom}
-            />,
+            galleryScrollReveal(
+              `immersive-${index}-${slide.src}`,
+              <PdpGalleryPortraitSlide
+                src={slide.src}
+                alt={slide.alt}
+                priority={index === 0}
+                scale={
+                  slide.scale ??
+                  (PDP_PANEL_SCROLL
+                    ? "scale-100"
+                    : slide.src.includes("interior-packed") ||
+                        slide.src.includes("interior-packed-bleed")
+                      ? "scale-[1.12]"
+                      : "scale-[1.08]")
+                }
+                shopTheLookId={slide.shopTheLookId}
+                strapOptionsId={slide.strapOptionsId}
+                influencer={slide.influencer}
+                onOpenShopTheLook={setShopLookId}
+                onOpenStrapOptions={setStrapOptionsId}
+                insetMargins={slide.insetMargins}
+                objectPosition={slide.objectPosition}
+                hotspots={slide.hotspots}
+                isLastPanel={isLastPanel}
+                panelContain={slide.panelContain}
+                headerSurface={slide.headerSurface}
+                aspect={slide.aspect}
+                dragZoom={slide.dragZoom}
+              />,
+              { surface: "light" },
+            ),
           ];
         })}
         <div ref={galleryEndRef} aria-hidden className="h-px w-full shrink-0" />
-        <PdpGalleryViewMorePhotos onOpen={() => setPhotosOpen(true)} />
+        {galleryScrollReveal(
+          "view-more-photos",
+          <PdpGalleryViewMorePhotos onOpen={() => setPhotosOpen(true)} />,
+          { surface: "muted", variant: "rise" },
+        )}
       </div>
 
       {/* Ecommerce — after desire + function gallery scroll */}
       <PdpScrollReveal className="w-full shrink-0" surface="muted">
         <PdpCompareModule
-          selectedColorId={selectedColorId}
           onAddToBag={() => onAddSimilarToBag?.()}
           onPickerOpenChange={onComparePickerOpenChange}
         />

@@ -63,9 +63,6 @@ export function PdpUgcStoryCard({
           style={{ objectPosition: story.objectPosition ?? "center" }}
           sizes={imageSizes}
         />
-        <span className="font-extended absolute left-2 top-2 rounded-full bg-white/92 px-2 py-1 text-[10px] tracking-[0.2px] text-black shadow-sm">
-          {story.context}
-        </span>
       </div>
 
       <div className="flex flex-col gap-1 p-2">

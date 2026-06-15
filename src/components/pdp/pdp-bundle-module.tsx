@@ -36,26 +36,36 @@ type BundleRowProps = {
 
 function PrimaryBundleCard({ item }: { item: PdpBundleItem }) {
   return (
-    <div className="flex items-center gap-3 border border-black bg-neutral-50 px-3.5 py-3.5 ring-1 ring-inset ring-black">
-      <span className="relative size-12 shrink-0 overflow-hidden bg-neutral-100">
-        <Image
-          src={item.imageSrc}
-          alt={item.imageAlt}
-          fill
-          className="object-cover object-center"
-          sizes="48px"
-        />
-      </span>
+    <div className="flex flex-col gap-3 border-b border-neutral-200 pb-4">
+      <p
+        className={cn(
+          "font-extended m-0 text-[10px] uppercase tracking-[0.6px] text-neutral-500",
+        )}
+      >
+        Your bag
+      </p>
 
-      <span className="min-w-0 flex-1">
-        <span className={`font-extended block text-black ${pdpType.body}`}>
-          {item.name}
+      <div className="flex items-center gap-3.5">
+        <span className="relative size-16 shrink-0 overflow-hidden bg-neutral-100">
+          <Image
+            src={item.imageSrc}
+            alt={item.imageAlt}
+            fill
+            className="object-cover object-center"
+            sizes="64px"
+          />
         </span>
-      </span>
 
-      <span className={`font-extended shrink-0 text-black ${pdpType.label}`}>
-        {formatPrice(item.price)}
-      </span>
+        <div className="min-w-0 flex-1">
+          <p className="font-extended text-base font-bold leading-snug tracking-[0.2px] text-black">
+            {item.name}
+          </p>
+        </div>
+
+        <p className="font-extended shrink-0 text-base tracking-[0.2px] text-black">
+          {formatPrice(item.price)}
+        </p>
+      </div>
     </div>
   );
 }
@@ -68,7 +78,7 @@ function AddonBundleRow({ item, selected, onToggle }: BundleRowProps) {
       disabled={item.locked}
       aria-pressed={selected}
       className={cn(
-        "flex w-full items-center gap-3 border border-neutral-200 px-3.5 py-3.5 text-left transition-colors",
+        "flex w-full items-center gap-3 px-3.5 py-3.5 text-left transition-colors",
         selected ? "bg-neutral-50" : "bg-white",
         item.locked ? "cursor-default" : "active:bg-neutral-100",
       )}
@@ -183,15 +193,24 @@ export function PdpBundleModule({ onAddBundle }: PdpBundleModuleProps) {
               {primaryItem ? <PrimaryBundleCard item={primaryItem} /> : null}
 
               {addonItems.length ? (
-                <div className="flex flex-col gap-3">
-                  {addonItems.map((item) => (
-                    <AddonBundleRow
-                      key={item.id}
-                      item={item}
-                      selected={selectedIds.has(item.id)}
-                      onToggle={toggleItem}
-                    />
-                  ))}
+                <div className="flex flex-col gap-2">
+                  <p
+                    className={cn(
+                      "font-extended m-0 text-[10px] uppercase tracking-[0.6px] text-neutral-500",
+                    )}
+                  >
+                    Add to your bundle
+                  </p>
+                  <div className="flex flex-col divide-y divide-neutral-200 border border-neutral-200">
+                    {addonItems.map((item) => (
+                      <AddonBundleRow
+                        key={item.id}
+                        item={item}
+                        selected={selectedIds.has(item.id)}
+                        onToggle={toggleItem}
+                      />
+                    ))}
+                  </div>
                 </div>
               ) : null}
             </div>

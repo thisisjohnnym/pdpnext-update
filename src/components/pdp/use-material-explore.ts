@@ -39,6 +39,9 @@ export function useMaterialExplore(zones: readonly PdpMaterialExploreZone[]) {
   const [position, setPosition] = useState<ExplorePosition | null>(null);
   const [containerSize, setContainerSize] = useState<ContainerSize>({ width: 0, height: 0 });
   const [isExploring, setIsExploring] = useState(false);
+  const [pointerType, setPointerType] = useState<React.PointerEvent["pointerType"] | null>(
+    null,
+  );
 
   const updatePosition = useCallback((clientX: number, clientY: number) => {
     const container = containerRef.current;
@@ -68,6 +71,7 @@ export function useMaterialExplore(zones: readonly PdpMaterialExploreZone[]) {
 
       event.currentTarget.setPointerCapture(event.pointerId);
       isExploringRef.current = true;
+      setPointerType(event.pointerType);
       setIsExploring(true);
       updatePosition(event.clientX, event.clientY);
     },
@@ -100,6 +104,7 @@ export function useMaterialExplore(zones: readonly PdpMaterialExploreZone[]) {
 
       isExploringRef.current = false;
       setIsExploring(false);
+      setPointerType(null);
       setPosition(null);
     },
     [],
@@ -115,6 +120,7 @@ export function useMaterialExplore(zones: readonly PdpMaterialExploreZone[]) {
     containerSize,
     isExploring,
     activeZone,
+    pointerType,
     handlePointerDown,
     handlePointerMove,
     handlePointerEnd,

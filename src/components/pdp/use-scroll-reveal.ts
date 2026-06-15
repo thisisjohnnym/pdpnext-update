@@ -10,20 +10,21 @@ type UseScrollRevealOptions = {
 };
 
 export function useScrollReveal({
-  threshold = 0.06,
-  rootMargin = "0px 0px -5% 0px",
+  threshold = 0.04,
+  rootMargin = "0px 0px -2% 0px",
 }: UseScrollRevealOptions = {}) {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
 
   useEffect(() => {
     const node = ref.current;
-    if (!node) {
-      return;
-    }
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setVisible(true);
+    if (!node || visible) {
       return;
     }
 
@@ -42,7 +43,7 @@ export function useScrollReveal({
     return () => {
       observer.disconnect();
     };
-  }, [threshold, rootMargin]);
+  }, [threshold, rootMargin, visible]);
 
   return { ref, visible };
 }

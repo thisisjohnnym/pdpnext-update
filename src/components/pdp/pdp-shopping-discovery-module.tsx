@@ -17,6 +17,7 @@ import {
 } from "./pdp-data";
 import { pdpModuleSectionClass, pdpModuleHeadingClass, pdpModuleHeadingLeadClass } from "./pdp-module-section";
 import { PdpAiConciergePanel } from "./pdp-product-search-module";
+import { PdpAiInsightCard } from "./pdp-ai-insight-card";
 import { pdpType } from "./pdp-type";
 
 type PdpShoppingDiscoveryModuleProps = {
@@ -113,38 +114,23 @@ export function PdpShoppingDiscoveryModule({
               </ul>
             </div>
 
-            <div className="rounded-2xl bg-neutral-50 px-3.5 py-3.5">
-              {assistantOpen ? (
-                <PdpAiConciergePanel
-                  idSuffix="-discovery"
-                  showTitle={false}
-                  variant="flat"
-                  onClose={() => setAssistantOpen(false)}
-                />
-              ) : (
-                <>
-                  <div className="flex items-start gap-2.5">
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-black text-white">
-                      <MaterialIcon
-                        name="auto_awesome"
-                        size={18}
-                        className="text-white"
-                        aria-hidden
-                      />
-                    </span>
-                    <div className="min-w-0">
-                      <p className="font-extended text-sm tracking-[0.2px] text-black">
-                        {PDP_SHOPPING_ASSISTANT_PROMPT.title}
-                      </p>
-                      <p className={`mt-1 text-neutral-700 ${pdpType.caption}`}>
-                        {PDP_SHOPPING_ASSISTANT_PROMPT.body}
-                      </p>
-                    </div>
-                  </div>
+            {assistantOpen ? (
+              <PdpAiConciergePanel
+                idSuffix="-discovery"
+                showTitle={false}
+                variant="flat"
+                onClose={() => setAssistantOpen(false)}
+              />
+            ) : (
+              <PdpAiInsightCard
+                variant="minimal"
+                title={PDP_SHOPPING_ASSISTANT_PROMPT.title}
+                body={PDP_SHOPPING_ASSISTANT_PROMPT.body}
+                footer={
                   <button
                     type="button"
                     onClick={() => setAssistantOpen(true)}
-                    className={`font-extended mt-3 inline-flex items-center gap-0.5 text-black ${pdpType.label}`}
+                    className={`font-extended inline-flex items-center gap-0.5 text-black ${pdpType.micro}`}
                   >
                     {PDP_SHOPPING_ASSISTANT_PROMPT.cta}
                     <MaterialIcon
@@ -153,9 +139,9 @@ export function PdpShoppingDiscoveryModule({
                       className="text-black"
                     />
                   </button>
-                </>
-              )}
-            </div>
+                }
+              />
+            )}
           </div>
         </GridItem>
       </PageGrid>

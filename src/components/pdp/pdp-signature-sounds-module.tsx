@@ -8,8 +8,35 @@ import { cn } from "@/lib/cn";
 
 import { PDP_SIGNATURE_SOUNDS, type PdpSignatureSound } from "./pdp-data";
 import { pdpModuleHeadingClass, pdpModuleSectionClass, pdpModuleHeadingLeadClass } from "./pdp-module-section";
-import { pdpType } from "./pdp-type";
 import { useSignatureSound } from "./use-signature-sound";
+
+const SOUND_WAVE_HEIGHTS = [38, 68, 100, 58, 34];
+
+function SoundWaveBars({ active }: { active: boolean }) {
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        "flex h-5 w-7 shrink-0 items-end justify-between",
+        active ? "text-black" : "text-neutral-400",
+      )}
+    >
+      {SOUND_WAVE_HEIGHTS.map((height, index) => (
+        <span
+          key={index}
+          className={cn(
+            "pdp-sound-wave-bar w-0.5 rounded-full bg-current",
+            active && "animate-pdp-sound-wave",
+          )}
+          style={{
+            height: `${height}%`,
+            animationDelay: active ? `${index * 0.11}s` : undefined,
+          }}
+        />
+      ))}
+    </span>
+  );
+}
 
 function SignatureSoundRow({
   sound,
@@ -27,7 +54,7 @@ function SignatureSoundRow({
       aria-pressed={active}
       aria-label={active ? `Stop ${sound.label}` : sound.label}
       className={cn(
-        "group flex w-full min-h-[4.75rem] items-center gap-3 border-0 px-3 py-4 text-left transition-colors duration-200",
+        "group flex w-full min-h-[3.75rem] items-center gap-3 border-0 px-3 py-3 text-left transition-colors duration-200",
         active ? "bg-neutral-100" : "bg-white active:bg-neutral-50",
       )}
     >
@@ -55,22 +82,22 @@ function SignatureSoundRow({
       </span>
 
       <span className="min-w-0 flex-1">
-        <span className="font-extended flex items-center gap-1 text-sm tracking-[0.2px] text-black">
-          <span className="-translate-y-px">{sound.label}</span>
-        </span>
-        <span className={`mt-0.5 block text-neutral-600 ${pdpType.micro}`}>
-          {active ? sound.playingHint : sound.hint}
+        <span className="font-extended block text-sm tracking-[0.2px] text-black">
+          {sound.label}
         </span>
       </span>
 
-      <MaterialIcon
-        name={active ? "pause" : "play_arrow"}
-        size={24}
-        className={cn(
-          "shrink-0 transition-colors",
-          active ? "text-black" : "text-neutral-400",
-        )}
-      />
+      <span className="flex shrink-0 items-center gap-2.5">
+        <SoundWaveBars active={active} />
+        <MaterialIcon
+          name={active ? "pause" : "play_arrow"}
+          size={24}
+          className={cn(
+            "shrink-0 transition-colors",
+            active ? "text-black" : "text-neutral-400",
+          )}
+        />
+      </span>
     </button>
   );
 }

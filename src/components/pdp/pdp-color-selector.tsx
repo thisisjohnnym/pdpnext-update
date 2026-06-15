@@ -180,7 +180,7 @@ function PdpColorDropup({
             sizeClass={compact ? "size-7" : "size-8"}
           />
           {!iconOnly ? (
-            <span className="truncate">{selected.name}</span>
+            <span className="truncate translate-y-px">{selected.name}</span>
           ) : null}
         </span>
         <MaterialIcon

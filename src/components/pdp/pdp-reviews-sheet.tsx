@@ -24,6 +24,7 @@ import {
   type PdpFeaturedReview,
 } from "./pdp-data";
 import { PdpReviewLikeButton } from "./pdp-review-like-button";
+import { PdpAiInsightCard } from "./pdp-ai-insight-card";
 import { PdpUgcStoryCard } from "./pdp-ugc-story-card";
 import { pdpType } from "./pdp-type";
 
@@ -254,24 +255,12 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
           </div>
 
           <div className="flex flex-col gap-6">
-            <section className="flex flex-col gap-2.5">
-              <p className={pdpModuleHeadingClass({ lead: false, size: "sm" })}>
-                {PDP_REVIEWS_AI_SUMMARY.headline}
-              </p>
-              <p className="font-extended text-sm leading-[1.35] tracking-[0.2px] text-[#4a4a4a]">
-                {PDP_REVIEWS_AI_SUMMARY.body}
-              </p>
-              <div className="flex items-center gap-2 pt-0.5">
-                <MaterialIcon
-                  name="auto_awesome"
-                  size={18}
-                  className="text-black"
-                />
-                <p className="font-extended text-sm leading-[1.35] tracking-[0.2px] text-black">
-                  {PDP_REVIEWS_AI_SUMMARY.attribution}
-                </p>
-              </div>
-            </section>
+            <PdpAiInsightCard
+              variant="minimal"
+              eyebrow={PDP_REVIEWS_AI_SUMMARY.attribution}
+              title={PDP_REVIEWS_AI_SUMMARY.headline}
+              body={PDP_REVIEWS_AI_SUMMARY.body}
+            />
 
             <section className="flex flex-col gap-4 pt-1">
               <div className="flex items-start justify-between gap-4">

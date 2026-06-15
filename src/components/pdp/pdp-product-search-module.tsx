@@ -11,6 +11,7 @@ import {
   PDP_AI_CONCIERGE,
   type PdpAiConciergePrompt,
 } from "./pdp-data";
+import { PdpAiInsightContent } from "./pdp-ai-insight-card";
 import { pdpModuleSectionClass, pdpModuleHeadingClass } from "./pdp-module-section";
 import { pdpType } from "./pdp-type";
 
@@ -29,29 +30,16 @@ function ConciergeResponse({
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 border border-neutral-200 bg-white p-3",
+        "flex flex-col gap-4 border border-neutral-200 bg-white p-4",
         flat ? "shadow-none" : "rounded-2xl shadow-sm",
       )}
       aria-live="polite"
     >
-      <div className="flex items-start gap-2.5">
-        <span
-          className={cn(
-            "flex size-8 shrink-0 items-center justify-center rounded-full bg-black text-white",
-          )}
-        >
-          <MaterialIcon name="auto_awesome" size={18} className="text-white" />
-        </span>
-        <div className="min-w-0 flex-1">
-          <p className="font-extended text-xs tracking-[0.2px] text-neutral-500">
-            AI Concierge
-          </p>
-          <p className="font-extended mt-1 text-sm tracking-[0.2px] text-black">
-            {response.headline}
-          </p>
-          <p className={`mt-2 text-neutral-700 ${pdpType.caption}`}>{response.body}</p>
-        </div>
-      </div>
+      <PdpAiInsightContent
+        eyebrow="AI Concierge"
+        title={response.headline}
+        body={response.body}
+      />
 
       {highlights?.length ? (
         <ul className="flex flex-wrap gap-1.5">

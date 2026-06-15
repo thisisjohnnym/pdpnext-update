@@ -1,6 +1,6 @@
 "use client";
 
-import { type RefObject, useEffect } from "react";
+import { type RefObject, useEffect, useState } from "react";
 
 const LOOP_REPETITIONS = 3;
 
@@ -116,4 +116,51 @@ export function useInfiniteCenteredCarousel(
       ro.disconnect();
     };
   }, [scrollRef, itemCount, initialIndex]);
+}
+
+/** Maps center-snapped scroll position to the active source item index */
+export function useCarouselActiveIndex(
+  scrollRef: RefObject<HTMLDivElement | null>,
+  itemCount: number,
+) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el || itemCount === 0) {
+      return;
+    }
+
+    const updateActiveIndex = () => {
+      const center = el.scrollLeft + el.clientWidth / 2;
+      let closestIndex = 0;
+      let closestDistance = Number.POSITIVE_INFINITY;
+
+      for (let index = 0; index < el.children.length; index += 1) {
+        const child = el.children[index] as HTMLElement;
+        const childCenter = child.offsetLeft + child.offsetWidth / 2;
+        const distance = Math.abs(center - childCenter);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      }
+
+      setActiveIndex(closestIndex % itemCount);
+    };
+
+    updateActiveIndex();
+    el.addEventListener("scroll", updateActiveIndex, { passive: true });
+
+    const ro = new ResizeObserver(updateActiveIndex);
+    ro.observe(el);
+
+    return () => {
+      el.removeEventListener("scroll", updateActiveIndex);
+      ro.disconnect();
+    };
+  }, [scrollRef, itemCount]);
+
+  return activeIndex;
 }

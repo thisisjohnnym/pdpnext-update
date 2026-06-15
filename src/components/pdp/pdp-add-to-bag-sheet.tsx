@@ -182,22 +182,22 @@ export function PdpAddToBagSheet({
               </ul>
             </div>
           ) : (
-            <div className="flex items-center gap-3.5 rounded-lg bg-[#f2f2f2] px-3 py-4">
-              <div className="relative size-[88px] shrink-0 overflow-hidden bg-neutral-100">
+            <div className="flex overflow-hidden rounded-lg bg-[#f2f2f2]">
+              <div className="relative w-[7.25rem] shrink-0 self-stretch min-h-[6.75rem]">
                 <Image
                   src={PDP_PRODUCT.imageSrc}
                   alt={PDP_PRODUCT.imageAlt}
                   fill
                   className="object-cover object-center"
-                  sizes="88px"
+                  sizes="116px"
                 />
               </div>
 
-              <div className="min-w-0 flex-1">
+              <div className="flex min-w-0 flex-1 flex-col justify-center px-3 py-3.5">
                 <p className="font-extended text-base tracking-[0.2px] text-black">
                   {PDP_PRODUCT.name}
                 </p>
-                          <p className="font-extended mt-1 text-xs tracking-[0.2px] text-neutral-600">
+                <p className="font-extended mt-1 text-xs tracking-[0.2px] text-neutral-600">
                   {selectedColor.name} · {PDP_PRODUCT.subtitle}
                 </p>
                 <p className="font-extended mt-1.5 text-base tracking-[0.2px] text-black">
@@ -213,13 +213,13 @@ export function PdpAddToBagSheet({
               onClick={onClose}
               className="font-extended flex h-12 min-w-0 flex-1 items-center justify-center rounded-full border border-neutral-300 text-sm tracking-[0.2px] text-black"
             >
-              <span>Keep shopping</span>
+              <span className="translate-y-px">Keep shopping</span>
             </button>
             <button
               type="button"
               className="font-extended flex h-12 min-w-0 flex-1 items-center justify-center rounded-full bg-black text-sm tracking-[0.2px] text-white"
             >
-              <span>Checkout</span>
+              <span className="translate-y-px">Checkout</span>
             </button>
           </div>
 

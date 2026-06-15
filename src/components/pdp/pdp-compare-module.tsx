@@ -8,13 +8,13 @@ import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
 import { PdpComparePickerSheet } from "./pdp-compare-picker-sheet";
+import { PdpAiInsightCard } from "./pdp-ai-insight-card";
 import {
   pdpModuleSectionClass,
   pdpModuleHeadingClass,
   pdpModuleHeadingLeadClass,
 } from "./pdp-module-section";
 import {
-  PDP_COLORS,
   PDP_COMPARE_SELECTED,
   PDP_FAMILY_COMPARE_ALTERNATIVES,
   type PdpCompareDifferenceRow,
@@ -25,11 +25,9 @@ import { pdpType } from "./pdp-type";
 
 function CompareProductCard({
   item,
-  colorLabel,
   showChangeAffordance = false,
 }: {
   item: PdpCompareItem | PdpFamilyCompareAlternative;
-  colorLabel?: string;
   showChangeAffordance?: boolean;
 }) {
   return (
@@ -44,15 +42,10 @@ function CompareProductCard({
         />
         {showChangeAffordance ? (
           <span
-            className={`font-extended absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1.5 leading-none tracking-[0.2px] text-black shadow-sm ${pdpType.micro}`}
+            className="absolute left-2.5 top-2.5 z-10 flex size-8 items-center justify-center rounded-full border border-neutral-200 bg-white/95 text-black shadow-sm"
+            aria-hidden
           >
-            <MaterialIcon
-              name="swap_horiz"
-              size={18}
-              className="shrink-0 text-black"
-              aria-hidden
-            />
-            Change
+            <MaterialIcon name="swap_horiz" size={18} />
           </span>
         ) : null}
       </div>
@@ -61,54 +54,49 @@ function CompareProductCard({
           {item.name}
         </p>
         <p className={`font-extended text-black ${pdpType.micro}`}>{item.price}</p>
-        {colorLabel ? (
-          <p className={`text-neutral-500 ${pdpType.micro}`}>{colorLabel}</p>
-        ) : null}
       </div>
     </>
   );
 }
 
+function getKeyDifferences(rows: PdpCompareDifferenceRow[]) {
+  const wins = rows.filter((row) => row.advantage === "selected");
+  const price = rows.find((row) => row.variant === "price");
+  const picked = wins.slice(0, 3);
+
+  if (price && !picked.includes(price)) {
+    picked.push(price);
+  }
+
+  return picked.slice(0, 4);
+}
+
 function DifferenceRow({ row }: { row: PdpCompareDifferenceRow }) {
   const isSelectedWin = row.advantage === "selected";
-  const isAlternativeWin = row.advantage === "alternative";
-  const isPrice = row.variant === "price";
 
   return (
-    <div className="flex items-center justify-between gap-3 py-2.5">
+    <div className="flex items-baseline justify-between gap-3 py-2">
       <span className={`text-neutral-500 ${pdpType.micro}`}>{row.label}</span>
       <span
         className={cn(
-          "font-extended inline-flex items-center gap-1 text-sm tracking-[0.2px]",
-          isSelectedWin && "text-black",
-          isAlternativeWin && "text-neutral-700",
-          !isSelectedWin && !isAlternativeWin && !isPrice && "text-neutral-700",
-          isPrice && "text-neutral-700",
+          "font-extended text-right tracking-[0.2px]",
+          pdpType.micro,
+          isSelectedWin ? "text-black" : "text-neutral-600",
         )}
       >
         {row.display}
-        {isSelectedWin ? (
-          <MaterialIcon
-            name="check"
-            size={18}
-            className="text-black"
-            aria-hidden
-          />
-        ) : null}
       </span>
     </div>
   );
 }
 
 type PdpCompareModuleProps = {
-  selectedColorId?: string;
   onAddToBag?: () => void;
   onPickerOpenChange?: (open: boolean) => void;
 };
 
 /** Tabby family — side-by-side compare + picker tray for swapping the right bag */
 export function PdpCompareModule({
-  selectedColorId,
   onAddToBag,
   onPickerOpenChange,
 }: PdpCompareModuleProps) {
@@ -129,11 +117,10 @@ export function PdpCompareModule({
 
   const selected = PDP_COMPARE_SELECTED;
   const selectedShortName = selected.shortName ?? selected.name;
-  const selectedColor =
-    PDP_COLORS.find((color) => color.id === selectedColorId) ?? PDP_COLORS[0];
   const alternative =
     PDP_FAMILY_COMPARE_ALTERNATIVES[alternativeIndex] ??
     PDP_FAMILY_COMPARE_ALTERNATIVES[0];
+  const keyDifferences = getKeyDifferences(alternative.differences);
 
   const handleAdd = (id: string) => {
     setAddedIds((current) => {
@@ -162,77 +149,41 @@ export function PdpCompareModule({
             Compare the family
           </h2>
 
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4">
             <div
               className="grid grid-cols-2 gap-2"
               aria-label="Compare Tabby family bags"
             >
-              <article className="min-w-0 bg-white">
-                <CompareProductCard
-                  item={selected}
-                  colorLabel={selectedColor.name}
-                />
+              <article className="min-w-0">
+                <CompareProductCard item={selected} />
               </article>
 
               <button
                 type="button"
                 onClick={() => handlePickerOpenChange(true)}
-                className="group min-w-0 bg-white text-left transition-colors active:bg-neutral-50"
+                className="group min-w-0 text-left transition-colors active:opacity-80"
                 aria-label={`Compare with ${alternative.shortName}. Tap to choose a different bag.`}
               >
                 <CompareProductCard item={alternative} showChangeAffordance />
               </button>
             </div>
 
-            <div>
-              <p
-                className={cn(
-                  "mb-2 font-extended text-[10px] uppercase tracking-[0.6px] text-neutral-500",
-                )}
-              >
-                Key differences vs {alternative.shortName}
-              </p>
-              <div className="border border-neutral-200 bg-white px-3 py-1">
-                <div className="flex flex-col divide-y divide-neutral-200">
-                  {alternative.differences.map((row) => (
-                    <DifferenceRow key={row.id} row={row} />
-                  ))}
-                </div>
-              </div>
+            <div className="flex flex-col divide-y divide-neutral-200 border-y border-neutral-200">
+              {keyDifferences.map((row) => (
+                <DifferenceRow key={row.id} row={row} />
+              ))}
             </div>
 
             {!insightDismissed ? (
-              <div
-                className="relative rounded-xl bg-neutral-50 px-2.5 py-2 pr-8"
-                aria-live="polite"
-              >
-                <button
-                  type="button"
-                  onClick={() => setInsightDismissed(true)}
-                  aria-label="Dismiss recommendation"
-                  className="absolute right-1 top-1 flex size-6 items-center justify-center rounded-full text-neutral-500 transition-colors active:bg-neutral-200/80"
-                >
-                  <MaterialIcon name="close" size={18} />
-                </button>
-                <div className="flex items-start gap-2">
-                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-black text-white">
-                    <MaterialIcon
-                      name="auto_awesome"
-                      size={18}
-                      className="text-white"
-                      aria-hidden
-                    />
-                  </span>
-                  <div className="min-w-0">
-                    <p className={`font-extended text-black ${pdpType.micro}`}>
-                      {alternative.aiInsight.title}
-                    </p>
-                    <p className={`mt-0.5 text-neutral-600 ${pdpType.micro}`}>
-                      {alternative.aiInsight.body}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <PdpAiInsightCard
+                variant="minimal"
+                contained
+                size="xs"
+                title={alternative.aiInsight.title}
+                body={alternative.aiInsight.body}
+                onDismiss={() => setInsightDismissed(true)}
+                ariaLive="polite"
+              />
             ) : null}
 
             <div className="flex gap-2">

@@ -88,6 +88,7 @@ export function PdpLeatherCleanerModule({
 
   return (
     <section
+      id="pdp-leather-care"
       data-header-surface="light"
       className={pdpModuleSectionClass()}
     >

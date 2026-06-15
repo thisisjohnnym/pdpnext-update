@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 
+import { MaterialIcon } from "@/components/icons/material-icon";
 import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
@@ -79,6 +80,13 @@ export function PdpRecentlyViewedCarousel() {
                 <p className={`font-extended mt-0.5 text-black ${pdpType.micro}`}>
                   {item.price}
                 </p>
+                <button
+                  type="button"
+                  className={`font-extended mt-2 inline-flex items-center gap-0.5 text-black ${pdpType.label}`}
+                >
+                  View again
+                  <MaterialIcon name="arrow_forward" size={18} className="text-black" />
+                </button>
               </li>
             ))}
           </ul>

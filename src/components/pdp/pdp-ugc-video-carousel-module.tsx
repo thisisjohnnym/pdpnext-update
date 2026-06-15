@@ -54,7 +54,11 @@ export function PdpUgcVideoCarouselModule() {
         </GridItem>
       </PageGrid>
 
-      <div className={cn(pdpCarouselScrollWrapClass, "mt-3")}>
+      <div className={cn(pdpCarouselScrollWrapClass, "relative mt-3")}>
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-8 right-0 z-10 w-5 bg-gradient-to-l from-white/95 to-transparent"
+        />
         <div
           ref={scrollRef}
           className={cn(pdpCarouselInfiniteCenteredScrollClass, "flex pb-0")}

@@ -141,78 +141,49 @@ body {
   animation: hotspot-ring-ripple 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 
-/* Leather aging — discrete time slider (44px touch target) */
-.pdp-aging-slider {
+/* Leather aging — custom timeline scrubber */
+.pdp-aging-timeline__input {
   -webkit-appearance: none;
   appearance: none;
-  display: block;
-  width: 100%;
-  height: 2.75rem;
   margin: 0;
-  border-radius: 9999px;
-  background: linear-gradient(
-    to right,
-    #000 0%,
-    #000 var(--pdp-aging-progress, 0%),
-    #d4d4d4 var(--pdp-aging-progress, 0%),
-    #d4d4d4 100%
-  );
-  background-repeat: no-repeat;
-  background-size: 100% 4px;
-  background-position: center;
   cursor: pointer;
+  background: transparent;
   touch-action: pan-x;
 }
 
-.pdp-aging-slider:focus-visible {
-  outline: 2px solid #000;
-  outline-offset: 2px;
+.pdp-aging-timeline__input:focus-visible {
+  outline: none;
 }
 
-.pdp-aging-slider::-webkit-slider-runnable-track {
-  height: 4px;
-  border-radius: 9999px;
+.pdp-aging-timeline:focus-within .pdp-aging-timeline__track {
+  box-shadow: 0 0 0 2px rgb(0 0 0 / 0.08);
+}
+
+.pdp-aging-timeline__input::-webkit-slider-runnable-track {
+  height: 44px;
   background: transparent;
 }
 
-.pdp-aging-slider::-webkit-slider-thumb {
+.pdp-aging-timeline__input::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 22px;
-  height: 22px;
-  margin-top: -9px;
-  border: 2px solid #fff;
-  border-radius: 9999px;
-  background: #000;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.22);
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  cursor: pointer;
 }
 
-.pdp-aging-slider:active::-webkit-slider-thumb {
-  transform: scale(1.08);
+.pdp-aging-timeline__input::-moz-range-track {
+  height: 44px;
+  background: transparent;
+  border: 0;
 }
 
-.pdp-aging-slider::-moz-range-track {
-  height: 4px;
-  border-radius: 9999px;
-  background: #d4d4d4;
-}
-
-.pdp-aging-slider::-moz-range-progress {
-  height: 4px;
-  border-radius: 9999px;
-  background: #000;
-}
-
-.pdp-aging-slider::-moz-range-thumb {
-  width: 22px;
-  height: 22px;
-  border: 2px solid #fff;
-  border-radius: 9999px;
-  background: #000;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.22);
-}
-
-.pdp-aging-slider:active::-moz-range-thumb {
-  transform: scale(1.08);
+.pdp-aging-timeline__input::-moz-range-thumb {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
 /* Hero load-in — photo first, then chrome fades into place */
@@ -347,6 +318,24 @@ body {
   animation: pdp-material-lens-pulse 2.8s ease-in-out infinite;
 }
 
+@keyframes pdp-sound-wave {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.pdp-sound-wave-bar {
+  transform-origin: bottom;
+}
+
+.animate-pdp-sound-wave {
+  animation: pdp-sound-wave 0.85s ease-in-out infinite;
+}
+
 /* Weight & feel — suppress iOS image long-press callout (Copy / Save) */
 .pdp-weight-lift {
   -webkit-touch-callout: none;
@@ -374,6 +363,38 @@ body {
   filter: blur(10px);
 }
 
+@keyframes pdp-weight-lift-ring-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.07);
+  }
+}
+
+@keyframes pdp-weight-lift-ring-ripple {
+  0% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.45);
+  }
+}
+
+.pdp-weight-lift__ring {
+  transform-origin: center;
+  animation: pdp-weight-lift-ring-pulse 2.4s ease-in-out infinite;
+}
+
+.pdp-weight-lift__ring--outer {
+  animation: pdp-weight-lift-ring-ripple 2.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
 .pdp-strap-track:focus-visible {
   outline: 2px solid #171717;
   outline-offset: 3px;
@@ -383,6 +404,17 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .pdp-material-lens > div:first-child {
     animation: none;
+  }
+
+  .animate-pdp-sound-wave {
+    animation: none;
+    transform: scaleY(0.72);
+  }
+
+  .pdp-weight-lift__ring {
+    animation: none;
+    opacity: 0.7;
+    transform: none;
   }
 
   .pdp-social-rail-item {
@@ -419,8 +451,13 @@ body {
 }
 
 .pdp-scroll-reveal--subtle .pdp-scroll-reveal__inner {
-  transform: translate3d(0, 2px, 0);
-  transition-duration: 700ms;
+  transform: none;
+  transition:
+    opacity 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pdp-scroll-reveal--subtle .pdp-scroll-reveal__inner--visible {
+  transform: none;
 }
 
 /* Floating bottom pills — heavy frosted glass */
@@ -483,6 +520,99 @@ body {
     background-color: rgb(255 255 255 / 0.96);
     border-color: rgb(255 255 255 / 0.9);
   }
+
+  .pdp-bottom-frost-gradient::before {
+    background: linear-gradient(
+      to top,
+      rgb(255 255 255 / 0.96) 0%,
+      rgb(255 255 255 / 0.72) 45%,
+      transparent 100%
+    );
+  }
+}
+
+/* Bottom chrome — frosted fade behind floating CTAs */
+.pdp-bottom-frost-gradient {
+  position: relative;
+  pointer-events: none;
+}
+
+.pdp-bottom-frost-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-mask-image: linear-gradient(
+    to top,
+    black 0%,
+    rgb(0 0 0 / 0.85) 35%,
+    rgb(0 0 0 / 0.35) 65%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to top,
+    black 0%,
+    rgb(0 0 0 / 0.85) 35%,
+    rgb(0 0 0 / 0.35) 65%,
+    transparent 100%
+  );
+}
+
+.pdp-bottom-frost-gradient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgb(255 255 255 / 0.82) 0%,
+    rgb(255 255 255 / 0.48) 38%,
+    rgb(255 255 255 / 0.12) 68%,
+    transparent 100%
+  );
+}
+
+.pdp-bottom-frost-gradient--prominent::before {
+  -webkit-backdrop-filter: blur(52px) saturate(220%);
+  backdrop-filter: blur(52px) saturate(220%);
+  -webkit-mask-image: linear-gradient(
+    to top,
+    black 0%,
+    black 30%,
+    rgb(0 0 0 / 0.96) 48%,
+    rgb(0 0 0 / 0.78) 66%,
+    rgb(0 0 0 / 0.42) 84%,
+    rgb(0 0 0 / 0.12) 94%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to top,
+    black 0%,
+    black 30%,
+    rgb(0 0 0 / 0.96) 48%,
+    rgb(0 0 0 / 0.78) 66%,
+    rgb(0 0 0 / 0.42) 84%,
+    rgb(0 0 0 / 0.12) 94%,
+    transparent 100%
+  );
+}
+
+.pdp-bottom-frost-gradient--prominent::after {
+  background: linear-gradient(
+    to top,
+    rgb(255 255 255 / 1) 0%,
+    rgb(255 255 255 / 0.98) 22%,
+    rgb(255 255 255 / 0.9) 40%,
+    rgb(255 255 255 / 0.68) 58%,
+    rgb(255 255 255 / 0.38) 76%,
+    rgb(255 255 255 / 0.14) 90%,
+    transparent 100%
+  );
+}
+
+.pdp-bottom-frost-gradient--docked::before,
+.pdp-bottom-frost-gradient--docked::after {
+  opacity: 0.35;
 }
 
 /* Full-viewport gallery panels snap on scroll (toggle in pdp-panel-scroll.ts) */

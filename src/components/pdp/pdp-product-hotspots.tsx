@@ -3,7 +3,6 @@
 import { useState } from "react";
 
 import type { PdpProductHotspot } from "./pdp-data";
-import { pdpType } from "./pdp-type";
 
 type PdpProductHotspotsProps = {
   hotspots: PdpProductHotspot[];
@@ -77,11 +76,11 @@ export function PdpProductHotspots({ hotspots }: PdpProductHotspotsProps) {
                 event.stopPropagation();
                 handleToggle(hotspot.id);
               }}
-              className="relative flex size-11 items-center justify-center"
+              className="relative flex size-14 items-center justify-center"
             >
               <span
                 aria-hidden
-                className="pointer-events-none absolute size-8 rounded-full border-2 animate-hotspot-ring-ripple"
+                className="pointer-events-none absolute size-10 rounded-full border-2 animate-hotspot-ring-ripple"
                 style={{
                   borderColor: ringColor,
                   animationDelay: staggerDelay,
@@ -89,7 +88,7 @@ export function PdpProductHotspots({ hotspots }: PdpProductHotspotsProps) {
               />
               <span
                 aria-hidden
-                className="pointer-events-none absolute size-7 rounded-full border-2 animate-hotspot-pulse"
+                className="pointer-events-none absolute size-9 rounded-full border-2 animate-hotspot-pulse"
                 style={{
                   borderColor: ringColor,
                   animationDelay: staggerDelay,
@@ -97,7 +96,7 @@ export function PdpProductHotspots({ hotspots }: PdpProductHotspotsProps) {
               />
               <span
                 aria-hidden
-                className="relative size-3.5 rounded-full border-2 border-white bg-white"
+                className="relative size-5 rounded-full border-2 border-white bg-white"
               />
             </button>
           </div>
@@ -113,10 +112,10 @@ export function PdpProductHotspots({ hotspots }: PdpProductHotspotsProps) {
             transform: getCardTransform(activeHotspot.y),
           }}
         >
-          <p className={`font-extended text-black ${pdpType.label}`}>
+          <p className="font-extended text-base font-bold leading-snug tracking-[0.2px] text-black">
             {activeHotspot.title}
           </p>
-          <p className={`mt-1 text-neutral-600 ${pdpType.caption}`}>
+          <p className="mt-1 font-extended text-sm leading-[1.35] tracking-[0.2px] text-neutral-600">
             {activeHotspot.body}
           </p>
         </div>

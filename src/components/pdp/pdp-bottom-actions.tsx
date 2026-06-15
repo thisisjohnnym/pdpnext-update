@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
+import { MaterialIcon } from "@/components/icons/material-icon";
 import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
@@ -27,7 +28,7 @@ export function PdpBottomActions({
   suppressed = false,
 }: PdpBottomActionsProps) {
   const [mounted, setMounted] = useState(false);
-  const docked = useBottomBarDocked();
+  const { docked, frostOpacity } = useBottomBarDocked();
 
   useEffect(() => {
     setMounted(true);
@@ -59,43 +60,65 @@ export function PdpBottomActions({
         type="button"
         onClick={onAddToBag}
         className={cn(
-          "font-extended flex min-w-0 items-center justify-center text-center leading-none tracking-[0.2px] transition-[border-radius] duration-300",
+          "font-extended flex min-w-0 items-center justify-center gap-2 text-center leading-none transition-[border-radius,colors] duration-300",
           docked
-            ? "h-[54px] w-full rounded-none border-0 bg-white px-4 text-sm text-neutral-950 shadow-none"
-            : "h-12 w-full rounded-full border border-white bg-white px-3 text-sm text-neutral-950 shadow-none",
+            ? "h-[54px] w-full rounded-none border-0 bg-black px-4 shadow-none"
+            : "h-12 w-full rounded-full border-0 bg-black px-3 shadow-none",
         )}
       >
-        <span className="translate-y-px">Add to Bag</span>
+        <MaterialIcon
+          name="shopping_bag"
+          size={18}
+          className="shrink-0 text-white"
+          aria-hidden
+        />
+        <span className="translate-y-px text-[11px] uppercase tracking-[0.08em] text-white">
+          Add to Bag
+        </span>
       </button>
     </div>
   );
 
   return createPortal(
-    <footer
-      className={cn(
-        "pointer-events-none fixed inset-x-0 z-40 transition-[transform,padding] duration-300 ease-out",
-        suppressed ? "translate-y-full" : "translate-y-0",
-      )}
-      style={{
-        bottom: BOTTOM_CHROME_OFFSET,
-        paddingBottom: docked ? 0 : "0.625rem",
-      }}
-    >
+    <>
       <div
+        aria-hidden
         className={cn(
-          "relative transition-[padding] duration-300 ease-out",
-          docked ? "pt-0" : "bg-transparent pt-2.5",
+          "pdp-bottom-frost-gradient pointer-events-none fixed inset-x-0 bottom-0 z-[39] transition-[transform,opacity] duration-300 ease-out",
+          suppressed ? "translate-y-full opacity-0" : "translate-y-0",
+          docked
+            ? "pdp-bottom-frost-gradient--docked h-[calc(6.5rem+var(--pdp-browser-bottom-inset,0px)+env(safe-area-inset-bottom,0px))]"
+            : "pdp-bottom-frost-gradient--prominent h-[calc(15rem+var(--pdp-browser-bottom-inset,0px)+env(safe-area-inset-bottom,0px))]",
         )}
+        style={{ opacity: suppressed ? 0 : frostOpacity }}
+      />
+
+      <footer
+        className={cn(
+          "pointer-events-none fixed inset-x-0 z-40 transition-[transform,padding] duration-300 ease-out",
+          suppressed ? "translate-y-full" : "translate-y-0",
+        )}
+        style={{
+          bottom: BOTTOM_CHROME_OFFSET,
+          paddingBottom: docked ? 0 : "0.625rem",
+        }}
       >
-        {docked ? (
-          <div className="pointer-events-auto w-full">{bar}</div>
-        ) : (
-          <PageGrid fullWidth className="pointer-events-auto">
-            <GridItem mobile={12} desktop={24}>{bar}</GridItem>
-          </PageGrid>
-        )}
-      </div>
-    </footer>,
+        <div
+          className={cn(
+            "relative z-[1] transition-[padding] duration-300 ease-out",
+            docked ? "pt-0" : "pt-2.5",
+          )}
+        >
+          {docked ? (
+            <div className="pointer-events-auto w-full">{bar}</div>
+          ) : (
+            <PageGrid fullWidth className="pointer-events-auto">
+              <GridItem mobile={12} desktop={24}>{bar}</GridItem>
+            </PageGrid>
+          )}
+        </div>
+      </footer>
+    </>,
     document.body,
   );
 }
