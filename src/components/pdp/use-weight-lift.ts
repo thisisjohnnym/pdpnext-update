@@ -7,18 +7,17 @@ type UseWeightLiftOptions = {
   onLift?: () => void;
 };
 
-/** Press-and-hold lift — progress fills, then triggers haptic reveal */
+/** Press-and-hold lift — progress fills, haptic at completion, resets on release */
 export function useWeightLift({ holdMs, onLift }: UseWeightLiftOptions) {
   const holdMsRef = useRef(holdMs);
   const onLiftRef = useRef(onLift);
   const isHoldingRef = useRef(false);
-  const liftedRef = useRef(false);
+  const hapticFiredRef = useRef(false);
   const startTimeRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
 
   const [progress, setProgress] = useState(0);
-  const [lifted, setLifted] = useState(false);
-  const [revealed, setRevealed] = useState(false);
+  const [isHolding, setIsHolding] = useState(false);
 
   holdMsRef.current = holdMs;
   onLiftRef.current = onLift;
@@ -40,15 +39,14 @@ export function useWeightLift({ holdMs, onLift }: UseWeightLiftOptions) {
       const nextProgress = Math.min(elapsed / holdMsRef.current, 1);
       setProgress(nextProgress);
 
-      if (nextProgress >= 1 && !liftedRef.current) {
-        liftedRef.current = true;
-        setLifted(true);
-        setRevealed(true);
+      if (nextProgress >= 1 && !hapticFiredRef.current) {
+        hapticFiredRef.current = true;
         onLiftRef.current?.();
-        return;
       }
 
-      rafRef.current = requestAnimationFrame(runTick);
+      if (nextProgress < 1) {
+        rafRef.current = requestAnimationFrame(runTick);
+      }
     },
     [],
   );
@@ -62,10 +60,9 @@ export function useWeightLift({ holdMs, onLift }: UseWeightLiftOptions) {
 
       event.currentTarget.setPointerCapture(event.pointerId);
       isHoldingRef.current = true;
-      liftedRef.current = false;
+      hapticFiredRef.current = false;
       startTimeRef.current = performance.now();
-      setLifted(false);
-      setRevealed(false);
+      setIsHolding(true);
       setProgress(0);
       cancelAnimation();
       rafRef.current = requestAnimationFrame(tick);
@@ -89,9 +86,9 @@ export function useWeightLift({ holdMs, onLift }: UseWeightLiftOptions) {
       isHoldingRef.current = false;
       startTimeRef.current = null;
       cancelAnimation();
-      setLifted(false);
+      setIsHolding(false);
       setProgress(0);
-      liftedRef.current = false;
+      hapticFiredRef.current = false;
     },
     [cancelAnimation],
   );
@@ -100,8 +97,7 @@ export function useWeightLift({ holdMs, onLift }: UseWeightLiftOptions) {
 
   return {
     progress,
-    lifted,
-    revealed,
+    isHolding,
     handlePointerDown,
     handlePointerEnd,
     handleContextMenu,

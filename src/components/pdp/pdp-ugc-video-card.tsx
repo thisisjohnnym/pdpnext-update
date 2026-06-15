@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import Image from "next/image";
+
 import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
 
@@ -23,6 +25,13 @@ export function PdpUgcVideoCard({
 }: PdpUgcVideoCardProps) {
   const cardRef = useRef<HTMLElement>(null);
   const [isActive, setIsActive] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    if (isActive) {
+      setMounted(true);
+    }
+  }, [isActive]);
 
   useEffect(() => {
     const card = cardRef.current;
@@ -53,15 +62,30 @@ export function PdpUgcVideoCard({
       )}
     >
       <div className="relative aspect-[9/16] w-full overflow-hidden bg-black">
-        <PdpGalleryHeroVideo
-          src={video.src}
-          poster={video.poster}
-          ariaLabel={video.alt}
-          isActive={isActive}
-          showControls
-          showMuteControl
-          className="size-full object-cover object-center"
-        />
+        {mounted ? (
+          <PdpGalleryHeroVideo
+            src={video.src}
+            poster={video.poster}
+            ariaLabel={video.alt}
+            isActive={isActive}
+            preload={isActive ? "auto" : "metadata"}
+            showControls
+            showMuteControl
+            className="size-full object-cover object-center"
+          />
+        ) : video.poster ? (
+          <Image
+            src={video.poster}
+            alt=""
+            fill
+            aria-hidden
+            className="object-cover object-center"
+            sizes="72vw"
+            loading="lazy"
+          />
+        ) : (
+          <div aria-hidden className="size-full bg-neutral-900" />
+        )}
 
         <div className="pointer-events-none absolute bottom-3 left-3 z-[1] max-w-[calc(100%-5.5rem)] drop-shadow-[0_1px_4px_rgba(0,0,0,0.65)]">
           <p className="font-extended text-sm tracking-[0.2px] text-white">

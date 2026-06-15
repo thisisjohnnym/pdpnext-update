@@ -5,8 +5,22 @@ import { useCallback, useEffect, useRef, useState } from "react";
 /** One product sound at a time — tap toggles play/pause */
 export function useSignatureSound() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioCacheRef = useRef<Map<string, HTMLAudioElement>>(new Map());
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const getAudio = useCallback((src: string) => {
+    const cache = audioCacheRef.current;
+    let audio = cache.get(src);
+
+    if (!audio) {
+      audio = new Audio(src);
+      audio.preload = "none";
+      cache.set(src, audio);
+    }
+
+    return audio;
+  }, []);
 
   const stop = useCallback(() => {
     const audio = audioRef.current;
@@ -28,11 +42,12 @@ export function useSignatureSound() {
 
       if (audioRef.current) {
         audioRef.current.pause();
+        audioRef.current.currentTime = 0;
       }
 
       setActiveId(id);
 
-      const audio = new Audio(src);
+      const audio = getAudio(src);
       audioRef.current = audio;
 
       audio.onended = () => {
@@ -55,12 +70,15 @@ export function useSignatureSound() {
         stop();
       });
     },
-    [activeId, isPlaying, stop],
+    [activeId, getAudio, isPlaying, stop],
   );
 
   useEffect(() => {
     return () => {
       audioRef.current?.pause();
+      audioCacheRef.current.forEach((audio) => {
+        audio.pause();
+      });
     };
   }, []);
 

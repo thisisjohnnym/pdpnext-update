@@ -419,12 +419,6 @@ html.font-extended {
   transform: translate3d(0, -1.35rem, 0) scale(1.015);
 }
 
-.pdp-weight-lift__shadow--lifted {
-  transform: translateX(-50%) scale(0.72);
-  opacity: 0.28;
-  filter: blur(10px);
-}
-
 @keyframes pdp-weight-lift-ring-pulse {
   0%,
   100% {

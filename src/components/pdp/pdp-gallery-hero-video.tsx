@@ -23,6 +23,7 @@ type PdpGalleryHeroVideoProps = {
   ariaLabel?: string;
   showControls?: boolean;
   showMuteControl?: boolean;
+  preload?: "auto" | "metadata" | "none";
 };
 
 export function PdpGalleryHeroVideo({
@@ -33,6 +34,7 @@ export function PdpGalleryHeroVideo({
   ariaLabel = "360° product view of Tabby Shoulder Bag 26",
   showControls = false,
   showMuteControl = true,
+  preload = "none",
 }: PdpGalleryHeroVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const userPausedRef = useRef(false);
@@ -116,7 +118,7 @@ export function PdpGalleryHeroVideo({
         loop
         muted
         playsInline
-        preload="auto"
+        preload={preload}
         poster={poster}
         aria-label={ariaLabel}
         onClick={showControls ? togglePlayback : undefined}

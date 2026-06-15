@@ -2004,18 +2004,18 @@ export const PDP_WEIGHT_FEEL = {
   image: {
     src: "/images/gallery/tabby-weight-lift.png",
     alt: "Tabby Shoulder Bag 26 in black leather with gold C clasp and detachable straps on a light gray background",
-    objectPosition: "center center",
+    objectPosition: "center 70%",
     backgroundColor: "#dedede",
   },
   liftedImage: {
     src: "/images/gallery/tabby-weight-lift-lifted.jpg",
     alt: "Tabby Shoulder Bag 26 floating after lift — black leather with gold C clasp and detachable straps",
-    objectPosition: "center center",
+    objectPosition: "center 70%",
     backgroundColor: "#f5ece7",
   },
   reveal: {
-    headline: "Comparable to carrying a water bottle.",
-    subline: "Under 2 lbs — light enough for all-day crossbody, substantial enough to feel premium.",
+    headline: "Lighter than a 2 lb puppy.",
+    subline: "Light enough for all-day crossbody, substantial enough to feel premium.",
     feelings: [
       {
         id: "in-hand",

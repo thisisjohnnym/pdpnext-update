@@ -134,8 +134,15 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
   const titleId = useId();
   const breakdownId = useId();
   const [breakdownOpen, setBreakdownOpen] = useState(false);
+  const [hasBeenOpen, setHasBeenOpen] = useState(false);
   const { average } = PDP_REVIEWS_SUMMARY;
   const reviewCount = PDP_COMMENTS_SUMMARY.count;
+
+  useEffect(() => {
+    if (open) {
+      setHasBeenOpen(true);
+    }
+  }, [open]);
 
   useEffect(() => {
     if (!open) {
@@ -203,6 +210,8 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(24px,env(safe-area-inset-bottom))]">
+          {hasBeenOpen ? (
+          <>
           <div className="flex flex-col items-start gap-3 pb-6">
             <h2 id={titleId} className={pdpSheetHeadingClass()}>
               Reviews
@@ -294,6 +303,8 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
               ))}
             </section>
           </div>
+          </>
+          ) : null}
         </div>
       </div>
     </div>

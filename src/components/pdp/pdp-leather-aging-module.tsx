@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent } from "react";
 
 import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
@@ -155,13 +155,17 @@ export function PdpLeatherAgingModule({
   const stage = stages[stageIndex]!;
   const sliderProgress =
     maxIndex > 0 ? (stageIndex / maxIndex) * 100 : 0;
-  const careProducts = careNudge.productIds
-    .map((productId) =>
-      PDP_LEATHER_CLEANER.products.find((product) => product.id === productId),
-    )
-    .filter((product): product is (typeof PDP_LEATHER_CLEANER.products)[number] =>
-      Boolean(product),
-    );
+  const careProducts = useMemo(
+    () =>
+      careNudge.productIds
+        .map((productId) =>
+          PDP_LEATHER_CLEANER.products.find((product) => product.id === productId),
+        )
+        .filter((product): product is (typeof PDP_LEATHER_CLEANER.products)[number] =>
+          Boolean(product),
+        ),
+    [careNudge.productIds],
+  );
 
   const updateStageFromPointer = useCallback(
     (clientX: number) => {
@@ -211,6 +215,10 @@ export function PdpLeatherAgingModule({
     <section data-header-surface="light" className={panel.className} style={panel.style}>
       <div className={cn(EXPERIENCE_PANEL_MEDIA_CLASS, "bg-white")}>
         {stages.map((item, index) => {
+          if (Math.abs(index - stageIndex) > 1) {
+            return null;
+          }
+
           const stageImage = item.image ?? image;
           const active = stageIndex === index;
           const filter =
@@ -225,6 +233,7 @@ export function PdpLeatherAgingModule({
               alt={stageImage.alt}
               fill
               priority={index === 0}
+              loading={index === 0 ? undefined : "lazy"}
               className={cn(
                 "object-cover transition-opacity duration-500 ease-out",
                 active ? "opacity-100" : "opacity-0",

@@ -86,6 +86,7 @@ function galleryScrollReveal(
       className="w-full shrink-0"
       variant={options.variant ?? "subtle"}
       surface={options.surface ?? "light"}
+      lazyMount
     >
       {child}
     </PdpScrollReveal>
@@ -370,6 +371,7 @@ function PdpGalleryVideoSlide({
             poster={poster}
             ariaLabel={alt}
             isActive={isActive}
+            preload={isActive ? "auto" : "metadata"}
             showControls
             showMuteControl={showMuteControl}
             className={cn(
@@ -617,28 +619,28 @@ export function PdpGalleryView({
       </div>
 
       {/* Ecommerce — after desire + function gallery scroll */}
-      <PdpScrollReveal className="w-full shrink-0" surface="muted">
+      <PdpScrollReveal className="w-full shrink-0" surface="muted" lazyMount reserveMinHeight="40dvh">
         <PdpCompareModule
           onAddToBag={() => onAddSimilarToBag?.()}
           onPickerOpenChange={onComparePickerOpenChange}
         />
       </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="light">
+      <PdpScrollReveal className="w-full shrink-0" surface="light" lazyMount reserveMinHeight="40dvh">
         <PdpBundleModule onAddBundle={(payload) => onAddBundle?.(payload)} />
       </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="muted">
+      <PdpScrollReveal className="w-full shrink-0" surface="muted" lazyMount reserveMinHeight="40dvh">
         <PdpShoppingDiscoveryModule onAddToBag={() => onAddSimilarToBag?.()} />
       </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="muted">
+      <PdpScrollReveal className="w-full shrink-0" surface="muted" lazyMount reserveMinHeight="32dvh">
         <PdpFaqModule />
       </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="light">
+      <PdpScrollReveal className="w-full shrink-0" surface="light" lazyMount reserveMinHeight="40dvh">
         <PdpReviewsModule
           onReadAll={onOpenReviews}
           onWriteReview={onOpenReviews}
         />
       </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="muted">
+      <PdpScrollReveal className="w-full shrink-0" surface="muted" lazyMount reserveMinHeight="24dvh">
         <PdpRecentlyViewedCarousel />
       </PdpScrollReveal>
     </div>

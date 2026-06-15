@@ -128,6 +128,7 @@ export function PdpGalleryEditorialSlide({
                   poster={src}
                   ariaLabel={alt}
                   isActive={isActive}
+                  preload={isActive ? "auto" : "metadata"}
                   showControls
                   showMuteControl={showMuteControl}
                   className="size-full object-cover object-center"

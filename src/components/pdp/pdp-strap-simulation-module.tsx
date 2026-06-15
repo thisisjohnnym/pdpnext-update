@@ -42,6 +42,10 @@ export function PdpStrapSimulationModule({
     <section data-header-surface="light" className={panel.className} style={panel.style}>
       <div className={cn(EXPERIENCE_PANEL_MEDIA_CLASS, "bg-white")}>
         {modes.map((mode, index) => {
+          if (Math.abs(index - activeIndex) > 1) {
+            return null;
+          }
+
           const isActive = index === activeIndex;
 
           return (
@@ -61,6 +65,7 @@ export function PdpStrapSimulationModule({
                 style={{ objectPosition: mode.image.objectPosition ?? "center" }}
                 sizes="100vw"
                 priority={index === 0}
+                loading={index === 0 ? undefined : "lazy"}
                 draggable={false}
               />
             </div>

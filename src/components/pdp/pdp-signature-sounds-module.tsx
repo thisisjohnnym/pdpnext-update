@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { memo, useCallback } from "react";
 
 import { MaterialIcon } from "@/components/icons/material-icon";
 import { GridItem, PageGrid } from "@/components/grid/page-grid";
@@ -8,8 +9,8 @@ import { cn } from "@/lib/cn";
 
 import { PDP_SIGNATURE_SOUNDS, type PdpSignatureSound } from "./pdp-data";
 import { PdpModuleHeading } from "./pdp-module-heading";
-import { pdpPressableClass } from "./pdp-type";
 import { useSignatureSound } from "./use-signature-sound";
+import { useScrollRevealSection } from "./scroll-reveal-section-context";
 
 const SOUND_WAVE_HEIGHTS = [38, 68, 100, 58, 34];
 
@@ -51,14 +52,16 @@ function SoundWaveBars({
   );
 }
 
-function SignatureSoundHeroCard({
+const SignatureSoundHeroCard = memo(function SignatureSoundHeroCard({
   sound,
   active,
   onToggle,
+  priority = false,
 }: {
   sound: PdpSignatureSound;
   active: boolean;
   onToggle: () => void;
+  priority?: boolean;
 }) {
   return (
     <button
@@ -66,19 +69,18 @@ function SignatureSoundHeroCard({
       onClick={onToggle}
       aria-pressed={active}
       aria-label={active ? `Stop ${sound.label}` : sound.label}
-      className={cn(
-        "group relative block w-full overflow-hidden bg-black text-left transition-[opacity,transform] duration-500 ease-out motion-reduce:transition-none",
-        pdpPressableClass,
-      )}
+      className="group relative block w-full overflow-hidden bg-black text-left [-webkit-tap-highlight-color:transparent]"
     >
       <div className="relative aspect-[4/5] w-full">
         <Image
           src={sound.imageSrc}
           alt={sound.imageAlt}
           fill
-          className="object-cover transition-[transform,filter] duration-500 ease-out group-active:scale-[1.02]"
+          priority={priority}
+          loading={priority ? undefined : "lazy"}
+          className="object-cover"
           style={{ objectPosition: sound.objectPosition ?? "center center" }}
-          sizes="100vw"
+          sizes="(max-width: 768px) 100vw, 640px"
         />
 
         <div
@@ -103,12 +105,20 @@ function SignatureSoundHeroCard({
       </div>
     </button>
   );
-}
+});
 
 /** Tap-to-hear product sounds — turnlock, zipper, bag opening */
 export function PdpSignatureSoundsModule() {
   const { title, sounds } = PDP_SIGNATURE_SOUNDS;
   const { toggle, isActive } = useSignatureSound();
+  const { sectionVisible } = useScrollRevealSection() ?? { sectionVisible: false };
+
+  const handleToggle = useCallback(
+    (id: string, audioSrc: string) => {
+      toggle(id, audioSrc);
+    },
+    [toggle],
+  );
 
   return (
     <section
@@ -122,12 +132,13 @@ export function PdpSignatureSoundsModule() {
           <PdpModuleHeading>{title}</PdpModuleHeading>
 
           <ul className="flex flex-col gap-3">
-            {sounds.map((sound) => (
+            {sounds.map((sound, index) => (
               <li key={sound.id}>
                 <SignatureSoundHeroCard
                   sound={sound}
                   active={isActive(sound.id)}
-                  onToggle={() => toggle(sound.id, sound.audioSrc)}
+                  priority={sectionVisible && index === 0}
+                  onToggle={() => handleToggle(sound.id, sound.audioSrc)}
                 />
               </li>
             ))}

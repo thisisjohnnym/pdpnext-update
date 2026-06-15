@@ -12,6 +12,10 @@ type PdpScrollRevealProps = {
   variant?: "rise" | "subtle";
   /** Opaque shell color — prevents color flashes during opacity fade */
   surface?: "dark" | "light" | "muted" | "transparent";
+  /** Defer mounting children until the section is near the viewport */
+  lazyMount?: boolean;
+  /** Placeholder height while lazy content is not yet mounted */
+  reserveMinHeight?: string;
 };
 
 /** Fade + rise into view once as the user scrolls */
@@ -20,9 +24,12 @@ export function PdpScrollReveal({
   className,
   variant = "rise",
   surface,
+  lazyMount = false,
+  reserveMinHeight = "70dvh",
 }: PdpScrollRevealProps) {
-  const { ref, visible } = useScrollReveal();
+  const { ref, visible, nearView } = useScrollReveal({ prefetch: lazyMount });
   const resolvedSurface = surface ?? "light";
+  const shouldMount = !lazyMount || nearView;
 
   return (
     <div
@@ -36,17 +43,20 @@ export function PdpScrollReveal({
         variant === "subtle" && "pdp-scroll-reveal--subtle",
         className,
       )}
+      style={!shouldMount ? { minHeight: reserveMinHeight } : undefined}
     >
-      <ScrollRevealSectionContext.Provider value={{ sectionVisible: visible }}>
-        <div
-          className={cn(
-            "pdp-scroll-reveal__inner",
-            visible && "pdp-scroll-reveal__inner--visible",
-          )}
-        >
-          {children}
-        </div>
-      </ScrollRevealSectionContext.Provider>
+      {shouldMount ? (
+        <ScrollRevealSectionContext.Provider value={{ sectionVisible: visible }}>
+          <div
+            className={cn(
+              "pdp-scroll-reveal__inner",
+              visible && "pdp-scroll-reveal__inner--visible",
+            )}
+          >
+            {children}
+          </div>
+        </ScrollRevealSectionContext.Provider>
+      ) : null}
     </div>
   );
 }

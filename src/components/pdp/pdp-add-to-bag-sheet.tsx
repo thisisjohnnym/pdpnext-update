@@ -42,6 +42,7 @@ export function PdpAddToBagSheet({
 }: PdpAddToBagSheetProps) {
   const titleId = useId();
   const [quickAddedIds, setQuickAddedIds] = useState<Set<string>>(new Set());
+  const [hasBeenOpen, setHasBeenOpen] = useState(false);
 
   const selectedColor =
     PDP_COLORS.find((color) => color.id === selectedColorId) ?? PDP_COLORS[0];
@@ -52,6 +53,12 @@ export function PdpAddToBagSheet({
     bundle !== null && bundle.subtotal > bundle.total;
   const savings =
     bundle !== null ? bundle.subtotal - bundle.total : 0;
+
+  useEffect(() => {
+    if (open) {
+      setHasBeenOpen(true);
+    }
+  }, [open]);
 
   useEffect(() => {
     if (!open) {
@@ -117,6 +124,8 @@ export function PdpAddToBagSheet({
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(24px,env(safe-area-inset-bottom))]">
+          {hasBeenOpen ? (
+          <>
           <div className="flex items-center gap-2 pb-4">
             <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-black">
               <MaterialIcon name="check" size={18} className="text-white" />
@@ -290,6 +299,8 @@ export function PdpAddToBagSheet({
                 })}
               </ul>
             </section>
+          ) : null}
+          </>
           ) : null}
         </div>
       </div>

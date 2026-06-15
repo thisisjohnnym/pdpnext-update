@@ -97,15 +97,32 @@ function mapCoverPointToSource(
   return { sx, sy };
 }
 
+let sharedSampleCanvas: HTMLCanvasElement | null = null;
+let sharedSampleContext: CanvasRenderingContext2D | null = null;
+
+function getSampleContext(): CanvasRenderingContext2D | null {
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  if (!sharedSampleCanvas) {
+    sharedSampleCanvas = document.createElement("canvas");
+    sharedSampleCanvas.width = 1;
+    sharedSampleCanvas.height = 1;
+    sharedSampleContext = sharedSampleCanvas.getContext("2d", {
+      willReadFrequently: true,
+    });
+  }
+
+  return sharedSampleContext;
+}
+
 function readPixelLuminance(
   media: CanvasImageSource,
   sx: number,
   sy: number,
 ): number | null {
-  const canvas = document.createElement("canvas");
-  canvas.width = 1;
-  canvas.height = 1;
-  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  const ctx = getSampleContext();
   if (!ctx) return null;
 
   try {
@@ -162,7 +179,7 @@ function sampleAtPoint(clientX: number, clientY: number): number | null {
 
 export function sampleBackdropLuminance(sampleRect: DOMRect): number | null {
   const y = sampleRect.top + sampleRect.height * 0.55;
-  const xs = [0.12, 0.32, 0.5, 0.68, 0.88].map(
+  const xs = [0.25, 0.5, 0.75].map(
     (fraction) => sampleRect.left + sampleRect.width * fraction,
   );
 
