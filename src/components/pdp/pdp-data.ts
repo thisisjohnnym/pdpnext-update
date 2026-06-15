@@ -2002,9 +2002,9 @@ export const PDP_WEIGHT_FEEL = {
   holdMs: 720,
   hapticPattern: [14, 36, 18, 52, 22],
   image: {
-    src: "/images/gallery/tabby-weight-lift.png",
-    alt: "Tabby Shoulder Bag 26 in black leather with gold C clasp and detachable straps on a light gray background",
-    objectPosition: "center 70%",
+    src: "/images/gallery/tabby-weight-lift-press-hold.jpg",
+    alt: "Hand lifting Tabby Shoulder Bag 26 by the strap — black leather with gold C clasp on a light gray background",
+    objectPosition: "center center",
     backgroundColor: "#eeeeee",
   },
   liftedImage: {
