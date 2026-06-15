@@ -44,6 +44,10 @@ export function syncViewportCssVars() {
     `${visualHeight}px`,
   );
   document.documentElement.style.setProperty(
+    "--pdp-immersive-height",
+    `${visualHeight}px`,
+  );
+  document.documentElement.style.setProperty(
     "--pdp-viewport-offset-top",
     `${offsetTop}px`,
   );
@@ -107,6 +111,7 @@ export function useBrowserBottomInsetCssVar() {
       window.removeEventListener("orientationchange", update);
       document.documentElement.style.removeProperty("--pdp-screen-height");
       document.documentElement.style.removeProperty("--pdp-viewport-height");
+      document.documentElement.style.removeProperty("--pdp-immersive-height");
       document.documentElement.style.removeProperty("--pdp-viewport-offset-top");
       document.documentElement.style.removeProperty("--pdp-browser-bottom-inset");
     };

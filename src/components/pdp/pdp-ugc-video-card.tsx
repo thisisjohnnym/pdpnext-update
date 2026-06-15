@@ -52,7 +52,7 @@ export function PdpUgcVideoCard({
         className,
       )}
     >
-      <div className="relative mx-auto aspect-[9/16] w-full max-h-[85svh] max-w-[calc(85svh*9/16)] overflow-hidden bg-neutral-900">
+      <div className="relative aspect-[9/16] w-full overflow-hidden bg-black">
         <PdpGalleryHeroVideo
           src={video.src}
           poster={video.poster}

@@ -43,13 +43,13 @@ export const pdpUgcStoryCardClass =
 export const pdpUgcVideoCardClass =
   "w-[calc((100vw-1.25rem)/1.1)] shrink-0 snap-start snap-always lg:w-[calc((100vw-2.25rem)/2.2)]";
 
-/** UGC video tiles — center snap, full-bleed (no side peek) */
+/** UGC video tiles — center snap, full viewport width */
 export const pdpUgcVideoCardCenteredClass =
-  "w-full shrink-0 snap-center snap-always flex-[0_0_100%]";
+  "w-screen max-w-[100vw] shrink-0 snap-center snap-always flex-[0_0_100vw]";
 
 /** Infinite centered carousel — full-width tiles, edge-to-edge */
 export const pdpCarouselInfiniteCenteredScrollClass = cn(
-  "w-full overflow-x-auto overscroll-x-contain touch-pan-y pb-1",
+  "w-screen max-w-[100vw] overflow-x-auto overscroll-x-contain touch-pan-y pb-1",
   "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
   "snap-x snap-mandatory",
 );

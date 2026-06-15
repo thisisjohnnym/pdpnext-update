@@ -1,8 +1,13 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
 import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
+import { PdpGalleryDragZoomImage } from "./pdp-gallery-drag-zoom-image";
+import { PdpGalleryHeroVideo } from "./pdp-gallery-hero-video";
 import { galleryPanelClassName } from "./pdp-gallery-panel";
 import { BOTTOM_CTA_OFFSET, SCREEN_HEIGHT_STYLE } from "./pdp-viewport-chrome";
 import { pdpType } from "./pdp-type";
@@ -12,6 +17,10 @@ type PdpGalleryEditorialSlideProps = {
   alt: string;
   caption: string;
   objectPosition?: string;
+  videoSrc?: string;
+  showMuteControl?: boolean;
+  dragZoom?: boolean;
+  scale?: string;
   secondarySrc?: string;
   secondaryAlt?: string;
   learnMore?: {
@@ -25,12 +34,16 @@ type PdpGalleryEditorialSlideProps = {
   reserveBottomCta?: boolean;
 };
 
-/** Inset editorial break — narrowed image + caption with generous margins */
+/** Inset editorial break — narrowed image or video + caption with generous margins */
 export function PdpGalleryEditorialSlide({
   src,
   alt,
   caption,
   objectPosition = "center top",
+  videoSrc,
+  showMuteControl = true,
+  dragZoom = false,
+  scale = "scale-100",
   secondarySrc,
   secondaryAlt,
   learnMore,
@@ -38,6 +51,33 @@ export function PdpGalleryEditorialSlide({
   isLastPanel = false,
   reserveBottomCta = false,
 }: PdpGalleryEditorialSlideProps) {
+  const mediaRef = useRef<HTMLDivElement>(null);
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    if (!videoSrc) {
+      return;
+    }
+
+    const media = mediaRef.current;
+    if (!media) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsActive(entry.isIntersecting && entry.intersectionRatio >= 0.35);
+      },
+      { threshold: [0, 0.35, 0.6] },
+    );
+
+    observer.observe(media);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [videoSrc]);
+
   return (
     <section
       data-header-surface="light"
@@ -69,19 +109,39 @@ export function PdpGalleryEditorialSlide({
             )}
           >
             <div
+              ref={mediaRef}
               className={cn(
                 "relative w-full overflow-hidden bg-neutral-100",
                 panelScroll ? "aspect-[4/5] max-h-[52dvh]" : "aspect-[4/5]",
               )}
             >
-              <Image
-                src={src}
-                alt={alt}
-                fill
-                className="object-cover"
-                style={{ objectPosition }}
-                sizes="(max-width: 1023px) 78vw, 42vw"
-              />
+              {videoSrc ? (
+                <PdpGalleryHeroVideo
+                  src={videoSrc}
+                  poster={src}
+                  ariaLabel={alt}
+                  isActive={isActive}
+                  showControls
+                  showMuteControl={showMuteControl}
+                  className="size-full object-cover object-center"
+                />
+              ) : dragZoom ? (
+                <PdpGalleryDragZoomImage
+                  src={src}
+                  alt={alt}
+                  objectPosition={objectPosition}
+                  scale={scale}
+                />
+              ) : (
+                <Image
+                  src={src}
+                  alt={alt}
+                  fill
+                  className="object-cover"
+                  style={{ objectPosition }}
+                  sizes="(max-width: 1023px) 78vw, 42vw"
+                />
+              )}
             </div>
 
             <div

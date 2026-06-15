@@ -7,8 +7,14 @@
   --foreground: #171717;
   --pdp-screen-height: 100dvh;
   --pdp-viewport-height: 100dvh;
+  --pdp-immersive-height: 100dvh;
   --pdp-viewport-offset-top: 0px;
   --pdp-browser-bottom-inset: 0px;
+  --pdp-safe-area-top: env(safe-area-inset-top, 0px);
+  --pdp-safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --pdp-immersive-top-bleed: calc(
+    var(--pdp-safe-area-top) + var(--pdp-viewport-offset-top, 0px)
+  );
 
   /* PDP grid — Mobile 12/12/4 */
   --grid-columns-mobile: 12;
@@ -33,6 +39,7 @@
 
 html {
   height: -webkit-fill-available;
+  min-height: 100dvh;
   overflow-x: clip;
   max-width: 100%;
 }
@@ -43,7 +50,7 @@ body {
   overscroll-behavior-y: none;
   overflow-x: clip;
   max-width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
   min-height: -webkit-fill-available;
 }
 
@@ -149,26 +156,43 @@ body {
   cursor: pointer;
   background: transparent;
   touch-action: pan-x;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  border: none;
+}
+
+.pdp-aging-timeline__input:focus,
+.pdp-aging-timeline__input:active {
+  outline: none;
+  background: transparent;
 }
 
 .pdp-aging-timeline__input:focus-visible {
   outline: none;
 }
 
-.pdp-aging-timeline:focus-within .pdp-aging-timeline__track {
-  box-shadow: 0 0 0 2px rgb(0 0 0 / 0.08);
+@media (hover: hover) and (pointer: fine) {
+  .pdp-aging-timeline:focus-within .pdp-aging-timeline__track {
+    box-shadow: 0 0 0 2px rgb(0 0 0 / 0.08);
+  }
 }
 
 .pdp-aging-timeline__input::-webkit-slider-runnable-track {
   height: 44px;
   background: transparent;
+  border: none;
 }
 
 .pdp-aging-timeline__input::-webkit-slider-thumb {
   -webkit-appearance: none;
+  appearance: none;
   width: 44px;
   height: 44px;
+  margin-top: 0;
+  border: none;
+  box-shadow: none;
   background: transparent;
+  opacity: 0;
   cursor: pointer;
 }
 
@@ -182,7 +206,9 @@ body {
   width: 44px;
   height: 44px;
   border: 0;
+  box-shadow: none;
   background: transparent;
+  opacity: 0;
   cursor: pointer;
 }
 
@@ -625,7 +651,46 @@ html.pdp-panel-scroll {
   scroll-snap-stop: always;
   width: 100%;
   min-height: 100dvh;
-  height: var(--pdp-screen-height, 100dvh);
+  height: var(--pdp-immersive-height, 100dvh);
+}
+
+/* Immersive hero — media bleeds under notch; overlays stay in safe area */
+.pdp-hero-immersive {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  margin-top: calc(-1 * var(--pdp-immersive-top-bleed));
+  padding: 0;
+  padding-top: var(--pdp-immersive-top-bleed);
+  overflow: hidden;
+  background: #000;
+  min-height: calc(var(--pdp-immersive-height, 100dvh) + var(--pdp-immersive-top-bleed));
+  height: calc(var(--pdp-immersive-height, 100dvh) + var(--pdp-immersive-top-bleed));
+}
+
+.pdp-hero-immersive__media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.pdp-hero-immersive__media img,
+.pdp-hero-immersive__media video {
+  object-fit: cover;
+  object-position: center;
+}
+
+.pdp-hero-immersive__top-scrim {
+  pointer-events: none;
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  z-index: 5;
+  height: calc(var(--pdp-immersive-top-bleed) + 4.5rem);
+  background: linear-gradient(to bottom, rgb(0 0 0 / 0.42), transparent);
 }
 
 .pdp-gallery-panel__frame {

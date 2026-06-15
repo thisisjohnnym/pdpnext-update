@@ -892,12 +892,12 @@ export const PDP_PRODUCT_SEARCH = {
   suggestions: PDP_AI_CONCIERGE.prompts.map((prompt) => prompt.question),
 } as const;
 
-/** Gallery hero — on-model lifestyle, bomber + shearling */
+/** Gallery hero — on-model lifestyle, navy bomber + Tabby shoulder bag */
 export const PDP_GALLERY_HERO_IMAGE = "/images/gallery/hero-model-bomber.png";
 
-/** Hero framing — portrait on-model, bias right so model fills mobile cover */
+/** Hero framing — centered portrait; slight upward bias keeps face + bag above bottom chrome */
 export const PDP_GALLERY_HERO_IMAGE_FOCUS = {
-  objectPosition: "72% 34%",
+  objectPosition: "center 38%",
   scale: 1,
   translateY: "0%",
 } as const;
@@ -988,6 +988,12 @@ export type PdpGalleryEditorialSlide = {
   alt: string;
   caption: string;
   objectPosition?: string;
+  /** Inset editorial video — poster uses src */
+  videoSrc?: string;
+  showMuteControl?: boolean;
+  /** Drag-to-zoom lens inside inset frame */
+  dragZoom?: boolean;
+  scale?: string;
   secondarySrc?: string;
   secondaryAlt?: string;
   learnMore?: {
@@ -1111,12 +1117,14 @@ export const PDP_GALLERY_PRODUCT_FRONT_SLIDE: PdpGalleryImmersiveSlide = {
   dragZoom: true,
 };
 
-/** On-model — 3rd frame in scroll (below hero + product front) */
-export const PDP_GALLERY_ON_MODEL_DENIM_SLIDE: PdpGalleryImmersiveSlide = {
-  type: "immersive",
+/** On-model — editorial inset below product front */
+export const PDP_GALLERY_ON_MODEL_DENIM_SLIDE: PdpGalleryEditorialSlide = {
+  type: "editorial",
   src: "/images/gallery/mode22.png",
   alt: "Model wearing Tabby Shoulder Bag 26 crossbody with a Coach tee and suede mini skirt",
   objectPosition: "center top",
+  caption:
+    "Full-grain glovetanned leather with signature hardware — shoulder or crossbody, your call.",
 };
 
 /** On-model trench + plaid — first frame below hero */
@@ -1135,11 +1143,12 @@ export const PDP_GALLERY_INTERIOR_OPEN_SLIDE: PdpGalleryImmersiveSlide = {
   objectPosition: "center center",
 };
 
-/** Capacity editorial break — lifestyle carry */
+/** Capacity editorial break — what fits inside (inset video + caption) */
 export const PDP_GALLERY_CAPACITY_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
   type: "editorial",
+  videoSrc: PDP_GALLERY_WHAT_FITS_INSIDE_VIDEO,
   src: "/images/gallery/tabby-leather-interior-packed.png",
-  alt: "Tabby Shoulder Bag 26 interior packed with phone, wallet, AirPods, and essentials",
+  alt: "What fits inside Tabby Shoulder Bag 26",
   objectPosition: "center center",
   caption:
     "Three compartments — room for the whole day, never overstuffed.",
@@ -1182,22 +1191,23 @@ export const PDP_GALLERY_DESIRE_SLIDES: PdpGallerySlide[] = [
   { type: "ugc-videos" },
 ];
 
+/** 360 spin — editorial inset after material detail */
+export const PDP_GALLERY_360_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
+  type: "editorial",
+  videoSrc: PDP_GALLERY_HERO_VIDEO,
+  src: PDP_GALLERY_PRODUCT_FRONT_IMAGE,
+  alt: "360° rotating view of Tabby Shoulder Bag 26",
+  objectPosition: "center",
+  showMuteControl: false,
+  caption:
+    "See it from every angle — signature C clasp, detachable straps, and glovetanned leather throughout.",
+};
+
 /** Capacity, craft detail, and touch-first interactives */
 export const PDP_GALLERY_FUNCTION_SLIDES: PdpGallerySlide[] = [
-  {
-    type: "video",
-    src: PDP_GALLERY_WHAT_FITS_INSIDE_VIDEO,
-    poster: "/images/gallery/tabby-leather-interior-packed.png",
-    alt: "What fits inside Tabby Shoulder Bag 26",
-  },
-  {
-    type: "video",
-    src: PDP_GALLERY_HERO_VIDEO,
-    poster: PDP_GALLERY_PRODUCT_IMMERSIVE,
-    alt: "360° rotating view of Tabby Shoulder Bag 26",
-    showMuteControl: false,
-  },
+  PDP_GALLERY_CAPACITY_EDITORIAL_SLIDE,
   ...PDP_GALLERY_PRODUCT_SHOTS,
+  PDP_GALLERY_360_EDITORIAL_SLIDE,
   { type: "leather-aging" },
   { type: "weight-feel" },
   { type: "signature-sounds" },

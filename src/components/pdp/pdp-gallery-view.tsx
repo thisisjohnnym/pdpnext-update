@@ -44,6 +44,8 @@ import type { PdpBundleAddPayload, PdpInfluencerCredit, PdpProductHotspot } from
 import { pdpType } from "./pdp-type";
 import {
   BOTTOM_CTA_OFFSET,
+  HERO_IMMERSIVE_CLASS,
+  HERO_IMMERSIVE_MEDIA_CLASS,
   PANEL_MEDIA_COVER_CLASS,
   PANEL_MEDIA_FILL_CLASS,
   PANEL_MEDIA_FRAME_CLASS,
@@ -90,7 +92,7 @@ function galleryScrollReveal(
   );
 }
 
-/** Hero only — full-screen immersive using layout viewport (innerHeight) */
+/** Hero only — full-screen immersive, edge-to-edge under device safe areas */
 function PdpHeroSlide({
   src,
   alt,
@@ -107,12 +109,12 @@ function PdpHeroSlide({
   return (
     <section
       className={cn(
-        "relative w-full shrink-0 overflow-hidden bg-black",
+        HERO_IMMERSIVE_CLASS,
+        "shrink-0",
         galleryPanelClassName(isLastPanel),
       )}
-      style={SCREEN_HEIGHT_STYLE}
     >
-      <div className="absolute inset-x-0 bottom-0 top-[calc(-1*env(safe-area-inset-top,0px))]">
+      <div className={HERO_IMMERSIVE_MEDIA_CLASS}>
         <div className={PANEL_MEDIA_FILL_CLASS}>
           <Image
             src={src}
@@ -127,6 +129,8 @@ function PdpHeroSlide({
           />
         </div>
       </div>
+
+      <div aria-hidden className="pdp-hero-immersive__top-scrim" />
 
       <PdpGalleryProductHud />
       <PdpHeroActionRail onOpenReviews={onOpenReviews} />
@@ -426,28 +430,32 @@ export function PdpGalleryView({
 
   return (
     <>
+    <PdpHeroSlide
+      src={PDP_GALLERY_HERO_IMAGE}
+      alt="Model in navy bomber with shearling collar carrying Tabby Shoulder Bag 26 over the shoulder"
+      priority
+      onOpenReviews={onOpenReviews}
+      isLastPanel={lastPanelSlideIndex === -1}
+    />
+
     <div className={GALLERY_CLASS} style={GALLERY_SCROLL_PAD}>
       <div className={GALLERY_MEDIA_STACK_CLASS}>
-        <PdpHeroSlide
-          src={PDP_GALLERY_HERO_IMAGE}
-          alt="Model in a navy bomber jacket with shearling collar carrying Tabby Shoulder Bag 26"
-          priority
-          onOpenReviews={onOpenReviews}
-          isLastPanel={lastPanelSlideIndex === -1}
-        />
-
         {PDP_GALLERY_SLIDES.flatMap((slide, index) => {
           const isLastPanel = index === lastPanelSlideIndex;
 
           if (slide.type === "editorial") {
             return [
               galleryScrollReveal(
-                `editorial-${index}-${slide.src}`,
+                `editorial-${index}-${slide.videoSrc ?? slide.src}`,
                 <PdpGalleryEditorialSlide
                   src={slide.src}
                   alt={slide.alt}
                   caption={slide.caption}
                   objectPosition={slide.objectPosition}
+                  videoSrc={slide.videoSrc}
+                  showMuteControl={slide.showMuteControl}
+                  dragZoom={slide.dragZoom}
+                  scale={slide.scale}
                   secondarySrc={slide.secondarySrc}
                   secondaryAlt={slide.secondaryAlt}
                   learnMore={slide.learnMore}
