@@ -7,6 +7,7 @@ import { cn } from "@/lib/cn";
 
 import { PDP_COMMENTS_SUMMARY, PDP_LIKE_SUMMARY, PDP_SAVE_SUMMARY } from "./pdp-data";
 import { BOTTOM_CTA_OFFSET } from "./pdp-gallery-view";
+import { pdpPressableIconClass } from "./pdp-type";
 import { PdpToast } from "./pdp-toast";
 import {
   isHeroOverlayVisible,
@@ -129,6 +130,7 @@ function RailAction({
       aria-pressed={pressed}
       className={cn(
         "flex flex-col items-center gap-1 text-white",
+        pdpPressableIconClass,
         className,
       )}
     >
@@ -194,6 +196,7 @@ function LikeRailAction({
       aria-pressed={liked}
       className={cn(
         "flex flex-col items-center gap-1 text-white",
+        pdpPressableIconClass,
         className,
       )}
     >

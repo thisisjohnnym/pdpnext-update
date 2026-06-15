@@ -9,11 +9,8 @@ import { cn } from "@/lib/cn";
 
 import { PdpComparePickerSheet } from "./pdp-compare-picker-sheet";
 import { PdpAiInsightCard } from "./pdp-ai-insight-card";
-import {
-  pdpModuleSectionClass,
-  pdpModuleHeadingClass,
-  pdpModuleHeadingLeadClass,
-} from "./pdp-module-section";
+import { PdpModuleHeading } from "./pdp-module-heading";
+import { pdpModuleSectionClass } from "./pdp-module-section";
 import {
   PDP_COMPARE_SELECTED,
   PDP_FAMILY_COMPARE_ALTERNATIVES,
@@ -174,14 +171,7 @@ export function PdpCompareModule({
     >
       <PageGrid fullWidth>
         <GridItem mobile={12} desktop={24} className="min-w-0">
-          <h2
-            className={cn(
-              pdpModuleHeadingClass({ lead: false }),
-              pdpModuleHeadingLeadClass(),
-            )}
-          >
-            Compare the family
-          </h2>
+          <PdpModuleHeading>Compare the family</PdpModuleHeading>
 
           <div className="flex flex-col gap-4">
             <div

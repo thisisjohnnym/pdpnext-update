@@ -1,19 +1,25 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 
 type UseScrollRevealOptions = {
   /** Fraction of element visible before reveal */
   threshold?: number;
   /** IntersectionObserver rootMargin */
   rootMargin?: string;
+  /** When false, observer is skipped (e.g. text inside PdpScrollReveal) */
+  enabled?: boolean;
 };
 
-export function useScrollReveal({
+export function useScrollReveal<T extends HTMLElement = HTMLDivElement>({
   threshold = 0.04,
   rootMargin = "0px 0px -2% 0px",
-}: UseScrollRevealOptions = {}) {
-  const ref = useRef<HTMLDivElement>(null);
+  enabled = true,
+}: UseScrollRevealOptions = {}): {
+  ref: RefObject<T | null>;
+  visible: boolean;
+} {
+  const ref = useRef<T>(null);
   const [visible, setVisible] = useState(() => {
     if (typeof window === "undefined") {
       return false;
@@ -23,6 +29,10 @@ export function useScrollReveal({
   });
 
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     const node = ref.current;
     if (!node || visible) {
       return;
@@ -43,7 +53,7 @@ export function useScrollReveal({
     return () => {
       observer.disconnect();
     };
-  }, [threshold, rootMargin, visible]);
+  }, [threshold, rootMargin, visible, enabled]);
 
   return { ref, visible };
 }

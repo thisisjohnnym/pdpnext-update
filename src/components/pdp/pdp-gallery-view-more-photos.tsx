@@ -3,8 +3,10 @@
 import Image from "next/image";
 
 import { MaterialIcon } from "@/components/icons/material-icon";
+import { cn } from "@/lib/cn";
 
 import { PDP_GALLERY_MORE_PHOTOS } from "./pdp-data";
+import { pdpPressableClass } from "./pdp-type";
 
 const PREVIEW_COUNT = 3;
 
@@ -25,7 +27,10 @@ export function PdpGalleryViewMorePhotos({ onOpen }: PdpGalleryViewMorePhotosPro
       <button
         type="button"
         onClick={onOpen}
-        className="font-extended flex w-full items-center gap-3 px-3 py-3 text-left tracking-[0.2px] text-neutral-900 transition-colors active:bg-neutral-200/80"
+        className={cn(
+          "font-extended flex w-full items-center gap-3 px-3 py-3 text-left tracking-[0.2px] text-neutral-900 transition-colors active:bg-neutral-200/80",
+          pdpPressableClass,
+        )}
       >
         <span className="flex shrink-0 items-center pl-1">
           {previews.map((photo, index) => (

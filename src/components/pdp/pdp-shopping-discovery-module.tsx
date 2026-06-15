@@ -16,10 +16,11 @@ import {
   PDP_MORE_LIKE_THIS,
   PDP_SHOPPING_ASSISTANT_PROMPT,
 } from "./pdp-data";
-import { pdpModuleSectionClass, pdpModuleHeadingClass, pdpModuleHeadingLeadClass } from "./pdp-module-section";
+import { PdpModuleHeading } from "./pdp-module-heading";
+import { pdpModuleSectionClass } from "./pdp-module-section";
 import { PdpAiConciergePanel } from "./pdp-product-search-module";
 import { PdpAiInsightCard } from "./pdp-ai-insight-card";
-import { pdpType } from "./pdp-type";
+import { pdpType, pdpPressableClass, pdpPressableSolidClass } from "./pdp-type";
 import { PdpTextLinkCta } from "./pdp-text-link-cta";
 
 type PdpShoppingDiscoveryModuleProps = {
@@ -53,9 +54,7 @@ export function PdpShoppingDiscoveryModule({
         <GridItem mobile={12} desktop={24} className="min-w-0">
           <div className="flex flex-col gap-6">
             <div>
-              <h2 className={cn(pdpModuleHeadingClass({ lead: false }), pdpModuleHeadingLeadClass())}>
-                {PDP_MORE_LIKE_THIS.eyebrow}
-              </h2>
+              <PdpModuleHeading>{PDP_MORE_LIKE_THIS.eyebrow}</PdpModuleHeading>
               <div className={pdpCarouselScrollWrapClass}>
                 <ul
                   className={cn(
@@ -100,8 +99,8 @@ export function PdpShoppingDiscoveryModule({
                             "mt-2 inline-flex w-full items-center justify-center gap-1 rounded-full py-2.5 transition-colors",
                             pdpType.micro,
                             added
-                              ? "bg-neutral-100 text-neutral-500"
-                              : "bg-black text-white",
+                              ? cn("bg-neutral-100 text-neutral-500", pdpPressableClass)
+                              : cn("bg-black text-white", pdpPressableSolidClass),
                           )}
                         >
                           {!added ? (

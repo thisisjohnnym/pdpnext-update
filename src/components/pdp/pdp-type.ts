@@ -12,9 +12,18 @@ export const pdpType = {
   tag: "font-extended text-[11px] uppercase tracking-[0.6px] lg:text-[10px]",
 } as const;
 
+/** Subtle touch press — scale on coarse pointers (mobile) */
+export const pdpPressableClass = "pdp-pressable";
+
+/** Filled CTAs — scale only, no opacity dip */
+export const pdpPressableSolidClass = "pdp-pressable pdp-pressable--solid";
+
+/** Icon / ghost controls — slightly stronger scale */
+export const pdpPressableIconClass = "pdp-pressable pdp-pressable--icon";
+
 /** Pill outline CTA — white fill, soft grey stroke (Add buttons, sheet actions) */
 export const pdpStrokeCtaClass =
-  "rounded-full border border-neutral-200 bg-white text-black transition-colors active:bg-neutral-50";
+  "rounded-full border border-neutral-200 bg-white text-black transition-colors active:bg-neutral-50 pdp-pressable";
 
 /** Outline CTA disabled / added state */
 export const pdpStrokeCtaMutedClass =
@@ -22,14 +31,14 @@ export const pdpStrokeCtaMutedClass =
 
 /** Underlined text CTA — primary (Shop Shoulder Bags) */
 export const pdpTextLinkCtaClass =
-  "font-extended inline-flex items-center gap-1 text-black transition-colors active:text-neutral-700";
+  "font-extended inline-flex items-center gap-1 text-black transition-colors active:text-neutral-700 pdp-pressable";
 
 export const pdpTextLinkCtaLabelClass =
   "underline decoration-black underline-offset-[3px] group-active:decoration-neutral-700";
 
 /** Underlined text CTA — secondary (See what fits inside) */
 export const pdpTextLinkCtaMutedClass =
-  "font-extended inline-flex items-center gap-1 text-neutral-600 transition-colors active:text-black";
+  "font-extended inline-flex items-center gap-1 text-neutral-600 transition-colors active:text-black pdp-pressable";
 
 export const pdpTextLinkCtaMutedLabelClass =
   "underline decoration-neutral-300 underline-offset-[3px] group-active:decoration-neutral-500";

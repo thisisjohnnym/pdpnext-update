@@ -8,6 +8,7 @@ import { cn } from "@/lib/cn";
 
 import type { PdpColor } from "./pdp-data";
 import { getColorChromeForeground } from "./pdp-color-chrome";
+import { pdpPressableClass, pdpPressableIconClass, pdpPressableSolidClass } from "./pdp-type";
 
 type PdpColorSelectorProps = {
   colors: PdpColor[];
@@ -128,7 +129,7 @@ function PdpColorDropup({
                     role="option"
                     aria-selected={isSelected}
                     onClick={() => handleSelect(color.id)}
-                    className={`font-extended flex w-full items-center gap-3 px-3 py-2.5 text-left text-xs tracking-[0.2px] text-white transition-colors ${
+                    className={`font-extended flex w-full items-center gap-3 px-3 py-2.5 text-left text-xs tracking-[0.2px] text-white transition-colors pdp-pressable ${
                       isSelected ? "bg-white/10" : "hover:bg-white/5"
                     }`}
                   >
@@ -153,7 +154,7 @@ function PdpColorDropup({
           <div className="shrink-0 border-t border-white/10 px-3 py-2">
             <button
               type="button"
-              className="font-extended flex w-full items-center justify-between gap-2 py-1 text-left text-xs tracking-[0.2px] text-white transition-colors active:text-white/80"
+              className="font-extended flex w-full items-center justify-between gap-2 py-1 text-left text-xs tracking-[0.2px] text-white transition-colors active:text-white/80 pdp-pressable"
             >
               <span className="underline decoration-white/35 underline-offset-[3px]">
                 Customize
@@ -172,6 +173,7 @@ function PdpColorDropup({
         onClick={() => setOpen((prev) => !prev)}
         className={cn(
           "font-extended flex w-full items-center overflow-hidden tracking-[0.2px] transition-[border-radius,background-color,color] duration-300",
+          pdpPressableSolidClass,
           compact ? "h-12 text-[11px]" : "h-[54px] text-xs",
           flush
             ? "justify-center gap-2 rounded-none px-3"
@@ -272,15 +274,17 @@ export function PdpColorSelector({
               aria-label={`Select ${color.name}`}
               aria-pressed={isSelected}
               onClick={() => onSelect(color.id)}
-              className={`relative shrink-0 overflow-hidden rounded-full bg-white transition-all ${
+              className={cn(
+                "relative shrink-0 overflow-hidden rounded-full bg-white transition-all",
+                pdpPressableIconClass,
                 compact
                   ? isSelected
                     ? "size-9 ring-2 ring-white/80 ring-offset-1 ring-offset-transparent opacity-100"
                     : "size-7 opacity-50"
                   : isSelected
                     ? "size-[70px] border border-white/20 opacity-100"
-                    : "size-14 opacity-40"
-              }`}
+                    : "size-14 opacity-40",
+              )}
             >
               <ColorSwatchImage
                 src={color.swatch}

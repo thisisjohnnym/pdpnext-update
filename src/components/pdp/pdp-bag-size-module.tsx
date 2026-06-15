@@ -7,7 +7,8 @@ import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
 import { PDP_BAG_SIZE } from "./pdp-data";
-import { pdpModuleHeadingClass, pdpModuleSectionClass, pdpModuleHeadingLeadClass } from "./pdp-module-section";
+import { PdpModuleHeading } from "./pdp-module-heading";
+import { pdpModuleSectionClass } from "./pdp-module-section";
 
 /** Interactive capacity explorer — tap hotspots on the product shot */
 export function PdpBagSizeModule() {
@@ -20,14 +21,7 @@ export function PdpBagSizeModule() {
     >
       <PageGrid fullWidth>
         <GridItem mobile={12} desktop={24}>
-          <h2
-            className={cn(
-              pdpModuleHeadingClass({ lead: false }),
-              pdpModuleHeadingLeadClass(),
-            )}
-          >
-            {PDP_BAG_SIZE.title}
-          </h2>
+          <PdpModuleHeading>{PDP_BAG_SIZE.title}</PdpModuleHeading>
 
           <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#e9e9e9]">
               <div className="absolute inset-x-0 top-0 bottom-[10%]">

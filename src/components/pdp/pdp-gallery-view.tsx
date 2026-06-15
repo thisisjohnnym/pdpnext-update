@@ -41,6 +41,7 @@ import {
 } from "./pdp-data";
 import type { PdpBundleAddPayload, PdpInfluencerCredit, PdpProductHotspot } from "./pdp-data";
 import { pdpType } from "./pdp-type";
+import { PdpTextReveal } from "./pdp-text-reveal";
 import {
   BOTTOM_CTA_OFFSET,
   HERO_IMMERSIVE_CLASS,
@@ -381,11 +382,12 @@ function PdpGalleryVideoSlide({
               aria-hidden
               className="pointer-events-none absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-black/55 via-black/20 to-transparent px-4 pb-8 pt-[calc(env(safe-area-inset-top,0px)+3.25rem)]"
             >
-              <p
+              <PdpTextReveal
+                as="p"
                 className={`font-extended m-0 text-center text-white ${pdpType.caption}`}
               >
                 {caption}
-              </p>
+              </PdpTextReveal>
             </div>
           ) : null}
         </div>
@@ -462,7 +464,7 @@ export function PdpGalleryView({
                   panelScroll={PDP_PANEL_SCROLL}
                   isLastPanel={isLastPanel}
                 />,
-                { surface: "light" },
+                { surface: "light", variant: "rise" },
               ),
             ];
           }
@@ -485,6 +487,7 @@ export function PdpGalleryView({
                   isLastPanel={isLastPanel}
                   onQuickAdd={() => onAddSimilarToBag?.()}
                 />,
+                { variant: "rise" },
               ),
             ];
           }
@@ -494,6 +497,7 @@ export function PdpGalleryView({
               galleryScrollReveal(
                 `weight-feel-${index}`,
                 <PdpWeightFeelModule isLastPanel={isLastPanel} />,
+                { variant: "rise" },
               ),
             ];
           }
@@ -541,7 +545,7 @@ export function PdpGalleryView({
                   caption={slide.caption}
                   isLastPanel={isLastPanel}
                 />,
-                { surface: "light" },
+                { surface: "light", variant: "rise" },
               ),
             ];
           }

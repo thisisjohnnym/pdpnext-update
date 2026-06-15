@@ -10,6 +10,7 @@ import { cn } from "@/lib/cn";
 import { PdpColorSelector } from "./pdp-color-selector";
 import { PDP_COLORS } from "./pdp-data";
 import { BOTTOM_CHROME_OFFSET } from "./pdp-viewport-chrome";
+import { pdpPressableSolidClass } from "./pdp-type";
 import { useBottomBarDocked } from "./use-bottom-bar-docked";
 
 type PdpBottomActionsProps = {
@@ -61,6 +62,7 @@ export function PdpBottomActions({
         onClick={onAddToBag}
         className={cn(
           "font-extended flex min-w-0 items-center justify-center gap-2 text-center leading-none transition-[border-radius,colors] duration-300",
+          pdpPressableSolidClass,
           docked
             ? "h-[54px] w-full rounded-none border-0 bg-black px-4 shadow-none"
             : "h-12 w-full rounded-full border-0 bg-black px-3 shadow-none",

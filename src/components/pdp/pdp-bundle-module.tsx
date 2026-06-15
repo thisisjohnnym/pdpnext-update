@@ -7,7 +7,8 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
-import { pdpModuleSectionClass, pdpModuleHeadingClass, pdpModuleHeadingLeadClass } from "./pdp-module-section";
+import { PdpModuleHeading } from "./pdp-module-heading";
+import { pdpModuleSectionClass } from "./pdp-module-section";
 import {
   PDP_BUNDLE_DISCOUNT,
   PDP_BUNDLE_ITEMS,
@@ -176,9 +177,7 @@ export function PdpBundleModule({ onAddBundle }: PdpBundleModuleProps) {
     >
       <PageGrid fullWidth>
         <GridItem mobile={12} desktop={24}>
-          <h2 className={cn(pdpModuleHeadingClass({ lead: false }), pdpModuleHeadingLeadClass())}>
-            Build your bundle
-          </h2>
+          <PdpModuleHeading>Build your bundle</PdpModuleHeading>
 
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-4">

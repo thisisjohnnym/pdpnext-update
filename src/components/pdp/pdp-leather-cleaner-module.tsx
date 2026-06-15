@@ -8,7 +8,8 @@ import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
 import { PDP_LEATHER_CLEANER, type PdpLeatherCleanerProduct } from "./pdp-data";
-import { pdpModuleHeadingClass, pdpModuleSectionClass, pdpModuleHeadingLeadClass } from "./pdp-module-section";
+import { PdpModuleHeading } from "./pdp-module-heading";
+import { pdpModuleSectionClass } from "./pdp-module-section";
 import { pdpType, pdpStrokeCtaClass, pdpStrokeCtaMutedClass } from "./pdp-type";
 
 function formatPrice(amount: number): string {
@@ -92,14 +93,7 @@ export function PdpLeatherCleanerModule({
     >
       <PageGrid fullWidth>
         <GridItem mobile={12} desktop={24}>
-          <h2
-            className={cn(
-              pdpModuleHeadingClass({ lead: false }),
-              pdpModuleHeadingLeadClass(),
-            )}
-          >
-            {title}
-          </h2>
+          <PdpModuleHeading>{title}</PdpModuleHeading>
 
           <div className="border border-neutral-200 bg-white p-4">
             <div className="grid grid-cols-2 gap-4">

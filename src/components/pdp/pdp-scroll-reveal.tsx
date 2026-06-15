@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/cn";
 
+import { ScrollRevealSectionContext } from "./scroll-reveal-section-context";
 import { useScrollReveal } from "./use-scroll-reveal";
 
 type PdpScrollRevealProps = {
@@ -36,14 +37,16 @@ export function PdpScrollReveal({
         className,
       )}
     >
-      <div
-        className={cn(
-          "pdp-scroll-reveal__inner",
-          visible && "pdp-scroll-reveal__inner--visible",
-        )}
-      >
-        {children}
-      </div>
+      <ScrollRevealSectionContext.Provider value={{ sectionVisible: visible }}>
+        <div
+          className={cn(
+            "pdp-scroll-reveal__inner",
+            visible && "pdp-scroll-reveal__inner--visible",
+          )}
+        >
+          {children}
+        </div>
+      </ScrollRevealSectionContext.Provider>
     </div>
   );
 }

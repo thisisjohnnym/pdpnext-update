@@ -9,6 +9,7 @@ import {
   pdpCarouselScrollClass,
 } from "./pdp-carousel";
 import { PDP_AS_SEEN_ON } from "./pdp-data";
+import { PdpTextReveal } from "./pdp-text-reveal";
 import { galleryPanelClassName } from "./pdp-gallery-panel";
 import { pdpModuleSectionClass } from "./pdp-module-section";
 
@@ -32,11 +33,12 @@ export function PdpAsSeenOnModule({
       <PageGrid fullWidth>
         <GridItem mobile={12} desktop={24}>
           <div className="flex flex-col gap-2">
-            <p
+            <PdpTextReveal
+              as="p"
               className="font-extended text-[10px] uppercase tracking-[0.6px] text-neutral-400"
             >
               {title}
-            </p>
+            </PdpTextReveal>
 
             <div className={cn(pdpCarouselScrollClass, "flex gap-3")}>
               {celebrities.map((celebrity) => (

@@ -12,6 +12,7 @@ import {
   experiencePanelSectionProps,
 } from "./pdp-experience-panel";
 import { pdpType, pdpStrokeCtaClass, pdpStrokeCtaMutedClass } from "./pdp-type";
+import { PdpTextReveal } from "./pdp-text-reveal";
 
 function formatCarePrice(amount: number): string {
   return `$${amount.toLocaleString("en-US")}`;
@@ -276,12 +277,19 @@ export function PdpLeatherAgingModule({
       >
         <div className="pdp-aging-timeline" aria-live="polite">
           <div className="mb-3">
-            <p className="font-extended text-lg tracking-[0.2px] text-black transition-opacity duration-300">
+            <PdpTextReveal
+              as="p"
+              className="font-extended text-lg tracking-[0.2px] text-black transition-opacity duration-300"
+            >
               {stage.label}
-            </p>
-            <p className={`mt-0.5 text-neutral-500 ${pdpType.micro}`}>
+            </PdpTextReveal>
+            <PdpTextReveal
+              as="p"
+              delay={60}
+              className={`mt-0.5 text-neutral-500 ${pdpType.micro}`}
+            >
               {stage.summary}
-            </p>
+            </PdpTextReveal>
           </div>
 
           <div

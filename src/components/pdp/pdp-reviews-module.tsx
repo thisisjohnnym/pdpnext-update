@@ -10,7 +10,9 @@ import {
   pdpCarouselScrollClass,
   pdpUgcStoryCardClass,
 } from "./pdp-carousel";
+import { PdpModuleHeading } from "./pdp-module-heading";
 import { pdpModuleSectionClass, pdpModuleHeadingClass } from "./pdp-module-section";
+import { PdpTextReveal } from "./pdp-text-reveal";
 import { PdpReviewLikeButton } from "./pdp-review-like-button";
 import { PdpAiInsightCard } from "./pdp-ai-insight-card";
 import { PdpUgcStoryCard } from "./pdp-ugc-story-card";
@@ -112,7 +114,7 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
           <div className="flex w-full flex-col gap-8">
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between gap-3">
-                <h2 className={pdpModuleHeadingClass({ lead: false })}>Reviews</h2>
+                <PdpModuleHeading spacing="none">Reviews</PdpModuleHeading>
                 <PdpTextLinkCta
                   type="button"
                   onClick={onWriteReview}
@@ -145,9 +147,13 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
             />
 
             <section className="flex flex-col gap-4">
-              <p className={pdpModuleHeadingClass({ lead: false, size: "sm" })}>
+              <PdpTextReveal
+                as="p"
+                delay={40}
+                className={pdpModuleHeadingClass({ lead: false, size: "sm" })}
+              >
                 In real life
-              </p>
+              </PdpTextReveal>
 
               <div className={cn("flex gap-2", pdpCarouselScrollClass)}>
                 {PDP_UGC_REVIEW_STORIES.map((story) => (

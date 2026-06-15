@@ -10,11 +10,8 @@ import {
   pdpCarouselScrollClass,
 } from "./pdp-carousel";
 import { PDP_RECENTLY_VIEWED, PDP_RECENTLY_VIEWED_SECTION } from "./pdp-data";
-import {
-  pdpModuleHeadingClass,
-  pdpModuleHeadingLeadClass,
-  pdpModuleSectionClass,
-} from "./pdp-module-section";
+import { PdpModuleHeading } from "./pdp-module-heading";
+import { pdpModuleSectionClass } from "./pdp-module-section";
 import { pdpType } from "./pdp-type";
 import { PdpTextLinkCta } from "./pdp-text-link-cta";
 
@@ -27,14 +24,7 @@ export function PdpRecentlyViewedCarousel() {
     >
       <PageGrid fullWidth>
         <GridItem mobile={12} desktop={24} className="min-w-0">
-          <h2
-            className={cn(
-              pdpModuleHeadingClass({ lead: false }),
-              pdpModuleHeadingLeadClass(),
-            )}
-          >
-            {PDP_RECENTLY_VIEWED_SECTION.eyebrow}
-          </h2>
+          <PdpModuleHeading>{PDP_RECENTLY_VIEWED_SECTION.eyebrow}</PdpModuleHeading>
 
           <ul
             className={cn(

@@ -7,17 +7,21 @@ import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
 import { PDP_FAQ, type PdpFaqItem } from "./pdp-data";
-import { pdpModuleHeadingClass, pdpModuleSectionClass, pdpModuleHeadingLeadClass } from "./pdp-module-section";
-import { pdpType } from "./pdp-type";
+import { PdpModuleHeading } from "./pdp-module-heading";
+import { pdpModuleSectionClass } from "./pdp-module-section";
+import { PdpTextReveal } from "./pdp-text-reveal";
+import { pdpType, pdpPressableClass } from "./pdp-type";
 
 function FaqAccordionItem({
   item,
   open,
   onToggle,
+  revealDelay = 0,
 }: {
   item: PdpFaqItem;
   open: boolean;
   onToggle: () => void;
+  revealDelay?: number;
 }) {
   const panelId = `faq-panel-${item.id}`;
 
@@ -28,11 +32,18 @@ function FaqAccordionItem({
         onClick={onToggle}
         aria-expanded={open}
         aria-controls={panelId}
-        className="flex w-full min-h-11 items-center justify-between gap-3 py-3.5 text-left"
+        className={cn(
+          "flex w-full min-h-11 items-center justify-between gap-3 py-3.5 text-left",
+          pdpPressableClass,
+        )}
       >
-        <span className="font-extended text-sm tracking-[0.2px] text-black">
+        <PdpTextReveal
+          as="span"
+          delay={revealDelay}
+          className="font-extended text-sm tracking-[0.2px] text-black"
+        >
           {item.question}
-        </span>
+        </PdpTextReveal>
         <MaterialIcon
           name={open ? "expand_less" : "expand_more"}
           size={20}
@@ -68,15 +79,14 @@ export function PdpFaqModule() {
     >
       <PageGrid fullWidth>
         <GridItem mobile={12} desktop={24}>
-          <h2 className={cn(pdpModuleHeadingClass({ lead: false }), pdpModuleHeadingLeadClass())}>
-            {title}
-          </h2>
+          <PdpModuleHeading>{title}</PdpModuleHeading>
 
           <div className="border border-neutral-200 bg-white px-4">
-            {items.map((item) => (
+            {items.map((item, index) => (
               <FaqAccordionItem
                 key={item.id}
                 item={item}
+                revealDelay={index * 45}
                 open={openId === item.id}
                 onToggle={() =>
                   setOpenId((current) => (current === item.id ? null : item.id))

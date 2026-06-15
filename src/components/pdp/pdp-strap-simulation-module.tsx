@@ -7,6 +7,7 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
 
 import { PDP_STRAP_SIMULATION } from "./pdp-data";
+import { pdpPressableClass, pdpPressableSolidClass } from "./pdp-type";
 import {
   EXPERIENCE_PANEL_MEDIA_CLASS,
   experiencePanelSectionProps,
@@ -91,7 +92,7 @@ export function PdpStrapSimulationModule({
                 <button
                   type="button"
                   onClick={() => setActiveIndex(index)}
-                  className="flex w-full flex-col gap-1 text-left"
+                  className={cn("flex w-full flex-col gap-1 text-left", pdpPressableClass)}
                 >
                   <span className="relative aspect-[4/5] overflow-hidden rounded-lg bg-white">
                     <Image
@@ -115,6 +116,7 @@ export function PdpStrapSimulationModule({
                     disabled={optionAdded}
                     className={cn(
                       "inline-flex w-full items-center justify-center gap-0.5 rounded-full px-2 py-1.5 text-[10px] leading-none tracking-[0.2px] transition-colors",
+                      optionAdded ? pdpPressableClass : pdpPressableSolidClass,
                       optionAdded
                         ? "bg-white/20 text-white/75"
                         : "bg-white text-black active:bg-white/90",

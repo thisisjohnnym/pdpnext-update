@@ -11,6 +11,7 @@ import {
   experiencePanelSectionProps,
 } from "./pdp-experience-panel";
 import { pdpType } from "./pdp-type";
+import { PdpTextReveal } from "./pdp-text-reveal";
 import { useWeightLift } from "./use-weight-lift";
 
 function triggerLiftHaptic(pattern: readonly number[]) {
@@ -167,9 +168,12 @@ export function PdpWeightFeelModule({
                 />
               </span>
             </div>
-            <span className="font-extended text-[11px] tracking-[0.2px] text-neutral-600">
+            <PdpTextReveal
+              as="span"
+              className="font-extended text-[11px] tracking-[0.2px] text-neutral-600"
+            >
               {isHolding ? "Keep holding…" : hint}
-            </span>
+            </PdpTextReveal>
           </div>
         ) : (
           <div aria-live="polite">

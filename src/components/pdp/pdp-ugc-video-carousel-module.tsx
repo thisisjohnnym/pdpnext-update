@@ -11,7 +11,7 @@ import {
   pdpUgcVideoCardCenteredClass,
 } from "./pdp-carousel";
 import { PDP_UGC_VIDEO_CAROUSEL } from "./pdp-data";
-import { pdpModuleHeadingClass } from "./pdp-module-section";
+import { PdpModuleHeading } from "./pdp-module-heading";
 import { PdpUgcVideoCard } from "./pdp-ugc-video-card";
 import { pdpType } from "./pdp-type";
 import { PdpTextLinkCta } from "./pdp-text-link-cta";
@@ -42,7 +42,7 @@ export function PdpUgcVideoCarouselModule() {
       <PageGrid fullWidth>
         <GridItem mobile={12} desktop={24} className="min-w-0">
           <div className="flex items-end justify-between gap-3">
-            <h2 className={pdpModuleHeadingClass({ lead: false })}>{title}</h2>
+            <PdpModuleHeading spacing="none">{title}</PdpModuleHeading>
             <PdpTextLinkCta
               as="a"
               href={followCta.href}

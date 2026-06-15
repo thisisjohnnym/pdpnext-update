@@ -6,6 +6,7 @@ import { useState } from "react";
 import { cn } from "@/lib/cn";
 
 import { PDP_BAG_STORIES } from "./pdp-data";
+import { pdpPressableClass } from "./pdp-type";
 import {
   EXPERIENCE_PANEL_MEDIA_CLASS,
   experiencePanelSectionProps,
@@ -51,6 +52,7 @@ export function PdpBagStoriesModule({
               aria-pressed={activeId === story.id}
               className={cn(
                 "font-extended rounded-lg px-1 py-2 text-center text-[10px] leading-tight tracking-[0.2px] transition-colors",
+                pdpPressableClass,
                 activeId === story.id
                   ? "bg-black text-white"
                   : "text-neutral-500 hover:bg-neutral-100 hover:text-black",

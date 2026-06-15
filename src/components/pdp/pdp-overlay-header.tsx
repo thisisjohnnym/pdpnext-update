@@ -7,6 +7,7 @@ import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
 import { useHeaderContrast } from "./use-header-contrast";
+import { pdpPressableIconClass } from "./pdp-type";
 import { useScrollNavVisibility } from "./use-scroll-nav-visibility";
 
 const HEADER_ICON_SIZE = 24;
@@ -61,6 +62,7 @@ export function PdpOverlayHeader({ bagCount = 0 }: { bagCount?: number }) {
               aria-label="Open menu"
               className={cn(
                 "flex items-center justify-self-start transition-colors duration-300",
+                pdpPressableIconClass,
                 isLight ? "text-white" : "text-neutral-900",
               )}
               style={{ width: HEADER_ROW_HEIGHT, height: HEADER_ROW_HEIGHT }}
@@ -88,6 +90,7 @@ export function PdpOverlayHeader({ bagCount = 0 }: { bagCount?: number }) {
               }
               className={cn(
                 "relative flex items-center justify-center justify-self-end transition-colors duration-300",
+                pdpPressableIconClass,
                 isLight ? "text-white" : "text-neutral-900",
               )}
               style={{ width: HEADER_ROW_HEIGHT, height: HEADER_ROW_HEIGHT }}

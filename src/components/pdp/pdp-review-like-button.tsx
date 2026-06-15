@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { MaterialIcon } from "@/components/icons/material-icon";
-import { pdpType } from "./pdp-type";
+import { pdpType, pdpPressableClass } from "./pdp-type";
 import { cn } from "@/lib/cn";
 
 type PdpReviewLikeButtonProps = {
@@ -32,7 +32,10 @@ export function PdpReviewLikeButton({ initialLikes }: PdpReviewLikeButtonProps) 
           ? `Remove like from review, ${count} likes`
           : `Like review, ${count} likes`
       }
-      className="inline-flex shrink-0 items-center gap-1 rounded-full py-1 pl-1 pr-2 transition-colors active:bg-neutral-100"
+      className={cn(
+        "inline-flex shrink-0 items-center gap-1 rounded-full py-1 pl-1 pr-2 transition-colors active:bg-neutral-100",
+        pdpPressableClass,
+      )}
     >
       <MaterialIcon
         name="favorite"

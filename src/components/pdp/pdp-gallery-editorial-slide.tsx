@@ -12,6 +12,7 @@ import { galleryPanelClassName } from "./pdp-gallery-panel";
 import { BOTTOM_CTA_OFFSET, SCREEN_HEIGHT_STYLE } from "./pdp-viewport-chrome";
 import { pdpType } from "./pdp-type";
 import { PdpTextLinkCta } from "./pdp-text-link-cta";
+import { PdpTextReveal } from "./pdp-text-reveal";
 
 type PdpGalleryEditorialSlideProps = {
   src: string;
@@ -156,26 +157,30 @@ export function PdpGalleryEditorialSlide({
                 learnMore && "pb-2 lg:pb-4",
               )}
             >
-              <p className={`font-extended m-0 w-full text-black ${pdpType.caption}`}>
+              <PdpTextReveal as="p" className={`font-extended m-0 w-full text-black ${pdpType.caption}`}>
                 {caption}
-              </p>
+              </PdpTextReveal>
 
               {cta ? (
-                <PdpTextLinkCta as="a" href={cta.href} variant="muted" className={pdpType.micro}>
-                  {cta.label}
-                </PdpTextLinkCta>
+                <PdpTextReveal as="div" delay={60}>
+                  <PdpTextLinkCta as="a" href={cta.href} className={pdpType.micro}>
+                    {cta.label}
+                  </PdpTextLinkCta>
+                </PdpTextReveal>
               ) : null}
 
               {learnMore ? (
-                <PdpTextLinkCta
-                  as="a"
-                  href={learnMore.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={pdpType.body}
-                >
-                  {learnMore.label}
-                </PdpTextLinkCta>
+                <PdpTextReveal as="div" delay={cta ? 120 : 60}>
+                  <PdpTextLinkCta
+                    as="a"
+                    href={learnMore.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={pdpType.body}
+                  >
+                    {learnMore.label}
+                  </PdpTextLinkCta>
+                </PdpTextReveal>
               ) : null}
             </div>
 

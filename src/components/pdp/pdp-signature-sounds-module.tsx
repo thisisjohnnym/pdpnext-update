@@ -7,7 +7,8 @@ import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
 import { PDP_SIGNATURE_SOUNDS, type PdpSignatureSound } from "./pdp-data";
-import { pdpModuleHeadingClass, pdpModuleHeadingLeadClass } from "./pdp-module-section";
+import { PdpModuleHeading } from "./pdp-module-heading";
+import { pdpPressableClass } from "./pdp-type";
 import { useSignatureSound } from "./use-signature-sound";
 
 const SOUND_WAVE_HEIGHTS = [38, 68, 100, 58, 34];
@@ -65,7 +66,10 @@ function SignatureSoundHeroCard({
       onClick={onToggle}
       aria-pressed={active}
       aria-label={active ? `Stop ${sound.label}` : sound.label}
-      className="group relative block w-full overflow-hidden bg-black text-left transition-[opacity,transform] duration-500 ease-out motion-reduce:transition-none"
+      className={cn(
+        "group relative block w-full overflow-hidden bg-black text-left transition-[opacity,transform] duration-500 ease-out motion-reduce:transition-none",
+        pdpPressableClass,
+      )}
     >
       <div className="relative aspect-[4/5] w-full">
         <Image
@@ -115,14 +119,7 @@ export function PdpSignatureSoundsModule() {
     >
       <PageGrid fullWidth>
         <GridItem mobile={12} desktop={24}>
-          <h2
-            className={cn(
-              pdpModuleHeadingClass({ lead: false }),
-              pdpModuleHeadingLeadClass(),
-            )}
-          >
-            {title}
-          </h2>
+          <PdpModuleHeading>{title}</PdpModuleHeading>
 
           <ul className="flex flex-col gap-3">
             {sounds.map((sound) => (
