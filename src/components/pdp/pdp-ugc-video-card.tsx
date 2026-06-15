@@ -63,7 +63,7 @@ export function PdpUgcVideoCard({
           className="size-full object-cover object-center"
         />
 
-        <div className="pointer-events-none absolute bottom-12 left-3 z-[1] max-w-[calc(100%-4.5rem)] drop-shadow-[0_1px_4px_rgba(0,0,0,0.65)]">
+        <div className="pointer-events-none absolute bottom-3 left-3 z-[1] max-w-[calc(100%-5.5rem)] drop-shadow-[0_1px_4px_rgba(0,0,0,0.65)]">
           <p className="font-extended text-sm tracking-[0.2px] text-white">
             {video.handle}
             {video.verified ? (

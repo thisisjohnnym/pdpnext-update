@@ -1127,11 +1127,15 @@ export const PDP_GALLERY_ON_MODEL_DENIM_SLIDE: PdpGalleryEditorialSlide = {
     "Full-grain glovetanned leather with signature hardware — shoulder or crossbody, your call.",
 };
 
+/** On-model trench — fourth frame in scroll (below hero + product + editorial) */
+export const PDP_GALLERY_ON_MODEL_TRENCH_IMAGE =
+  "/images/gallery/tabby-on-model-trench.jpg";
+
 /** On-model trench + plaid — first frame below hero */
 export const PDP_GALLERY_ON_MODEL_FULL_DENIM_SLIDE: PdpGalleryImmersiveSlide = {
   type: "immersive",
-  src: "/images/gallery/tabby-leather-on-model-trench.png",
-  alt: "Model wearing Tabby Shoulder Bag 26 with a tan trench coat and plaid mini skirt",
+  src: PDP_GALLERY_ON_MODEL_TRENCH_IMAGE,
+  alt: "Model wearing Tabby Shoulder Bag 26 with a tan trench coat over the shoulder",
   objectPosition: "center top",
 };
 
@@ -1184,8 +1188,8 @@ export const PDP_GALLERY_DESIRE_SLIDES: PdpGallerySlide[] = [
   PDP_GALLERY_ON_MODEL_DENIM_SLIDE,
   {
     type: "immersive",
-    src: "/images/gallery/tabby-leather-on-model-trench.png",
-    alt: "Model wearing Tabby Shoulder Bag 26 with a tan trench coat and plaid mini skirt",
+    src: PDP_GALLERY_ON_MODEL_TRENCH_IMAGE,
+    alt: "Model wearing Tabby Shoulder Bag 26 with a tan trench coat over the shoulder",
     shopTheLookId: "trench-daytime",
   },
   { type: "ugc-videos" },
@@ -1241,7 +1245,7 @@ export const PDP_GALLERY_MORE_PHOTOS: PdpGalleryPhoto[] = [
   },
   {
     id: "on-model-trench",
-    src: "/images/gallery/tabby-leather-on-model-trench.png",
+    src: PDP_GALLERY_ON_MODEL_TRENCH_IMAGE,
     alt: "Model wearing Tabby Shoulder Bag 26 with a tan trench coat and plaid mini skirt",
   },
   {
@@ -1329,7 +1333,7 @@ export const PDP_SHOP_THE_LOOK: Record<string, PdpShopTheLookLook> = {
         name: "Heritage Trench Coat",
         price: "$695",
         href: "https://www.coach.com/shop/women/ready-to-wear/coats",
-        imageSrc: "/images/gallery/tabby-leather-on-model-trench.png",
+        imageSrc: PDP_GALLERY_ON_MODEL_TRENCH_IMAGE,
         imageAlt: "Tan trench coat with leather trim",
       },
       {
@@ -1579,7 +1583,7 @@ export const PDP_HOW_TO_WEAR = {
     {
       id: "crossbody",
       label: "Crossbody",
-      src: "/images/gallery/tabby-leather-on-model-trench.png",
+      src: PDP_GALLERY_ON_MODEL_TRENCH_IMAGE,
       alt: "Tabby Shoulder Bag 26 worn crossbody with a trench coat",
     },
     {
@@ -1702,6 +1706,7 @@ export type PdpLeatherAgingStageImage = {
   src: string;
   alt: string;
   objectPosition?: string;
+  objectFit?: "contain" | "cover";
 };
 
 export type PdpLeatherAgingStage = {
@@ -1728,22 +1733,40 @@ export type PdpLeatherAgingStage = {
 };
 
 /** Leather aging simulator — trust builder for long-term material quality */
+export const PDP_LEATHER_AGING_NEW_IMAGE = {
+  src: "/images/gallery/tabby-leather-aging-new-day-one.jpg",
+  alt: "Tabby Shoulder Bag 26 in black leather with gold C clasp hardware — new, day one",
+  objectPosition: "center center",
+  objectFit: "cover",
+} as const satisfies PdpLeatherAgingStageImage;
+
+export const PDP_LEATHER_AGING_SIX_MONTHS_IMAGE = {
+  src: "/images/gallery/tabby-leather-aging-six-months.jpg",
+  alt: "Tabby Shoulder Bag 26 after six months of daily carry — softened leather with creasing and warm patina",
+  objectPosition: "center center",
+  objectFit: "cover",
+} as const satisfies PdpLeatherAgingStageImage;
+
+export const PDP_LEATHER_AGING_TWO_YEARS_IMAGE = {
+  src: "/images/gallery/tabby-leather-aging-two-years.jpg",
+  alt: "Tabby Shoulder Bag 26 after two years of daily carry — rich patina and honest wear",
+  objectPosition: "center center",
+  objectFit: "cover",
+} as const satisfies PdpLeatherAgingStageImage;
+
 export const PDP_LEATHER_AGING = {
   moment: "Material",
   title: "Leather aging simulator",
   intro:
     "See how glovetanned full-grain leather evolves — patina, softening, and honest wear over years of daily carry.",
-  image: {
-    src: "/images/gallery/tabby-leather-aging-new.png",
-    alt: "Tabby Shoulder Bag 26 in black leather with gold hardware — new, day one",
-    objectPosition: "center 42%",
-  },
+  image: PDP_LEATHER_AGING_NEW_IMAGE,
   stages: [
     {
       id: "new",
       label: "New",
       timeline: "Day one",
       summary: "Factory-fresh grain, structured silhouette, crisp edges.",
+      image: PDP_LEATHER_AGING_NEW_IMAGE,
       traits: [
         {
           id: "patina",
@@ -1780,11 +1803,7 @@ export const PDP_LEATHER_AGING = {
       label: "6 months",
       timeline: "Six months in",
       summary: "Warm highlights emerge; leather relaxes into daily rhythm.",
-      image: {
-        src: "/images/gallery/tabby-leather-aging-six-months.png",
-        alt: "Tabby Shoulder Bag 26 after six months of daily carry — softened leather with creasing and warm patina",
-        objectPosition: "center 68%",
-      },
+      image: PDP_LEATHER_AGING_SIX_MONTHS_IMAGE,
       traits: [
         {
           id: "patina",
@@ -1821,6 +1840,7 @@ export const PDP_LEATHER_AGING = {
       label: "2 years",
       timeline: "Two years of carry",
       summary: "Lived-in depth — supple drape with an honest crease map.",
+      image: PDP_LEATHER_AGING_TWO_YEARS_IMAGE,
       traits: [
         {
           id: "patina",
@@ -1858,8 +1878,20 @@ export const PDP_LEATHER_AGING = {
   ] satisfies PdpLeatherAgingStage[],
   /** Subtle care upsell — hidden at New, reveals on later timeline stages */
   careNudge: {
-    productId: "coach-leather-cleaner",
-    label: "Leather cleaner",
+    productIds: ["coach-leather-cleaner", "coach-leather-conditioner"],
+    help: {
+      label: "Which do I need?",
+      lines: [
+        {
+          productId: "coach-leather-cleaner",
+          text: "Cleaner — lifts dirt and everyday grime without stripping natural oils.",
+        },
+        {
+          productId: "coach-leather-conditioner",
+          text: "Conditioner — restores moisture and keeps leather soft as patina develops.",
+        },
+      ],
+    },
   },
 } as const;
 
@@ -1885,12 +1917,12 @@ export const PDP_LEATHER_CLEANER = {
       imageAlt: "Coach Leather Cleaner bottle — 4 fl. oz.",
     },
     {
-      id: "coach-leather-moisturizer",
-      name: "Leather Moisturizer",
-      detail: "Conditions pebbled leather to stay soft and resist drying.",
+      id: "coach-leather-conditioner",
+      name: "Leather Conditioner",
+      detail: "Conditions glovetanned leather to stay soft and resist drying.",
       price: 22,
       imageSrc: "/images/products/coach-leather-moisturizer.png",
-      imageAlt: "Coach Leather Moisturizer bottle — 4 fl. oz.",
+      imageAlt: "Coach Leather Conditioner bottle — 4 fl. oz.",
     },
   ] satisfies PdpLeatherCleanerProduct[],
 } as const;
@@ -1927,7 +1959,7 @@ export const PDP_FAQ = {
       id: "leather-care",
       question: "How do I care for glovetanned leather?",
       answer:
-        "Wipe with a soft dry cloth after wear. For deeper cleaning, use Coach Leather Cleaner and condition with Leather Moisturizer — both are formulated for glovetanned full-grain leather.",
+        "Wipe with a soft dry cloth after wear. For deeper cleaning, use Coach Leather Cleaner and follow with Leather Conditioner — both are formulated for glovetanned full-grain leather.",
     },
     {
       id: "returns",
@@ -2145,7 +2177,7 @@ export const PDP_COLORS: PdpColor[] = [
 
 export const PDP_MEDIA_SLIDES = [
   {
-    src: "/images/gallery/tabby-leather-on-model-trench.png",
+    src: PDP_GALLERY_ON_MODEL_TRENCH_IMAGE,
     alt: "Model wearing Tabby Shoulder Bag 26 in black full-grain leather",
   },
   {
@@ -2268,7 +2300,7 @@ export const PDP_AS_SEEN_ON = {
       id: "jennifer-lopez",
       name: "Jennifer Lopez",
       context: "Coach Fall campaign",
-      src: "/images/gallery/tabby-leather-on-model-trench.png",
+      src: PDP_GALLERY_ON_MODEL_TRENCH_IMAGE,
       alt: "Jennifer Lopez with Tabby Shoulder Bag 26 in a tan trench coat",
       objectPosition: "center 40%",
     },

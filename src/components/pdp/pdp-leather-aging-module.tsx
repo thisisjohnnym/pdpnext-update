@@ -27,8 +27,7 @@ function AgingCareUpsellRow({
   onQuickAdd: () => void;
 }) {
   return (
-    <div className="border-t border-neutral-200 pt-3">
-      <div className="flex items-center gap-3 py-1">
+    <div className="flex items-center gap-3 py-1">
         <div className="relative size-12 shrink-0 overflow-hidden bg-neutral-100">
           <Image
             src={product.imageSrc}
@@ -64,6 +63,44 @@ function AgingCareUpsellRow({
           ) : null}
         </button>
       </div>
+  );
+}
+
+function AgingCareHelp({
+  label,
+  lines,
+}: {
+  label: string;
+  lines: readonly { productId: string; text: string }[];
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="flex flex-col gap-2">
+      <button
+        type="button"
+        onClick={() => setOpen((current) => !current)}
+        aria-expanded={open}
+        className="inline-flex items-center gap-2 self-start text-left"
+      >
+        <span
+          aria-hidden
+          className="flex size-4 shrink-0 items-center justify-center rounded-full border border-neutral-400 text-[10px] font-medium leading-none text-neutral-600"
+        >
+          ?
+        </span>
+        <span className={`text-neutral-600 ${pdpType.micro}`}>{label}</span>
+      </button>
+
+      {open ? (
+        <div className="flex flex-col gap-1.5 pl-6">
+          {lines.map((line) => (
+            <p key={line.productId} className={`text-neutral-500 ${pdpType.micro}`}>
+              {line.text}
+            </p>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -80,13 +117,17 @@ export function PdpLeatherAgingModule({
   const panel = experiencePanelSectionProps(isLastPanel);
   const maxIndex = stages.length - 1;
   const [stageIndex, setStageIndex] = useState(0);
-  const [careAdded, setCareAdded] = useState(false);
+  const [careAddedIds, setCareAddedIds] = useState<Set<string>>(() => new Set());
   const stage = stages[stageIndex]!;
   const sliderProgress =
     maxIndex > 0 ? (stageIndex / maxIndex) * 100 : 0;
-  const careProduct = PDP_LEATHER_CLEANER.products.find(
-    (product) => product.id === careNudge.productId,
-  );
+  const careProducts = careNudge.productIds
+    .map((productId) =>
+      PDP_LEATHER_CLEANER.products.find((product) => product.id === productId),
+    )
+    .filter((product): product is (typeof PDP_LEATHER_CLEANER.products)[number] =>
+      Boolean(product),
+    );
 
   const showSimulatedWear = !stage.image;
 
@@ -241,26 +282,35 @@ export function PdpLeatherAgingModule({
             })}
           </div>
 
-          {careProduct ? (
+          {careProducts.length ? (
             <div
               className={cn(
-                "overflow-hidden transition-[max-height,margin] duration-500 ease-out",
-                stageIndex === 0 ? "max-h-0 opacity-0" : "mt-1 max-h-24 opacity-100",
+                "overflow-hidden transition-[max-height,margin,opacity] duration-500 ease-out",
+                stageIndex === 0
+                  ? "max-h-0 opacity-0"
+                  : "mt-1 max-h-56 border-t border-neutral-200 pt-3 opacity-100",
               )}
               aria-hidden={stageIndex === 0}
             >
-              <AgingCareUpsellRow
-                product={careProduct}
-                added={careAdded}
-                onQuickAdd={() => {
-                  if (careAdded) {
-                    return;
-                  }
+              <div className="flex flex-col gap-3">
+                {careProducts.map((product) => (
+                  <AgingCareUpsellRow
+                    key={product.id}
+                    product={product}
+                    added={careAddedIds.has(product.id)}
+                    onQuickAdd={() => {
+                      if (careAddedIds.has(product.id)) {
+                        return;
+                      }
 
-                  onQuickAdd?.();
-                  setCareAdded(true);
-                }}
-              />
+                      onQuickAdd?.();
+                      setCareAddedIds((current) => new Set(current).add(product.id));
+                    }}
+                  />
+                ))}
+
+                <AgingCareHelp label={careNudge.help.label} lines={careNudge.help.lines} />
+              </div>
             </div>
           ) : null}
         </div>
