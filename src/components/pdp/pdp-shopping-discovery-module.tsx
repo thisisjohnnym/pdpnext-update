@@ -10,6 +10,7 @@ import { cn } from "@/lib/cn";
 import {
   pdpCarouselCard15Class,
   pdpCarouselScrollClass,
+  pdpCarouselScrollWrapClass,
 } from "./pdp-carousel";
 import {
   PDP_MORE_LIKE_THIS,
@@ -19,6 +20,7 @@ import { pdpModuleSectionClass, pdpModuleHeadingClass, pdpModuleHeadingLeadClass
 import { PdpAiConciergePanel } from "./pdp-product-search-module";
 import { PdpAiInsightCard } from "./pdp-ai-insight-card";
 import { pdpType } from "./pdp-type";
+import { PdpTextLinkCta } from "./pdp-text-link-cta";
 
 type PdpShoppingDiscoveryModuleProps = {
   onAddToBag?: () => void;
@@ -54,64 +56,71 @@ export function PdpShoppingDiscoveryModule({
               <h2 className={cn(pdpModuleHeadingClass({ lead: false }), pdpModuleHeadingLeadClass())}>
                 {PDP_MORE_LIKE_THIS.eyebrow}
               </h2>
-              <ul
-                className={cn(
-                  "m-0 flex list-none gap-2",
-                  pdpCarouselScrollClass,
-                )}
-                aria-label="More like this"
-              >
-                {PDP_MORE_LIKE_THIS.items.map((item) => {
-                  const added = addedIds.has(item.id);
+              <div className={pdpCarouselScrollWrapClass}>
+                <ul
+                  className={cn(
+                    "m-0 flex list-none gap-2",
+                    pdpCarouselScrollClass,
+                  )}
+                  aria-label="More like this"
+                >
+                  {PDP_MORE_LIKE_THIS.items.map((item) => {
+                    const added = addedIds.has(item.id);
 
-                  return (
-                    <li
-                      key={item.id}
-                      className={cn("flex flex-col", pdpCarouselCard15Class)}
-                    >
-                      <div
-                        className="relative w-full overflow-hidden bg-neutral-100"
-                        style={{ aspectRatio: "4 / 5" }}
+                    return (
+                      <li
+                        key={item.id}
+                        className={cn("flex flex-col", pdpCarouselCard15Class)}
                       >
-                        <Image
-                          src={item.imageSrc}
-                          alt={item.imageAlt}
-                          fill
-                          className="object-cover object-center"
-                          sizes="40vw"
-                        />
-                      </div>
-                      <p
-                        className={`font-extended mt-2 line-clamp-2 text-black ${pdpType.label}`}
-                      >
-                        {item.name}
-                      </p>
-                      <p className={`font-extended mt-0.5 text-black ${pdpType.micro}`}>
-                        {item.price}
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => handleAdd(item.id)}
-                        disabled={added}
-                        className={cn(
-                          "mt-2 inline-flex w-full items-center justify-center gap-1 rounded-full py-2.5 transition-colors",
-                          pdpType.micro,
-                          added
-                            ? "bg-neutral-100 text-neutral-500"
-                            : "bg-black text-white",
-                        )}
-                      >
-                        <span className="font-extended -translate-y-px">
-                          {added ? "Added" : "Add to Bag"}
-                        </span>
-                        {!added ? (
-                          <MaterialIcon name="add" size={18} className="text-white" />
-                        ) : null}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
+                        <div
+                          className="relative w-full overflow-hidden bg-neutral-100"
+                          style={{ aspectRatio: "4 / 5" }}
+                        >
+                          <Image
+                            src={item.imageSrc}
+                            alt={item.imageAlt}
+                            fill
+                            className="object-cover object-center"
+                            sizes="40vw"
+                          />
+                        </div>
+                        <p
+                          className={`font-extended mt-2 line-clamp-2 text-black ${pdpType.label}`}
+                        >
+                          {item.name}
+                        </p>
+                        <p className={`font-extended mt-0.5 text-black ${pdpType.micro}`}>
+                          {item.price}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => handleAdd(item.id)}
+                          disabled={added}
+                          className={cn(
+                            "mt-2 inline-flex w-full items-center justify-center gap-1 rounded-full py-2.5 transition-colors",
+                            pdpType.micro,
+                            added
+                              ? "bg-neutral-100 text-neutral-500"
+                              : "bg-black text-white",
+                          )}
+                        >
+                          {!added ? (
+                            <MaterialIcon
+                              name="shopping_bag"
+                              size={18}
+                              className="shrink-0 text-white"
+                              aria-hidden
+                            />
+                          ) : null}
+                          <span className="font-extended -translate-y-px">
+                            {added ? "Added" : "Add to bag"}
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             </div>
 
             {assistantOpen ? (
@@ -127,18 +136,13 @@ export function PdpShoppingDiscoveryModule({
                 title={PDP_SHOPPING_ASSISTANT_PROMPT.title}
                 body={PDP_SHOPPING_ASSISTANT_PROMPT.body}
                 footer={
-                  <button
+                  <PdpTextLinkCta
                     type="button"
                     onClick={() => setAssistantOpen(true)}
-                    className={`font-extended inline-flex items-center gap-0.5 text-black ${pdpType.micro}`}
+                    className={pdpType.micro}
                   >
                     {PDP_SHOPPING_ASSISTANT_PROMPT.cta}
-                    <MaterialIcon
-                      name="arrow_forward"
-                      size={18}
-                      className="text-black"
-                    />
-                  </button>
+                  </PdpTextLinkCta>
                 }
               />
             )}

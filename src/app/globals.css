@@ -64,6 +64,13 @@ body {
   top: 2px;
 }
 
+/* Root layout — never offset the document; font-extended nudge is for labels only */
+body.font-extended,
+html.font-extended {
+  position: static;
+  top: auto;
+}
+
 .font-extended.font-bold {
   font-weight: 700;
 }
@@ -672,7 +679,9 @@ html.pdp-panel-scroll {
 
 .pdp-hero-immersive__media {
   position: absolute;
-  inset: 0;
+  inset-inline: 0;
+  bottom: 0;
+  top: calc(-1 * var(--pdp-immersive-top-bleed));
   overflow: hidden;
   background: #000;
 }

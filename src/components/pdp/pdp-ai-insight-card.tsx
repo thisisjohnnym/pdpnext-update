@@ -7,6 +7,8 @@ export type PdpAiInsightContentProps = {
   title: string;
   body: string;
   eyebrow?: string;
+  /** Eyebrow placement — reviews attribution sits below the summary paragraph */
+  eyebrowPosition?: "above" | "below";
   className?: string;
   showIcon?: boolean;
   size?: "default" | "compact" | "xs";
@@ -17,12 +19,19 @@ export function PdpAiInsightContent({
   title,
   body,
   eyebrow,
+  eyebrowPosition = "above",
   className,
   showIcon = true,
   size = "default",
 }: PdpAiInsightContentProps) {
   const compact = size === "compact" || size === "xs";
   const extraSmall = size === "xs";
+
+  const eyebrowEl = eyebrow ? (
+    <p className="font-extended text-xs tracking-[0.2px] text-neutral-500">
+      {eyebrow}
+    </p>
+  ) : null;
 
   return (
     <div className={cn("flex items-start", showIcon ? "gap-3" : "gap-0", className)}>
@@ -35,16 +44,12 @@ export function PdpAiInsightContent({
         </span>
       ) : null}
       <div className="min-w-0 flex-1">
-        {eyebrow ? (
-          <p className="font-extended text-xs tracking-[0.2px] text-neutral-500">
-            {eyebrow}
-          </p>
-        ) : null}
+        {eyebrowPosition === "above" ? eyebrowEl : null}
         <p
           className={cn(
             "font-extended font-bold leading-snug tracking-[0.2px] text-black",
             extraSmall ? "text-xs" : compact ? "text-sm" : "text-base",
-            eyebrow && "mt-0.5",
+            eyebrow && eyebrowPosition === "above" && "mt-0.5",
           )}
         >
           {title}
@@ -53,14 +58,19 @@ export function PdpAiInsightContent({
           className={cn(
             "font-extended leading-[1.35] tracking-[0.2px] text-neutral-600",
             extraSmall
-              ? "mt-0.5 text-xs"
+              ? "mt-1.5 text-xs"
               : compact
-                ? "mt-1 text-sm"
-                : "mt-1 text-base",
+                ? "mt-1.5 text-sm"
+                : "mt-2 text-base",
           )}
         >
           {body}
         </p>
+        {eyebrowPosition === "below" ? (
+          <div className={cn(extraSmall ? "mt-1.5" : compact ? "mt-2" : "mt-2.5")}>
+            {eyebrowEl}
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -84,6 +94,7 @@ export function PdpAiInsightCard({
   title,
   body,
   eyebrow,
+  eyebrowPosition,
   onDismiss,
   dismissLabel = "Dismiss recommendation",
   footer,
@@ -135,6 +146,7 @@ export function PdpAiInsightCard({
         title={title}
         body={body}
         eyebrow={eyebrow}
+        eyebrowPosition={eyebrowPosition}
         showIcon={minimal ? false : showIcon}
         size={minimal ? (size === "default" ? "compact" : size) : size}
       />

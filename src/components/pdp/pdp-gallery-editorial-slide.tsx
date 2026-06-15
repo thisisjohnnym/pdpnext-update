@@ -11,6 +11,7 @@ import { PdpGalleryHeroVideo } from "./pdp-gallery-hero-video";
 import { galleryPanelClassName } from "./pdp-gallery-panel";
 import { BOTTOM_CTA_OFFSET, SCREEN_HEIGHT_STYLE } from "./pdp-viewport-chrome";
 import { pdpType } from "./pdp-type";
+import { PdpTextLinkCta } from "./pdp-text-link-cta";
 
 type PdpGalleryEditorialSlideProps = {
   src: string;
@@ -24,6 +25,10 @@ type PdpGalleryEditorialSlideProps = {
   secondarySrc?: string;
   secondaryAlt?: string;
   learnMore?: {
+    label: string;
+    href: string;
+  };
+  cta?: {
     label: string;
     href: string;
   };
@@ -47,6 +52,7 @@ export function PdpGalleryEditorialSlide({
   secondarySrc,
   secondaryAlt,
   learnMore,
+  cta,
   panelScroll = false,
   isLastPanel = false,
   reserveBottomCta = false,
@@ -146,7 +152,7 @@ export function PdpGalleryEditorialSlide({
 
             <div
               className={cn(
-                "flex w-full flex-col items-start gap-3",
+                "flex w-full flex-col items-start gap-1.5",
                 learnMore && "pb-2 lg:pb-4",
               )}
             >
@@ -154,15 +160,22 @@ export function PdpGalleryEditorialSlide({
                 {caption}
               </p>
 
+              {cta ? (
+                <PdpTextLinkCta as="a" href={cta.href} variant="muted" className={pdpType.micro}>
+                  {cta.label}
+                </PdpTextLinkCta>
+              ) : null}
+
               {learnMore ? (
-                <a
+                <PdpTextLinkCta
+                  as="a"
                   href={learnMore.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center rounded-full bg-neutral-100 px-4 py-2.5 text-sm tracking-[0.2px] text-black transition-colors active:bg-neutral-200/80"
+                  className={pdpType.body}
                 >
-                  <span className="font-extended translate-y-px">{learnMore.label}</span>
-                </a>
+                  {learnMore.label}
+                </PdpTextLinkCta>
               ) : null}
             </div>
 

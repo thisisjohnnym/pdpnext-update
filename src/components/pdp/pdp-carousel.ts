@@ -8,7 +8,7 @@ export const pdpCarouselBleedClass =
 export const pdpCarouselBleedWrapClass = "w-full min-w-0 overflow-x-clip";
 
 export const pdpCarouselScrollClass = cn(
-  "overflow-x-auto overscroll-x-contain touch-pan-y pb-1",
+  "overflow-x-auto overscroll-x-contain touch-pan-x pb-1",
   pdpCarouselBleedClass,
   "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
   "snap-x snap-mandatory scroll-pl-3 lg:scroll-pl-5",
@@ -49,14 +49,14 @@ export const pdpUgcVideoCardCenteredClass =
 
 /** Infinite centered carousel — full-width tiles, edge-to-edge */
 export const pdpCarouselInfiniteCenteredScrollClass = cn(
-  "w-full overflow-x-auto overscroll-x-contain touch-pan-y pb-1",
+  "w-full overflow-x-auto overscroll-x-contain touch-pan-x pb-1",
   "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
   "snap-x snap-mandatory",
 );
 
 /** Infinite centered carousel — symmetric padding so active tile sits mid-frame with peek */
 export const pdpCarouselInfiniteCenteredPeekScrollClass = cn(
-  "overflow-x-auto overscroll-x-contain touch-pan-y pb-1",
+  "overflow-x-auto overscroll-x-contain touch-pan-x pb-1",
   pdpCarouselBleedClass,
   "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
   "snap-x snap-mandatory",
@@ -77,7 +77,7 @@ export const pdpAsSeenOnAvatarItemClass = "shrink-0 snap-start snap-always";
 
 /** Inset rails inside grouped discovery card — ~2 across with peek */
 export const pdpDiscoveryInnerScrollClass =
-  "overflow-x-auto overscroll-x-contain touch-pan-y snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden";
+  "overflow-x-auto overscroll-x-contain touch-pan-x snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden";
 
 export const pdpDiscoveryRailCardClass =
   "w-[calc((100%-0.5rem)/2.05)] shrink-0 snap-start snap-always";

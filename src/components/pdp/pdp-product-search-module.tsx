@@ -104,7 +104,7 @@ export function PdpAiConciergePanel({
   variant = "default",
 }: PdpAiConciergePanelProps) {
   const flat = variant === "flat";
-  const { title, placeholder, prompts, fallbackResponse } = PDP_AI_CONCIERGE;
+  const { title, placeholder, prompts } = PDP_AI_CONCIERGE;
   const [query, setQuery] = useState("");
   const [activePromptId, setActivePromptId] = useState<string | null>(null);
   const [submittedQuery, setSubmittedQuery] = useState<string | null>(null);
@@ -274,11 +274,7 @@ export function PdpAiConciergePanel({
           userQuery={submittedQuery ?? ""}
           flat={flat}
         />
-      ) : (
-        <p className={`m-0 text-neutral-500 ${pdpType.micro}`}>
-          {fallbackResponse.body}
-        </p>
-      )}
+      ) : null}
     </div>
   );
 }

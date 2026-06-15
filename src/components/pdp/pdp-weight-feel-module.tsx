@@ -20,7 +20,7 @@ function triggerLiftHaptic(pattern: readonly number[]) {
 }
 
 const WEIGHT_LIFT_STRIP_CLASS =
-  "shrink-0 bg-[#ececec] px-4 pt-3 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]";
+  "shrink-0 px-4 pt-3 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] transition-colors duration-500 ease-out";
 
 /** Weight & feel — press-and-hold lift with haptic, specs as sensation */
 export function PdpWeightFeelModule({
@@ -28,7 +28,7 @@ export function PdpWeightFeelModule({
 }: {
   isLastPanel?: boolean;
 }) {
-  const { hint, holdMs, image, reveal, hapticPattern } = PDP_WEIGHT_FEEL;
+  const { hint, holdMs, image, liftedImage, reveal, hapticPattern } = PDP_WEIGHT_FEEL;
   const panel = experiencePanelSectionProps(isLastPanel);
 
   const { progress, lifted, revealed, handlePointerDown, handlePointerEnd, handleContextMenu } =
@@ -38,15 +38,19 @@ export function PdpWeightFeelModule({
     });
 
   const isHolding = progress > 0 && !revealed;
-  const showReveal = revealed || lifted;
+  const showLiftedAsset = lifted || revealed;
+  const surfaceColor = showLiftedAsset
+    ? (liftedImage.backgroundColor ?? "#f5ece7")
+    : (image.backgroundColor ?? "#dedede");
 
   return (
     <section data-header-surface="light" className={panel.className} style={panel.style}>
       <div
         className={cn(
           EXPERIENCE_PANEL_MEDIA_CLASS,
-          "pdp-weight-lift bg-[#ececec]",
+          "pdp-weight-lift transition-colors duration-500 ease-out",
         )}
+        style={{ backgroundColor: surfaceColor }}
       >
         <div
           className={cn(
@@ -54,20 +58,46 @@ export function PdpWeightFeelModule({
             lifted && "pdp-weight-lift__stage--lifted",
           )}
         >
-          <Image
-            src={image.src}
-            alt={image.alt}
-            fill
-            unoptimized
-            className="pointer-events-none object-cover"
-            style={{ objectPosition: image.objectPosition ?? "center 72%" }}
-            sizes="100vw"
-            draggable={false}
-          />
+          <div
+            className={cn(
+              "absolute inset-0 transition-opacity duration-500 ease-out",
+              showLiftedAsset ? "opacity-0" : "opacity-100",
+            )}
+          >
+            <Image
+              src={image.src}
+              alt={image.alt}
+              fill
+              unoptimized
+              className="pointer-events-none object-contain px-6 py-4"
+              style={{ objectPosition: image.objectPosition ?? "center center" }}
+              sizes="100vw"
+              draggable={false}
+            />
+          </div>
+
+          <div
+            className={cn(
+              "absolute inset-0 transition-opacity duration-500 ease-out",
+              showLiftedAsset ? "opacity-100" : "opacity-0",
+            )}
+          >
+            <Image
+              src={liftedImage.src}
+              alt={showLiftedAsset ? liftedImage.alt : ""}
+              fill
+              unoptimized
+              className="pointer-events-none object-contain px-6 py-4"
+              style={{ objectPosition: liftedImage.objectPosition ?? "center center" }}
+              sizes="100vw"
+              draggable={false}
+            />
+          </div>
+
           <div
             className={cn(
               "pdp-weight-lift__shadow absolute bottom-[14%] left-1/2 h-5 w-[45%] -translate-x-1/2 rounded-[100%] bg-black/20 blur-md transition-all duration-300",
-              lifted && "pdp-weight-lift__shadow--lifted",
+              showLiftedAsset && "pdp-weight-lift__shadow--lifted",
             )}
           />
         </div>
@@ -79,22 +109,23 @@ export function PdpWeightFeelModule({
           WEIGHT_LIFT_STRIP_CLASS,
           "pdp-weight-lift touch-none select-none text-left",
         )}
+        style={{ backgroundColor: surfaceColor }}
         aria-label={hint}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerEnd}
         onPointerCancel={handlePointerEnd}
         onContextMenu={handleContextMenu}
       >
-        {!showReveal ? (
+        {!revealed ? (
           <div className="flex flex-col items-center gap-2">
             <div className="relative flex size-[4.25rem] items-center justify-center">
               <span
                 aria-hidden
-                className="pdp-weight-lift__ring pdp-weight-lift__ring--outer pointer-events-none absolute size-[4.25rem] rounded-full border border-neutral-400/70"
+                className="pdp-weight-lift__ring pdp-weight-lift__ring--outer pointer-events-none absolute size-[4.25rem] rounded-full border border-white/80"
               />
               <span
                 aria-hidden
-                className="pdp-weight-lift__ring pointer-events-none absolute size-[3.25rem] rounded-full border border-neutral-500/80"
+                className="pdp-weight-lift__ring pointer-events-none absolute size-[3.25rem] rounded-full border border-white"
               />
               <span
                 className={cn(

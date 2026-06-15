@@ -14,6 +14,7 @@ import { PDP_UGC_VIDEO_CAROUSEL } from "./pdp-data";
 import { pdpModuleHeadingClass } from "./pdp-module-section";
 import { PdpUgcVideoCard } from "./pdp-ugc-video-card";
 import { pdpType } from "./pdp-type";
+import { PdpTextLinkCta } from "./pdp-text-link-cta";
 import {
   loopCarouselItems,
   useInfiniteCenteredCarousel,
@@ -42,14 +43,15 @@ export function PdpUgcVideoCarouselModule() {
         <GridItem mobile={12} desktop={24} className="min-w-0">
           <div className="flex items-end justify-between gap-3">
             <h2 className={pdpModuleHeadingClass({ lead: false })}>{title}</h2>
-            <a
+            <PdpTextLinkCta
+              as="a"
               href={followCta.href}
               target="_blank"
               rel="noopener noreferrer"
-              className={`font-extended shrink-0 text-black underline decoration-neutral-300 underline-offset-2 transition-colors hover:decoration-neutral-500 ${pdpType.label}`}
+              className={cn("shrink-0", pdpType.label)}
             >
               {followCta.label}
-            </a>
+            </PdpTextLinkCta>
           </div>
         </GridItem>
       </PageGrid>

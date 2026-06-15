@@ -36,15 +36,7 @@ type BundleRowProps = {
 
 function PrimaryBundleCard({ item }: { item: PdpBundleItem }) {
   return (
-    <div className="flex flex-col gap-3 border-b border-neutral-200 pb-4">
-      <p
-        className={cn(
-          "font-extended m-0 text-[10px] uppercase tracking-[0.6px] text-neutral-500",
-        )}
-      >
-        Your bag
-      </p>
-
+    <div className="flex flex-col border-b border-neutral-200 pb-4">
       <div className="flex items-center gap-3.5">
         <span className="relative size-16 shrink-0 overflow-hidden bg-neutral-100">
           <Image
@@ -251,9 +243,6 @@ export function PdpBundleModule({ onAddBundle }: PdpBundleModuleProps) {
                   ? "Added to bag"
                   : `Add bundle to bag (${selectedItems.length})`}
               </span>
-              {!justAdded ? (
-                <MaterialIcon name="add" size={20} className="text-white" />
-              ) : null}
             </button>
           </div>
         </GridItem>

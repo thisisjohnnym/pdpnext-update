@@ -22,7 +22,7 @@ function FaqAccordionItem({
   const panelId = `faq-panel-${item.id}`;
 
   return (
-    <div className="border-b border-neutral-200 last:border-b-0">
+    <div id={`faq-${item.id}`} className="border-b border-neutral-200 last:border-b-0">
       <button
         type="button"
         onClick={onToggle}

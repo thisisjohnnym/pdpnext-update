@@ -72,8 +72,8 @@ export function PdpBottomActions({
           className="shrink-0 text-white"
           aria-hidden
         />
-        <span className="translate-y-px text-[11px] uppercase tracking-[0.08em] text-white">
-          Add to Bag
+        <span className="translate-y-px text-[11px] text-white">
+          Add to bag
         </span>
       </button>
     </div>

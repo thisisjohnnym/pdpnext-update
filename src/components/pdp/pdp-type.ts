@@ -11,3 +11,25 @@ export const pdpType = {
   /** Uppercase tags (THIS ITEM, etc.) */
   tag: "font-extended text-[11px] uppercase tracking-[0.6px] lg:text-[10px]",
 } as const;
+
+/** Pill outline CTA — white fill, soft grey stroke (Add buttons, sheet actions) */
+export const pdpStrokeCtaClass =
+  "rounded-full border border-neutral-200 bg-white text-black transition-colors active:bg-neutral-50";
+
+/** Outline CTA disabled / added state */
+export const pdpStrokeCtaMutedClass =
+  "rounded-full bg-neutral-100 text-neutral-500";
+
+/** Underlined text CTA — primary (Shop Shoulder Bags) */
+export const pdpTextLinkCtaClass =
+  "font-extended inline-flex items-center gap-1 text-black transition-colors active:text-neutral-700";
+
+export const pdpTextLinkCtaLabelClass =
+  "underline decoration-black underline-offset-[3px] group-active:decoration-neutral-700";
+
+/** Underlined text CTA — secondary (See what fits inside) */
+export const pdpTextLinkCtaMutedClass =
+  "font-extended inline-flex items-center gap-1 text-neutral-600 transition-colors active:text-black";
+
+export const pdpTextLinkCtaMutedLabelClass =
+  "underline decoration-neutral-300 underline-offset-[3px] group-active:decoration-neutral-500";

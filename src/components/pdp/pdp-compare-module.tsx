@@ -21,7 +21,7 @@ import {
   type PdpCompareItem,
   type PdpFamilyCompareAlternative,
 } from "./pdp-data";
-import { pdpType } from "./pdp-type";
+import { pdpType, pdpStrokeCtaClass, pdpStrokeCtaMutedClass } from "./pdp-type";
 
 function CompareProductCard({
   item,
@@ -90,6 +90,40 @@ function DifferenceRow({ row }: { row: PdpCompareDifferenceRow }) {
   );
 }
 
+function CompareAddButton({
+  label,
+  added,
+  onClick,
+  variant = "primary",
+  className,
+}: {
+  label: string;
+  added: boolean;
+  onClick: () => void;
+  variant?: "primary" | "secondary";
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={added}
+      className={cn(
+        "inline-flex w-full min-w-0 items-center justify-center px-3 py-3 transition-colors",
+        pdpType.micro,
+        added
+          ? pdpStrokeCtaMutedClass
+          : variant === "primary"
+            ? "rounded-full bg-black text-white"
+            : pdpStrokeCtaClass,
+        className,
+      )}
+    >
+      <span className="font-extended truncate">{label}</span>
+    </button>
+  );
+}
+
 type PdpCompareModuleProps = {
   onAddToBag?: () => void;
   onPickerOpenChange?: (open: boolean) => void;
@@ -151,21 +185,45 @@ export function PdpCompareModule({
 
           <div className="flex flex-col gap-4">
             <div
-              className="grid grid-cols-2 gap-2"
+              className="grid grid-cols-2 items-stretch gap-2"
               aria-label="Compare Tabby family bags"
             >
-              <article className="min-w-0">
+              <article className="flex min-w-0 flex-col">
                 <CompareProductCard item={selected} />
+                <CompareAddButton
+                  className="mt-auto shrink-0 pt-2"
+                  label={
+                    addedIds.has(selected.id)
+                      ? "Added"
+                      : `Add ${selectedShortName}`
+                  }
+                  added={addedIds.has(selected.id)}
+                  onClick={() => handleAdd(selected.id)}
+                  variant="primary"
+                />
               </article>
 
-              <button
-                type="button"
-                onClick={() => handlePickerOpenChange(true)}
-                className="group min-w-0 text-left transition-colors active:opacity-80"
-                aria-label={`Compare with ${alternative.shortName}. Tap to choose a different bag.`}
-              >
-                <CompareProductCard item={alternative} showChangeAffordance />
-              </button>
+              <article className="flex min-w-0 flex-col">
+                <button
+                  type="button"
+                  onClick={() => handlePickerOpenChange(true)}
+                  className="group block w-full min-w-0 text-left transition-colors active:opacity-80"
+                  aria-label={`Compare with ${alternative.shortName}. Tap to choose a different bag.`}
+                >
+                  <CompareProductCard item={alternative} showChangeAffordance />
+                </button>
+                <CompareAddButton
+                  className="mt-auto shrink-0 pt-2"
+                  label={
+                    addedIds.has(alternative.id)
+                      ? "Added"
+                      : `Add ${alternative.shortName}`
+                  }
+                  added={addedIds.has(alternative.id)}
+                  onClick={() => handleAdd(alternative.id)}
+                  variant="secondary"
+                />
+              </article>
             </div>
 
             <div className="flex flex-col divide-y divide-neutral-200 border-y border-neutral-200">
@@ -185,45 +243,6 @@ export function PdpCompareModule({
                 ariaLive="polite"
               />
             ) : null}
-
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => handleAdd(selected.id)}
-                disabled={addedIds.has(selected.id)}
-                className={cn(
-                  "inline-flex min-w-0 flex-1 items-center justify-center rounded-full px-3 py-3 transition-colors",
-                  pdpType.micro,
-                  addedIds.has(selected.id)
-                    ? "bg-neutral-100 text-neutral-500"
-                    : "bg-black text-white",
-                )}
-              >
-                <span className="font-extended truncate">
-                  {addedIds.has(selected.id)
-                    ? "Added"
-                    : `Add ${selectedShortName}`}
-                </span>
-              </button>
-              <button
-                type="button"
-                onClick={() => handleAdd(alternative.id)}
-                disabled={addedIds.has(alternative.id)}
-                className={cn(
-                  "inline-flex min-w-0 flex-1 items-center justify-center rounded-full px-3 py-3 transition-colors",
-                  pdpType.micro,
-                  addedIds.has(alternative.id)
-                    ? "bg-neutral-100 text-neutral-500"
-                    : "bg-neutral-100 text-black hover:bg-neutral-200/80",
-                )}
-              >
-                <span className="font-extended truncate">
-                  {addedIds.has(alternative.id)
-                    ? "Added"
-                    : `Add ${alternative.shortName}`}
-                </span>
-              </button>
-            </div>
           </div>
         </GridItem>
       </PageGrid>

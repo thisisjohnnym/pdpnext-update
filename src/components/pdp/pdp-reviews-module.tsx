@@ -15,6 +15,7 @@ import { PdpReviewLikeButton } from "./pdp-review-like-button";
 import { PdpAiInsightCard } from "./pdp-ai-insight-card";
 import { PdpUgcStoryCard } from "./pdp-ugc-story-card";
 import { pdpType } from "./pdp-type";
+import { PdpTextLinkCta } from "./pdp-text-link-cta";
 import {
   PDP_COMMENTS_SUMMARY,
   PDP_CUSTOMER_REVIEWS,
@@ -112,14 +113,13 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between gap-3">
                 <h2 className={pdpModuleHeadingClass({ lead: false })}>Reviews</h2>
-                <button
+                <PdpTextLinkCta
                   type="button"
                   onClick={onWriteReview}
-                  className={`font-extended inline-flex shrink-0 items-center gap-1 rounded-full border border-neutral-300 px-3 py-2 text-black ${pdpType.label}`}
+                  className={cn("shrink-0", pdpType.label)}
                 >
-                  <span>Write a review</span>
-                  <MaterialIcon name="edit" size={18} className="text-black" />
-                </button>
+                  Write a review
+                </PdpTextLinkCta>
               </div>
 
               <div className="flex items-center gap-2.5">
@@ -139,6 +139,7 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
             <PdpAiInsightCard
               variant="minimal"
               eyebrow={PDP_REVIEWS_AI_SUMMARY.attribution}
+              eyebrowPosition="below"
               title={PDP_REVIEWS_AI_SUMMARY.headline}
               body={PDP_REVIEWS_AI_SUMMARY.body}
             />
@@ -166,13 +167,13 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
               ))}
             </section>
 
-            <button
+            <PdpTextLinkCta
               type="button"
               onClick={onReadAll}
-              className="font-extended w-full rounded-full border border-neutral-300 py-3 text-sm tracking-[0.2px] text-black"
+              className={cn("self-start", pdpType.body)}
             >
               Read all {PDP_COMMENTS_SUMMARY.count} reviews
-            </button>
+            </PdpTextLinkCta>
           </div>
         </GridItem>
       </PageGrid>

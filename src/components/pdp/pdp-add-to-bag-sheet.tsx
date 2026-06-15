@@ -14,6 +14,7 @@ import {
   type PdpBundleAddPayload,
 } from "./pdp-data";
 import { pdpSheetHeadingClass } from "./pdp-module-section";
+import { pdpStrokeCtaClass, pdpStrokeCtaMutedClass } from "./pdp-type";
 
 type BagConfirmation =
   | { type: "product" }
@@ -211,7 +212,10 @@ export function PdpAddToBagSheet({
             <button
               type="button"
               onClick={onClose}
-              className="font-extended flex h-12 min-w-0 flex-1 items-center justify-center rounded-full border border-neutral-300 text-sm tracking-[0.2px] text-black"
+              className={cn(
+                "font-extended flex h-12 min-w-0 flex-1 items-center justify-center text-sm tracking-[0.2px]",
+                pdpStrokeCtaClass,
+              )}
             >
               <span className="translate-y-px">Keep shopping</span>
             </button>
@@ -263,10 +267,10 @@ export function PdpAddToBagSheet({
                           onClick={() => handleQuickAdd(item.id)}
                           disabled={added}
                           className={cn(
-                            "font-extended inline-flex shrink-0 items-center justify-center gap-1 rounded-full px-3.5 py-2 text-xs tracking-[0.2px] transition-colors",
+                            "font-extended inline-flex shrink-0 items-center justify-center gap-1 px-3.5 py-2 text-xs tracking-[0.2px] transition-colors",
                             added
-                              ? "bg-neutral-100 text-neutral-500"
-                              : "border border-neutral-300 text-black",
+                              ? pdpStrokeCtaMutedClass
+                              : pdpStrokeCtaClass,
                           )}
                         >
                           <span>

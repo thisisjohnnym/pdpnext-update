@@ -27,6 +27,7 @@ import { PdpReviewLikeButton } from "./pdp-review-like-button";
 import { PdpAiInsightCard } from "./pdp-ai-insight-card";
 import { PdpUgcStoryCard } from "./pdp-ugc-story-card";
 import { pdpType } from "./pdp-type";
+import { PdpTextLinkCta } from "./pdp-text-link-cta";
 
 type PdpReviewsSheetProps = {
   open: boolean;
@@ -258,6 +259,7 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
             <PdpAiInsightCard
               variant="minimal"
               eyebrow={PDP_REVIEWS_AI_SUMMARY.attribution}
+              eyebrowPosition="below"
               title={PDP_REVIEWS_AI_SUMMARY.headline}
               body={PDP_REVIEWS_AI_SUMMARY.body}
             />
@@ -269,13 +271,9 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
                     In real life
                   </p>
                 </div>
-                <button
-                  type="button"
-                  className="font-extended flex shrink-0 items-center gap-0.5 text-sm leading-[1.35] text-black"
-                >
+                <PdpTextLinkCta type="button" className={cn("shrink-0", pdpType.body)}>
                   View all
-                  <MaterialIcon name="arrow_forward" size={18} className="text-black" />
-                </button>
+                </PdpTextLinkCta>
               </div>
 
               <div className={cn("flex gap-2", pdpCarouselScrollClass)}>

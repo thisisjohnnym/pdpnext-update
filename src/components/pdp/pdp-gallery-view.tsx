@@ -22,7 +22,6 @@ import { PdpRecentlyViewedCarousel } from "./pdp-recently-viewed-carousel";
 import { PdpScrollReveal } from "./pdp-scroll-reveal";
 import { PdpShopTheLookSheet } from "./pdp-shop-the-look-sheet";
 import { PdpLeatherAgingModule } from "./pdp-leather-aging-module";
-import { PdpLeatherCleanerModule } from "./pdp-leather-cleaner-module";
 import { PdpFaqModule } from "./pdp-faq-module";
 import { PdpBagStoriesModule } from "./pdp-bag-stories-module";
 import { PdpStrapSimulationModule } from "./pdp-strap-simulation-module";
@@ -459,6 +458,7 @@ export function PdpGalleryView({
                   secondarySrc={slide.secondarySrc}
                   secondaryAlt={slide.secondaryAlt}
                   learnMore={slide.learnMore}
+                  cta={slide.cta}
                   panelScroll={PDP_PANEL_SCROLL}
                   isLastPanel={isLastPanel}
                 />,
@@ -624,9 +624,6 @@ export function PdpGalleryView({
       </PdpScrollReveal>
       <PdpScrollReveal className="w-full shrink-0" surface="muted">
         <PdpShoppingDiscoveryModule onAddToBag={() => onAddSimilarToBag?.()} />
-      </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="light">
-        <PdpLeatherCleanerModule onQuickAdd={() => onAddSimilarToBag?.()} />
       </PdpScrollReveal>
       <PdpScrollReveal className="w-full shrink-0" surface="muted">
         <PdpFaqModule />

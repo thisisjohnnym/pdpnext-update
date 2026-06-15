@@ -9,7 +9,7 @@ import { cn } from "@/lib/cn";
 
 import { PDP_LEATHER_CLEANER, type PdpLeatherCleanerProduct } from "./pdp-data";
 import { pdpModuleHeadingClass, pdpModuleSectionClass, pdpModuleHeadingLeadClass } from "./pdp-module-section";
-import { pdpType } from "./pdp-type";
+import { pdpType, pdpStrokeCtaClass, pdpStrokeCtaMutedClass } from "./pdp-type";
 
 function formatPrice(amount: number): string {
   return `$${amount.toLocaleString("en-US")}`;
@@ -52,13 +52,11 @@ function LeatherCleanerCard({
           onClick={onAdd}
           disabled={added}
           className={cn(
-            "font-extended inline-flex items-center justify-center gap-1 rounded-full border px-2.5 py-1 text-[11px] leading-none tracking-[0.2px] transition-colors",
-            added
-              ? "border-neutral-200 bg-neutral-100 text-neutral-500"
-              : "border-neutral-300 bg-white text-black active:bg-neutral-50",
+            "font-extended inline-flex items-center justify-center gap-1 px-2.5 py-1 text-[11px] leading-none tracking-[0.2px] transition-colors",
+            added ? pdpStrokeCtaMutedClass : pdpStrokeCtaClass,
           )}
         >
-          <span>{added ? "Added" : "Add"}</span>
+          <span className="translate-y-px">{added ? "Added" : "Add"}</span>
           {!added ? (
             <MaterialIcon name="add" size={18} className="shrink-0 text-black" />
           ) : null}

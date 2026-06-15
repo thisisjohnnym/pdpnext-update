@@ -110,42 +110,58 @@ function PdpColorDropup({
   return (
     <div ref={rootRef} className="relative min-w-0 w-full">
       {open && (
-        <ul
-          role="listbox"
-          aria-label="Select color"
-          className="absolute inset-x-0 bottom-[calc(100%+0.375rem)] max-h-[min(50vh,16rem)] overflow-y-auto overscroll-y-contain rounded-2xl pdp-glass-dark py-1.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        <div
+          className="absolute inset-x-0 bottom-[calc(100%+0.375rem)] flex max-h-[min(50vh,16rem)] flex-col overflow-hidden rounded-2xl pdp-glass-dark"
         >
-          {colors.map((color) => {
-            const isSelected = color.id === selectedId;
+          <ul
+            role="listbox"
+            aria-label="Select color"
+            className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain py-1.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {colors.map((color) => {
+              const isSelected = color.id === selectedId;
 
-            return (
-              <li key={color.id} role="presentation">
-                <button
-                  type="button"
-                  role="option"
-                  aria-selected={isSelected}
-                  onClick={() => handleSelect(color.id)}
-                  className={`font-extended flex w-full items-center gap-3 px-3 py-2.5 text-left text-xs tracking-[0.2px] text-white transition-colors ${
-                    isSelected ? "bg-white/10" : "hover:bg-white/5"
-                  }`}
-                >
-                  <ColorSwatchButton
-                    color={color}
-                    sizeClass="size-8"
-                  />
-                  <span className="min-w-0 flex-1 truncate">{color.name}</span>
-                  {isSelected && (
-                    <MaterialIcon
-                      name="check"
-                      size={18}
-                      className="shrink-0 text-white"
+              return (
+                <li key={color.id} role="presentation">
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={isSelected}
+                    onClick={() => handleSelect(color.id)}
+                    className={`font-extended flex w-full items-center gap-3 px-3 py-2.5 text-left text-xs tracking-[0.2px] text-white transition-colors ${
+                      isSelected ? "bg-white/10" : "hover:bg-white/5"
+                    }`}
+                  >
+                    <ColorSwatchButton
+                      color={color}
+                      sizeClass="size-8"
                     />
-                  )}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+                    <span className="min-w-0 flex-1 truncate">{color.name}</span>
+                    {isSelected && (
+                      <MaterialIcon
+                        name="check"
+                        size={18}
+                        className="shrink-0 text-white"
+                      />
+                    )}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className="shrink-0 border-t border-white/10 px-3 py-2">
+            <button
+              type="button"
+              className="font-extended flex w-full items-center justify-between gap-2 py-1 text-left text-xs tracking-[0.2px] text-white transition-colors active:text-white/80"
+            >
+              <span className="underline decoration-white/35 underline-offset-[3px]">
+                Customize
+              </span>
+              <MaterialIcon name="arrow_forward" size={18} className="shrink-0 text-white/80" />
+            </button>
+          </div>
+        </div>
       )}
 
       <button

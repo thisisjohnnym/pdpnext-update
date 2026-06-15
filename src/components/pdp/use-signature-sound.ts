@@ -30,6 +30,8 @@ export function useSignatureSound() {
         audioRef.current.pause();
       }
 
+      setActiveId(id);
+
       const audio = new Audio(src);
       audioRef.current = audio;
 
@@ -46,7 +48,6 @@ export function useSignatureSound() {
       };
 
       audio.onplay = () => {
-        setActiveId(id);
         setIsPlaying(true);
       };
 

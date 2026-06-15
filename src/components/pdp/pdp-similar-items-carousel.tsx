@@ -97,12 +97,17 @@ export function PdpSimilarItemsCarousel({ onAddToBag }: PdpSimilarItemsCarouselP
                         : "bg-black text-white",
                     )}
                   >
-                    <span className="font-extended -translate-y-px">
-                      {added ? "Added" : "Add to Bag"}
-                    </span>
                     {!added ? (
-                      <MaterialIcon name="add" size={18} className="text-white" />
+                      <MaterialIcon
+                        name="shopping_bag"
+                        size={18}
+                        className="shrink-0 text-white"
+                        aria-hidden
+                      />
                     ) : null}
+                    <span className="font-extended -translate-y-px">
+                      {added ? "Added" : "Add to bag"}
+                    </span>
                   </button>
                 </li>
               );

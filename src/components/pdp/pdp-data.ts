@@ -1000,6 +1000,11 @@ export type PdpGalleryEditorialSlide = {
     label: string;
     href: string;
   };
+  /** Subtle text link below caption */
+  cta?: {
+    label: string;
+    href: string;
+  };
 };
 
 export type PdpGalleryVideoSlide = {
@@ -1105,7 +1110,7 @@ export const PDP_GALLERY_PRODUCT_FRONT_IMAGE =
   "/images/gallery/tabby-product-front-916.jpg";
 
 /** Lead product shot — first frame below hero (native 9:16) */
-export const PDP_GALLERY_DRAG_ZOOM_HINT = "Drag anywhere to zoom";
+export const PDP_GALLERY_DRAG_ZOOM_HINT = "Press & hold, then drag to zoom";
 
 export const PDP_GALLERY_PRODUCT_FRONT_SLIDE: PdpGalleryImmersiveSlide = {
   type: "immersive",
@@ -1156,6 +1161,10 @@ export const PDP_GALLERY_CAPACITY_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
   objectPosition: "center center",
   caption:
     "Three compartments — room for the whole day, never overstuffed.",
+  cta: {
+    label: "See what fits inside",
+    href: "#faq-what-fits",
+  },
 };
 
 /** Craftsmanship editorial break — glovetanned leather story */
@@ -1213,8 +1222,8 @@ export const PDP_GALLERY_FUNCTION_SLIDES: PdpGallerySlide[] = [
   ...PDP_GALLERY_PRODUCT_SHOTS,
   PDP_GALLERY_360_EDITORIAL_SLIDE,
   { type: "leather-aging" },
-  { type: "weight-feel" },
   { type: "signature-sounds" },
+  { type: "weight-feel" },
   { type: "strap-simulation" },
 ];
 
@@ -1993,9 +2002,16 @@ export const PDP_WEIGHT_FEEL = {
   holdMs: 720,
   hapticPattern: [14, 36, 18, 52, 22],
   image: {
-    src: "/images/gallery/tabby-weight-lift-press-hold.jpg",
+    src: "/images/gallery/tabby-weight-lift.png",
     alt: "Tabby Shoulder Bag 26 in black leather with gold C clasp and detachable straps on a light gray background",
-    objectPosition: "center 72%",
+    objectPosition: "center center",
+    backgroundColor: "#dedede",
+  },
+  liftedImage: {
+    src: "/images/gallery/tabby-weight-lift-lifted.jpg",
+    alt: "Tabby Shoulder Bag 26 floating after lift — black leather with gold C clasp and detachable straps",
+    objectPosition: "center center",
+    backgroundColor: "#f5ece7",
   },
   reveal: {
     headline: "Comparable to carrying a water bottle.",
@@ -2044,11 +2060,14 @@ export type PdpSignatureSound = {
   audioSrc: string;
   imageSrc: string;
   imageAlt: string;
+  /** Full-bleed visual card instead of compact row */
+  featured?: boolean;
+  objectPosition?: string;
 };
 
 /** Product sounds — turnlock, zipper, opening (replace audio with studio recordings) */
 export const PDP_SIGNATURE_SOUNDS = {
-  title: "Signature sounds",
+  title: "The Sounds of Tabby",
   sounds: [
     {
       id: "tabby-turnlock",
@@ -2056,8 +2075,10 @@ export const PDP_SIGNATURE_SOUNDS = {
       hint: "click · snap",
       playingHint: "Tabby turnlock",
       audioSrc: "/audio/tabby-turnlock.mp3",
-      imageSrc: "/images/gallery/tabby-leather-detail-hardware.png",
-      imageAlt: "Gold Tabby C turnlock clasp",
+      imageSrc: "/images/gallery/tabby-sound-clasp-hands.jpg",
+      imageAlt: "Fingers opening the gold Tabby C turnlock clasp on black glovetanned leather",
+      featured: true,
+      objectPosition: "center center",
     },
     {
       id: "tabby-zipper",
@@ -2065,17 +2086,21 @@ export const PDP_SIGNATURE_SOUNDS = {
       hint: "Smooth brass hardware",
       playingHint: "Luxury zipper pull",
       audioSrc: "/audio/tabby-zipper.mp3",
-      imageSrc: "/images/gallery/tabby-detail-clasp.png",
-      imageAlt: "Tabby bag zipper and hardware detail",
+      imageSrc: "/images/gallery/tabby-sound-zipper-coach-pull.jpg",
+      imageAlt: "Gold Coach zipper pull on black glovetanned leather Tabby bag",
+      featured: true,
+      objectPosition: "center center",
     },
     {
-      id: "tabby-bag-open",
-      label: "Opening the bag",
-      hint: "Accordion expands · soft leather",
-      playingHint: "Interior opening",
+      id: "tabby-leather-sound",
+      label: "Sound of leather",
+      hint: "Grain · patina · touch",
+      playingHint: "Leather texture",
       audioSrc: "/audio/tabby-bag-open.mp3",
-      imageSrc: "/images/gallery/tabby-leather-interior-open.png",
-      imageAlt: "Tabby bag interior accordion gussets open",
+      imageSrc: "/images/gallery/tabby-sound-leather-rub.jpg",
+      imageAlt: "Hand rubbing glovetanned Tabby leather with a microfiber cloth near the gold C clasp",
+      featured: true,
+      objectPosition: "center center",
     },
   ] satisfies PdpSignatureSound[],
 } as const;

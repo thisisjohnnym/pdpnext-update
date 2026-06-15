@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
 
 import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
@@ -11,10 +11,21 @@ import {
   EXPERIENCE_PANEL_MEDIA_CLASS,
   experiencePanelSectionProps,
 } from "./pdp-experience-panel";
-import { pdpType } from "./pdp-type";
+import { pdpType, pdpStrokeCtaClass, pdpStrokeCtaMutedClass } from "./pdp-type";
 
 function formatCarePrice(amount: number): string {
   return `$${amount.toLocaleString("en-US")}`;
+}
+
+function snapStageIndex(clientX: number, track: HTMLElement, maxIndex: number): number {
+  if (maxIndex <= 0) {
+    return 0;
+  }
+
+  const rect = track.getBoundingClientRect();
+  const ratio = (clientX - rect.left) / rect.width;
+
+  return Math.round(Math.min(1, Math.max(0, ratio)) * maxIndex);
 }
 
 function AgingCareUpsellRow({
@@ -27,7 +38,7 @@ function AgingCareUpsellRow({
   onQuickAdd: () => void;
 }) {
   return (
-    <div className="flex items-center gap-3 py-1">
+    <div className="flex items-center gap-3 py-2.5">
         <div className="relative size-12 shrink-0 overflow-hidden bg-neutral-100">
           <Image
             src={product.imageSrc}
@@ -51,13 +62,11 @@ function AgingCareUpsellRow({
           onClick={onQuickAdd}
           disabled={added}
           className={cn(
-            "font-extended inline-flex shrink-0 items-center justify-center gap-0.5 rounded-full px-2.5 py-1.5 text-[11px] leading-none tracking-[0.2px] transition-colors",
-            added
-              ? "bg-neutral-100 text-neutral-600"
-              : "border border-neutral-300 bg-white text-black active:bg-neutral-50",
+            "font-extended inline-flex shrink-0 items-center justify-center gap-0.5 px-2.5 py-1.5 text-[11px] leading-none tracking-[0.2px] transition-colors",
+            added ? pdpStrokeCtaMutedClass : pdpStrokeCtaClass,
           )}
         >
-          <span>{added ? "Added" : "Add"}</span>
+          <span className="translate-y-px">{added ? "Added" : "Add"}</span>
           {!added ? (
             <MaterialIcon name="add" size={18} className="text-black" />
           ) : null}
@@ -74,31 +83,52 @@ function AgingCareHelp({
   lines: readonly { productId: string; text: string }[];
 }) {
   const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    const close = (event: globalThis.PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", close);
+
+    return () => {
+      document.removeEventListener("pointerdown", close);
+    };
+  }, [open]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div ref={rootRef} className="relative self-start">
       <button
         type="button"
         onClick={() => setOpen((current) => !current)}
         aria-expanded={open}
-        className="inline-flex items-center gap-2 self-start text-left"
+        aria-controls="aging-care-help-tooltip"
+        className="inline-flex items-center gap-1.5 text-left text-neutral-500 transition-colors active:text-neutral-700"
       >
-        <span
-          aria-hidden
-          className="flex size-4 shrink-0 items-center justify-center rounded-full border border-neutral-400 text-[10px] font-medium leading-none text-neutral-600"
-        >
-          ?
-        </span>
-        <span className={`text-neutral-600 ${pdpType.micro}`}>{label}</span>
+        <MaterialIcon name="help_outline" size={18} className="shrink-0 text-neutral-500" />
+        <span className={pdpType.micro}>{label}</span>
       </button>
 
       {open ? (
-        <div className="flex flex-col gap-1.5 pl-6">
-          {lines.map((line) => (
-            <p key={line.productId} className={`text-neutral-500 ${pdpType.micro}`}>
-              {line.text}
-            </p>
-          ))}
+        <div
+          id="aging-care-help-tooltip"
+          role="tooltip"
+          className="absolute bottom-full left-0 z-20 mb-2 w-[min(17rem,calc(100vw-2rem))] rounded-lg border border-neutral-200 bg-white px-3 py-2.5 shadow-[0_8px_24px_rgba(0,0,0,0.1)]"
+        >
+          <div className="flex flex-col gap-1.5">
+            {lines.map((line) => (
+              <p key={line.productId} className={`text-neutral-600 ${pdpType.micro}`}>
+                {line.text}
+              </p>
+            ))}
+          </div>
         </div>
       ) : null}
     </div>
@@ -117,7 +147,10 @@ export function PdpLeatherAgingModule({
   const panel = experiencePanelSectionProps(isLastPanel);
   const maxIndex = stages.length - 1;
   const [stageIndex, setStageIndex] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const [careAddedIds, setCareAddedIds] = useState<Set<string>>(() => new Set());
+  const trackRef = useRef<HTMLDivElement>(null);
+  const draggingRef = useRef(false);
   const stage = stages[stageIndex]!;
   const sliderProgress =
     maxIndex > 0 ? (stageIndex / maxIndex) * 100 : 0;
@@ -128,6 +161,48 @@ export function PdpLeatherAgingModule({
     .filter((product): product is (typeof PDP_LEATHER_CLEANER.products)[number] =>
       Boolean(product),
     );
+
+  const updateStageFromPointer = useCallback(
+    (clientX: number) => {
+      const track = trackRef.current;
+      if (!track) {
+        return;
+      }
+
+      setStageIndex(snapStageIndex(clientX, track, maxIndex));
+    },
+    [maxIndex],
+  );
+
+  const handleScrubPointerDown = useCallback(
+    (event: PointerEvent<HTMLDivElement>) => {
+      draggingRef.current = true;
+      setIsDragging(true);
+      event.currentTarget.setPointerCapture(event.pointerId);
+      updateStageFromPointer(event.clientX);
+    },
+    [updateStageFromPointer],
+  );
+
+  const handleScrubPointerMove = useCallback(
+    (event: PointerEvent<HTMLDivElement>) => {
+      if (!draggingRef.current) {
+        return;
+      }
+
+      updateStageFromPointer(event.clientX);
+    },
+    [updateStageFromPointer],
+  );
+
+  const endScrub = useCallback((event: PointerEvent<HTMLDivElement>) => {
+    draggingRef.current = false;
+    setIsDragging(false);
+
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  }, []);
 
   const showSimulatedWear = !stage.image;
 
@@ -209,10 +284,38 @@ export function PdpLeatherAgingModule({
             </p>
           </div>
 
-          <div className="relative flex h-10 items-center">
+          <div
+            ref={trackRef}
+            role="slider"
+            tabIndex={0}
+            aria-valuemin={0}
+            aria-valuemax={maxIndex}
+            aria-valuenow={stageIndex}
+            aria-valuetext={stage.label}
+            aria-label="Leather aging over time"
+            className="relative flex h-11 cursor-grab touch-none select-none items-center active:cursor-grabbing"
+            onPointerDown={handleScrubPointerDown}
+            onPointerMove={handleScrubPointerMove}
+            onPointerUp={endScrub}
+            onPointerCancel={endScrub}
+            onKeyDown={(event) => {
+              if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+                event.preventDefault();
+                setStageIndex((current) => Math.max(0, current - 1));
+              }
+
+              if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+                event.preventDefault();
+                setStageIndex((current) => Math.min(maxIndex, current + 1));
+              }
+            }}
+          >
             <div className="pdp-aging-timeline__track relative h-[3px] w-full rounded-full bg-neutral-200">
               <div
-                className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-neutral-950 via-neutral-800 to-[#7a5c32] transition-[width] duration-500 ease-out"
+                className={cn(
+                  "absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-neutral-950 via-neutral-800 to-[#7a5c32]",
+                  isDragging ? "transition-none" : "transition-[width] duration-500 ease-out",
+                )}
                 style={{ width: `${sliderProgress}%` }}
               />
 
@@ -226,10 +329,11 @@ export function PdpLeatherAgingModule({
                     key={item.id}
                     aria-hidden
                     className={cn(
-                      "absolute top-1/2 -translate-y-1/2 rounded-full transition-all duration-300 ease-out",
+                      "absolute top-1/2 -translate-y-1/2 rounded-full",
                       active
                         ? "size-3.5 bg-neutral-950 shadow-[0_0_0_4px_rgba(0,0,0,0.08)]"
                         : "size-2 bg-neutral-300",
+                      active && !isDragging && "transition-all duration-300 ease-out",
                       isFirst && "left-0 -translate-x-1/2",
                       isLast && "right-0 translate-x-1/2",
                       !isFirst && !isLast && "left-1/2 -translate-x-1/2",
@@ -238,21 +342,6 @@ export function PdpLeatherAgingModule({
                 );
               })}
             </div>
-
-            <input
-              type="range"
-              min={0}
-              max={maxIndex}
-              step={1}
-              value={stageIndex}
-              onChange={(event) => setStageIndex(Number(event.target.value))}
-              aria-valuemin={0}
-              aria-valuemax={maxIndex}
-              aria-valuenow={stageIndex}
-              aria-valuetext={stage.label}
-              aria-label="Leather aging over time"
-              className="pdp-aging-timeline__input absolute inset-0 z-[1] w-full"
-            />
           </div>
 
           <div className="mt-2 grid grid-cols-3">
@@ -288,26 +377,28 @@ export function PdpLeatherAgingModule({
                 "overflow-hidden transition-[max-height,margin,opacity] duration-500 ease-out",
                 stageIndex === 0
                   ? "max-h-0 opacity-0"
-                  : "mt-1 max-h-56 border-t border-neutral-200 pt-3 opacity-100",
+                  : "mt-1 max-h-56 pt-3 opacity-100",
               )}
               aria-hidden={stageIndex === 0}
             >
               <div className="flex flex-col gap-3">
-                {careProducts.map((product) => (
-                  <AgingCareUpsellRow
-                    key={product.id}
-                    product={product}
-                    added={careAddedIds.has(product.id)}
-                    onQuickAdd={() => {
-                      if (careAddedIds.has(product.id)) {
-                        return;
-                      }
+                <div className="flex flex-col divide-y divide-neutral-200">
+                  {careProducts.map((product) => (
+                    <AgingCareUpsellRow
+                      key={product.id}
+                      product={product}
+                      added={careAddedIds.has(product.id)}
+                      onQuickAdd={() => {
+                        if (careAddedIds.has(product.id)) {
+                          return;
+                        }
 
-                      onQuickAdd?.();
-                      setCareAddedIds((current) => new Set(current).add(product.id));
-                    }}
-                  />
-                ))}
+                        onQuickAdd?.();
+                        setCareAddedIds((current) => new Set(current).add(product.id));
+                      }}
+                    />
+                  ))}
+                </div>
 
                 <AgingCareHelp label={careNudge.help.label} lines={careNudge.help.lines} />
               </div>

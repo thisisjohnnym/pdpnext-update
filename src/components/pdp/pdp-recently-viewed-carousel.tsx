@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 
-import { MaterialIcon } from "@/components/icons/material-icon";
 import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
@@ -17,6 +16,7 @@ import {
   pdpModuleSectionClass,
 } from "./pdp-module-section";
 import { pdpType } from "./pdp-type";
+import { PdpTextLinkCta } from "./pdp-text-link-cta";
 
 /** History rail — last block on the PDP, portrait cards with viewed-time chips */
 export function PdpRecentlyViewedCarousel() {
@@ -80,13 +80,9 @@ export function PdpRecentlyViewedCarousel() {
                 <p className={`font-extended mt-0.5 text-black ${pdpType.micro}`}>
                   {item.price}
                 </p>
-                <button
-                  type="button"
-                  className={`font-extended mt-2 inline-flex items-center gap-0.5 text-black ${pdpType.label}`}
-                >
+                <PdpTextLinkCta type="button" className={cn("mt-2", pdpType.label)}>
                   View again
-                  <MaterialIcon name="arrow_forward" size={18} className="text-black" />
-                </button>
+                </PdpTextLinkCta>
               </li>
             ))}
           </ul>

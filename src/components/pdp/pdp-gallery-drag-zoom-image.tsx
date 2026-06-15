@@ -74,7 +74,8 @@ export function PdpGalleryDragZoomImage({
     <div
       ref={containerRef}
       className={cn(
-        "pdp-material-explore relative size-full touch-none select-none",
+        "pdp-material-explore relative size-full select-none",
+        isExploring ? "touch-none" : "touch-pan-y",
         className,
       )}
       onPointerDown={handlePointerDown}
