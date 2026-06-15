@@ -11,6 +11,7 @@ import { PdpModuleHeading } from "./pdp-module-heading";
 import { pdpModuleSectionClass } from "./pdp-module-section";
 import {
   pdpCarouselCard15Class,
+  pdpCarouselImageClass,
   pdpCarouselScrollClass,
 } from "./pdp-carousel";
 import { PDP_SIMILAR_ITEMS } from "./pdp-data";
@@ -67,7 +68,7 @@ export function PdpSimilarItemsCarousel({ onAddToBag }: PdpSimilarItemsCarouselP
                       src={item.imageSrc}
                       alt={item.imageAlt}
                       fill
-                      className="object-cover object-center"
+                      className={cn("object-cover object-center", pdpCarouselImageClass)}
                       sizes="(max-width: 1023px) 66vw, 33vw"
                     />
                   </div>

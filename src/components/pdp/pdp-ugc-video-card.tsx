@@ -8,6 +8,7 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
 
 import type { PdpUgcVideo } from "./pdp-data";
+import { pdpCarouselImageClass } from "./pdp-carousel";
 import { PdpGalleryHeroVideo } from "./pdp-gallery-hero-video";
 import { pdpType } from "./pdp-type";
 
@@ -57,11 +58,14 @@ export function PdpUgcVideoCard({
     <article
       ref={cardRef}
       className={cn(
-        "relative flex shrink-0 flex-col overflow-hidden bg-black",
+        "pdp-ugc-video-card relative flex shrink-0 flex-col overflow-hidden bg-black",
         className,
       )}
     >
-      <div className="relative aspect-[9/16] w-full overflow-hidden bg-black">
+      <div
+        className="relative aspect-[9/16] w-full touch-pan-y overflow-hidden bg-black"
+        onPointerDown={(event) => {        }}
+      >
         {mounted ? (
           <PdpGalleryHeroVideo
             src={video.src}
@@ -69,6 +73,7 @@ export function PdpUgcVideoCard({
             ariaLabel={video.alt}
             isActive={isActive}
             preload={isActive ? "auto" : "metadata"}
+            passThroughTouch
             showControls
             showMuteControl
             className="size-full object-cover object-center"
@@ -79,7 +84,7 @@ export function PdpUgcVideoCard({
             alt=""
             fill
             aria-hidden
-            className="object-cover object-center"
+            className={cn("object-cover object-center", pdpCarouselImageClass)}
             sizes="72vw"
             loading="lazy"
           />

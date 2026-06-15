@@ -11,6 +11,7 @@ export type PdpAiInsightContentProps = {
   eyebrowPosition?: "above" | "below";
   className?: string;
   showIcon?: boolean;
+  iconVariant?: "default" | "compact";
   size?: "default" | "compact" | "xs";
 };
 
@@ -22,25 +23,45 @@ export function PdpAiInsightContent({
   eyebrowPosition = "above",
   className,
   showIcon = true,
+  iconVariant = "default",
   size = "default",
 }: PdpAiInsightContentProps) {
   const compact = size === "compact" || size === "xs";
   const extraSmall = size === "xs";
+  const compactIcon = iconVariant === "compact" || extraSmall;
 
   const eyebrowEl = eyebrow ? (
-    <p className="font-extended text-xs tracking-[0.2px] text-neutral-500">
+    <p
+      className={cn(
+        "font-extended tracking-[0.2px] text-neutral-500",
+        extraSmall ? "text-[10px]" : "text-xs",
+      )}
+    >
       {eyebrow}
     </p>
   ) : null;
 
   return (
-    <div className={cn("flex items-start", showIcon ? "gap-3" : "gap-0", className)}>
+    <div
+      className={cn(
+        "flex items-start",
+        showIcon ? (extraSmall ? "gap-2" : "gap-3") : "gap-0",
+        className,
+      )}
+    >
       {showIcon ? (
         <span
-          className="flex size-10 shrink-0 items-center justify-center rounded-full bg-black text-white"
+          className={cn(
+            "flex shrink-0 items-center justify-center rounded-full bg-black text-white",
+            extraSmall ? "size-7" : compactIcon ? "size-8" : "size-10",
+          )}
           aria-hidden
         >
-          <MaterialIcon name="auto_awesome" size={18} className="text-white" />
+          <MaterialIcon
+            name="auto_awesome"
+            size={compactIcon ? 18 : 20}
+            className="text-white"
+          />
         </span>
       ) : null}
       <div className="min-w-0 flex-1">
@@ -56,12 +77,12 @@ export function PdpAiInsightContent({
         </p>
         <p
           className={cn(
-            "font-extended leading-[1.35] tracking-[0.2px] text-neutral-600",
+            "font-extended tracking-[0.2px] text-neutral-600",
             extraSmall
-              ? "mt-1.5 text-xs"
+              ? "mt-1 text-[11px] leading-[1.35]"
               : compact
-                ? "mt-1.5 text-sm"
-                : "mt-2 text-base",
+                ? "mt-1.5 text-sm leading-[1.35]"
+                : "mt-2 text-base leading-[1.35]",
           )}
         >
           {body}
@@ -85,7 +106,7 @@ export type PdpAiInsightCardProps = PdpAiInsightContentProps & {
   /** polite for live recommendations */
   ariaLive?: "polite" | "off";
   variant?: "card" | "minimal";
-  /** Minimal only — inset white box on muted sections */
+  /** Minimal only — compact elevated callout on muted sections */
   contained?: boolean;
 };
 
@@ -107,6 +128,7 @@ export function PdpAiInsightCard({
   contained = false,
 }: PdpAiInsightCardProps) {
   const minimal = variant === "minimal";
+  const extraSmall = size === "xs";
 
   return (
     <div
@@ -115,11 +137,16 @@ export function PdpAiInsightCard({
         minimal
           ? contained
             ? cn(
-                "rounded-lg border border-neutral-200 bg-white px-3 py-2.5",
-                onDismiss && "pr-8",
+                "rounded-lg bg-white shadow-sm",
+                extraSmall ? "px-3 py-2.5" : "px-3.5 py-3",
+                onDismiss && (extraSmall ? "pr-8" : "pr-9"),
               )
             : "px-0 py-0"
-          : cn("rounded-xl bg-white px-4 py-4", onDismiss && "pr-10"),
+          : cn(
+              "rounded-lg bg-white shadow-sm",
+              extraSmall ? "px-3 py-2.5" : "rounded-xl px-4 py-4",
+              onDismiss && (extraSmall ? "pr-8" : "pr-10"),
+            ),
         className,
       )}
       aria-live={ariaLive === "polite" ? "polite" : undefined}
@@ -130,12 +157,16 @@ export function PdpAiInsightCard({
           onClick={onDismiss}
           aria-label={dismissLabel}
           className={cn(
-            "absolute flex items-center justify-center rounded-full text-neutral-500 transition-colors active:bg-neutral-100",
+            "absolute flex items-center justify-center rounded-full text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 active:bg-neutral-100",
             minimal
               ? contained
-                ? "right-1.5 top-1.5 size-6"
+                ? extraSmall
+                  ? "right-1 top-1 size-6"
+                  : "right-1.5 top-1.5 size-7"
                 : "right-0 top-0 size-6"
-              : "right-2 top-2 size-8",
+              : extraSmall
+                ? "right-1.5 top-1.5 size-6"
+                : "right-2 top-2 size-8",
           )}
         >
           <MaterialIcon name="close" size={18} />
@@ -147,15 +178,17 @@ export function PdpAiInsightCard({
         body={body}
         eyebrow={eyebrow}
         eyebrowPosition={eyebrowPosition}
-        showIcon={minimal ? false : showIcon}
+        showIcon={minimal ? (contained ? showIcon : false) : showIcon}
+        iconVariant={minimal && contained && !extraSmall ? "compact" : "default"}
         size={minimal ? (size === "default" ? "compact" : size) : size}
       />
 
       {footer ? (
         <div
           className={cn(
-            minimal ? "mt-2" : "mt-3",
-            showIcon && !minimal && "pl-[calc(2.5rem+0.75rem)]",
+            extraSmall ? "mt-1.5" : minimal ? "mt-2" : "mt-3",
+            showIcon && !minimal && !extraSmall && "pl-[calc(2.5rem+0.75rem)]",
+            showIcon && !minimal && extraSmall && "pl-[calc(1.75rem+0.5rem)]",
           )}
         >
           {footer}

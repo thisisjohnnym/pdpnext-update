@@ -4,6 +4,7 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
 
 import type { PdpUgcStory } from "./pdp-data";
+import { pdpCarouselImageClass } from "./pdp-carousel";
 import { pdpType } from "./pdp-type";
 
 type PdpUgcStoryCardProps = {
@@ -27,7 +28,7 @@ export function PdpUgcStoryCard({
           src={story.src}
           alt={story.alt}
           fill
-          className="object-cover object-center"
+          className={cn("object-cover object-center", pdpCarouselImageClass)}
           style={{ objectPosition: story.objectPosition ?? "center" }}
           sizes={imageSizes}
         />
@@ -59,7 +60,7 @@ export function PdpUgcStoryCard({
           src={story.src}
           alt={story.alt}
           fill
-          className="object-cover object-center"
+          className={cn("object-cover object-center", pdpCarouselImageClass)}
           style={{ objectPosition: story.objectPosition ?? "center" }}
           sizes={imageSizes}
         />

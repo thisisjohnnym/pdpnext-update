@@ -288,13 +288,13 @@ export function PdpLeatherAgingModule({
           <div className="mb-3">
             <PdpTextReveal
               as="p"
-              className="font-extended text-lg tracking-[0.2px] text-black transition-opacity duration-300"
+              className="font-extended text-lg tracking-[0.2px] text-black"
             >
               {stage.label}
             </PdpTextReveal>
             <PdpTextReveal
               as="p"
-              delay={60}
+              delay={100}
               className={`mt-0.5 text-neutral-500 ${pdpType.micro}`}
             >
               {stage.summary}

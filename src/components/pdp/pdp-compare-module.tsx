@@ -224,8 +224,6 @@ export function PdpCompareModule({
 
             {!insightDismissed ? (
               <PdpAiInsightCard
-                variant="minimal"
-                contained
                 size="xs"
                 title={alternative.aiInsight.title}
                 body={alternative.aiInsight.body}

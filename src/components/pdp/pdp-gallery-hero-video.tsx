@@ -24,6 +24,8 @@ type PdpGalleryHeroVideoProps = {
   showControls?: boolean;
   showMuteControl?: boolean;
   preload?: "auto" | "metadata" | "none";
+  /** UGC rails — video layer ignores touch so vertical page scroll works */
+  passThroughTouch?: boolean;
 };
 
 export function PdpGalleryHeroVideo({
@@ -35,6 +37,7 @@ export function PdpGalleryHeroVideo({
   showControls = false,
   showMuteControl = true,
   preload = "none",
+  passThroughTouch = false,
 }: PdpGalleryHeroVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const userPausedRef = useRef(false);
@@ -112,7 +115,7 @@ export function PdpGalleryHeroVideo({
     "flex size-8 items-center justify-center text-white transition-opacity active:opacity-75";
 
   return (
-    <div className="relative size-full">
+    <div className={cn("relative size-full", passThroughTouch && "touch-pan-y")}>
       <video
         ref={videoRef}
         loop
@@ -121,14 +124,18 @@ export function PdpGalleryHeroVideo({
         preload={preload}
         poster={poster}
         aria-label={ariaLabel}
-        onClick={showControls ? togglePlayback : undefined}
-        className={cn(className, showControls && "cursor-pointer")}
+        onClick={showControls && !passThroughTouch ? togglePlayback : undefined}
+        className={cn(
+          className,
+          showControls && !passThroughTouch && "cursor-pointer",
+          passThroughTouch && "pointer-events-none",
+        )}
       >
         <source src={src} type={videoMimeType(src)} />
       </video>
 
       {showControls ? (
-        <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
+        <div className="pointer-events-auto absolute bottom-3 right-3 z-[2] flex items-center gap-1.5">
           {showMuteControl ? (
             <button
               type="button"

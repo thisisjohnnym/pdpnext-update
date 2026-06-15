@@ -31,7 +31,7 @@ export function PdpWeightFeelModule({
   const { hint, holdMs, image, liftedImage, reveal, hapticPattern } = PDP_WEIGHT_FEEL;
   const panel = experiencePanelSectionProps(isLastPanel);
 
-  const { progress, isHolding, handlePointerDown, handlePointerEnd, handleContextMenu } =
+  const { progress, isHolding, handlePointerDown, handlePointerMove, handlePointerEnd, handleContextMenu } =
     useWeightLift({
       holdMs,
       onLift: () => triggerLiftHaptic(hapticPattern),
@@ -47,7 +47,7 @@ export function PdpWeightFeelModule({
       <div
         className={cn(
           EXPERIENCE_PANEL_MEDIA_CLASS,
-          "pdp-weight-lift transition-colors duration-500 ease-out",
+          "pdp-weight-lift-media transition-colors duration-500 ease-out",
         )}
         style={{ backgroundColor: surfaceColor }}
       >
@@ -92,38 +92,31 @@ export function PdpWeightFeelModule({
               draggable={false}
             />
           </div>
-
-          <div
-            aria-live="polite"
-            className={cn(
-              "pointer-events-none absolute inset-x-0 bottom-8 z-[1] px-8 text-center transition-opacity duration-500 ease-out",
-              showLiftedAsset ? "opacity-100" : "opacity-0",
-            )}
-          >
-            <p className="font-extended text-sm leading-snug tracking-[0.2px] text-black">
-              {reveal.headline}
-            </p>
-            <p className="font-extended mt-1 text-xs tracking-[0.2px] text-neutral-600">
-              {reveal.subline}
-            </p>
-          </div>
         </div>
       </div>
 
-      <button
-        type="button"
-        className={cn(
-          WEIGHT_LIFT_STRIP_CLASS,
-          "pdp-weight-lift touch-none select-none text-left",
-        )}
+      <div
+        className={cn(WEIGHT_LIFT_STRIP_CLASS, "touch-pan-y")}
         style={{ backgroundColor: surfaceColor }}
-        aria-label={hint}
-        onPointerDown={handlePointerDown}
-        onPointerUp={handlePointerEnd}
-        onPointerCancel={handlePointerEnd}
-        onContextMenu={handleContextMenu}
       >
-        <div className="flex flex-col items-center gap-2">
+        <div
+          role="button"
+          tabIndex={0}
+          className={cn(
+            "pdp-weight-lift-control mx-auto flex w-full max-w-[16rem] flex-col items-center gap-2 select-none",
+          )}
+          aria-label={hint}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerEnd}
+          onPointerCancel={handlePointerEnd}
+          onContextMenu={handleContextMenu}
+          onKeyDown={(event) => {
+            if (event.key === " " || event.key === "Enter") {
+              event.preventDefault();
+            }
+          }}
+        >
           <div className="relative flex size-[4.25rem] items-center justify-center">
             <span
               aria-hidden
@@ -173,14 +166,30 @@ export function PdpWeightFeelModule({
               />
             </span>
           </div>
-          <PdpTextReveal
-            as="span"
-            className="font-extended text-[11px] tracking-[0.2px] text-neutral-600"
+          <div
+            aria-live="polite"
+            className="min-h-[3.5rem] px-2 text-center"
           >
-            {isHolding ? "Keep holding…" : hint}
-          </PdpTextReveal>
+            {showLiftedAsset ? (
+              <>
+                <p className="font-extended text-sm leading-snug tracking-[0.2px] text-black">
+                  {reveal.headline}
+                </p>
+                <p className="font-extended mt-1 text-xs tracking-[0.2px] text-neutral-600">
+                  {reveal.subline}
+                </p>
+              </>
+            ) : (
+              <PdpTextReveal
+                as="span"
+                className="font-extended text-center text-[11px] tracking-[0.2px] text-neutral-600"
+              >
+                {isHolding ? "Keep holding…" : hint}
+              </PdpTextReveal>
+            )}
+          </div>
         </div>
-      </button>
+      </div>
     </section>
   );
 }

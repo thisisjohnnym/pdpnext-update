@@ -9,6 +9,7 @@ import { cn } from "@/lib/cn";
 
 import {
   pdpCarouselCard15Class,
+  pdpCarouselImageClass,
   pdpCarouselScrollClass,
   pdpCarouselScrollWrapClass,
 } from "./pdp-carousel";
@@ -79,7 +80,7 @@ export function PdpShoppingDiscoveryModule({
                             src={item.imageSrc}
                             alt={item.imageAlt}
                             fill
-                            className="object-cover object-center"
+                            className={cn("object-cover object-center", pdpCarouselImageClass)}
                             sizes="40vw"
                           />
                         </div>

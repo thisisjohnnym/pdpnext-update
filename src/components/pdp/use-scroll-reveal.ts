@@ -15,8 +15,8 @@ type UseScrollRevealOptions = {
 };
 
 export function useScrollReveal<T extends HTMLElement = HTMLDivElement>({
-  threshold = 0.04,
-  rootMargin = "0px 0px -2% 0px",
+  threshold = 0.02,
+  rootMargin = "0px 0px 15% 0px",
   enabled = true,
   prefetch = false,
   /** One viewport ahead — IO only accepts px or %, not vh */

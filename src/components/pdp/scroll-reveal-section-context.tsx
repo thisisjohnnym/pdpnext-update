@@ -15,4 +15,4 @@ export function useScrollRevealSection() {
 }
 
 /** Delay text reveal until the section shell is partway through its fade */
-export const NESTED_TEXT_REVEAL_BASE_DELAY_MS = 400;
+export const NESTED_TEXT_REVEAL_BASE_DELAY_MS = 780;

@@ -163,7 +163,7 @@ export function PdpGalleryEditorialSlide({
               </PdpTextReveal>
 
               {cta ? (
-                <PdpTextReveal as="div" delay={60}>
+                <PdpTextReveal as="div" delay={100}>
                   <PdpTextLinkCta as="a" href={cta.href} className={pdpType.micro}>
                     {cta.label}
                   </PdpTextLinkCta>
@@ -171,7 +171,7 @@ export function PdpGalleryEditorialSlide({
               ) : null}
 
               {learnMore ? (
-                <PdpTextReveal as="div" delay={cta ? 120 : 60}>
+                <PdpTextReveal as="div" delay={cta ? 200 : 100}>
                   <PdpTextLinkCta
                     as="a"
                     href={learnMore.href}

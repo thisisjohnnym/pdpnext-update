@@ -3,6 +3,7 @@ import Image from "next/image";
 import { cn } from "@/lib/cn";
 
 import type { PdpAsSeenOnCelebrity } from "./pdp-data";
+import { pdpCarouselImageClass } from "./pdp-carousel";
 import { pdpType } from "./pdp-type";
 
 type PdpAsSeenOnCardProps = {
@@ -32,7 +33,7 @@ export function PdpAsSeenOnCard({
             src={celebrity.src}
             alt=""
             fill
-            className="object-cover object-center"
+            className={cn("object-cover object-center", pdpCarouselImageClass)}
             style={{ objectPosition: celebrity.objectPosition ?? "center" }}
             sizes="44px"
           />
@@ -60,7 +61,7 @@ export function PdpAsSeenOnCard({
         src={celebrity.src}
         alt={celebrity.alt}
         fill
-        className="object-cover object-center"
+        className={cn("object-cover object-center", pdpCarouselImageClass)}
         style={{ objectPosition: celebrity.objectPosition ?? "center" }}
         sizes={compact ? "32vw" : imageSizes}
       />

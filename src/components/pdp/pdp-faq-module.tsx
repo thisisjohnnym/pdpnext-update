@@ -86,7 +86,7 @@ export function PdpFaqModule() {
               <FaqAccordionItem
                 key={item.id}
                 item={item}
-                revealDelay={index * 45}
+                revealDelay={index * 70}
                 open={openId === item.id}
                 onToggle={() =>
                   setOpenId((current) => (current === item.id ? null : item.id))

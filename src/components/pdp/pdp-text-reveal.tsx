@@ -47,8 +47,8 @@ export function PdpTextReveal<T extends ElementType = "div">({
   const nestedInSection = section !== null;
 
   const { ref, visible: inView } = useScrollReveal<HTMLElement>({
-    threshold: 0.15,
-    rootMargin: "0px 0px -6% 0px",
+    threshold: 0.05,
+    rootMargin: "0px 0px 12% 0px",
     enabled: !nestedInSection,
   });
 
@@ -90,7 +90,9 @@ export function PdpTextReveal<T extends ElementType = "div">({
       )}
       style={{
         ...style,
-        transitionDelay: nestedInSection ? undefined : `${delay}ms`,
+        transitionDelay: nestedInSection
+          ? undefined
+          : `${delay + 180}ms`,
       }}
       {...props}
     >

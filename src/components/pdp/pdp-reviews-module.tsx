@@ -7,6 +7,7 @@ import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
 import {
+  pdpCarouselImageClass,
   pdpCarouselScrollClass,
   pdpUgcStoryCardClass,
 } from "./pdp-carousel";
@@ -65,7 +66,7 @@ function ReviewCard({ review }: { review: PdpFeaturedReview }) {
       </p>
 
       {review.photos?.length ? (
-        <div className="flex gap-2 overflow-x-auto overscroll-x-contain pt-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex touch-pan-y gap-2 overflow-x-auto overscroll-x-contain pt-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {review.photos.map((photo) => (
             <div
               key={photo.src}
@@ -75,7 +76,7 @@ function ReviewCard({ review }: { review: PdpFeaturedReview }) {
                 src={photo.src}
                 alt={photo.alt}
                 fill
-                className="object-cover object-center"
+                className={cn("object-cover object-center", pdpCarouselImageClass)}
                 sizes="112px"
               />
             </div>
@@ -149,7 +150,7 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
             <section className="flex flex-col gap-4">
               <PdpTextReveal
                 as="p"
-                delay={40}
+                delay={80}
                 className={pdpModuleHeadingClass({ lead: false, size: "sm" })}
               >
                 In real life

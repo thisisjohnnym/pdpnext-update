@@ -61,11 +61,11 @@ export function PdpBottomActions({
         type="button"
         onClick={onAddToBag}
         className={cn(
-          "font-extended flex min-w-0 items-center justify-center gap-2 text-center leading-none transition-[border-radius,colors] duration-300",
+          "font-extended flex min-w-0 items-center justify-center gap-2 bg-black text-center leading-none transition-[border-radius,background-color,transform] duration-300 active:bg-neutral-800",
           pdpPressableSolidClass,
           docked
-            ? "h-[54px] w-full rounded-none border-0 bg-black px-4 shadow-none"
-            : "h-12 w-full rounded-full border-0 bg-black px-3 shadow-none",
+            ? "h-[54px] w-full rounded-none border-0 px-4 shadow-none"
+            : "h-12 w-full rounded-full border-0 px-3 shadow-none",
         )}
       >
         <MaterialIcon

@@ -97,14 +97,12 @@ export function useMaterialExplore(zones: readonly PdpMaterialExploreZone[]) {
       isExploringRef.current = true;
       setPointerType(type);
       setIsExploring(true);
-      updatePosition(clientX, clientY);
-    },
+      updatePosition(clientX, clientY);    },
     [updatePosition],
   );
 
   const handlePointerDown = useCallback(
-    (event: React.PointerEvent<HTMLDivElement>) => {
-      if (event.pointerType === "touch") {
+    (event: React.PointerEvent<HTMLDivElement>) => {      if (event.pointerType === "touch") {
         touchStartRef.current = { x: event.clientX, y: event.clientY };
         pendingPointerIdRef.current = event.pointerId;
 
@@ -116,11 +114,8 @@ export function useMaterialExplore(zones: readonly PdpMaterialExploreZone[]) {
         holdTimerRef.current = setTimeout(() => {
           holdTimerRef.current = null;
 
-          if (pendingPointerIdRef.current !== pointerId) {
-            return;
-          }
-
-          beginExplore(target, pointerId, "touch", startX, startY);
+          if (pendingPointerIdRef.current !== pointerId) {            return;
+          }          beginExplore(target, pointerId, "touch", startX, startY);
         }, TOUCH_HOLD_MS);
 
         return;
@@ -157,8 +152,7 @@ export function useMaterialExplore(zones: readonly PdpMaterialExploreZone[]) {
           const dx = event.clientX - start.x;
           const dy = event.clientY - start.y;
 
-          if (Math.hypot(dx, dy) > SCROLL_CANCEL_PX) {
-            clearTouchHold();
+          if (Math.abs(dy) > SCROLL_CANCEL_PX && Math.abs(dy) > Math.abs(dx)) {            clearTouchHold();
           }
         }
 
@@ -180,17 +174,18 @@ export function useMaterialExplore(zones: readonly PdpMaterialExploreZone[]) {
 
   const handlePointerEnd = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
+      const hadCapture = event.currentTarget.hasPointerCapture(event.pointerId);
       clearTouchHold();
 
-      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      if (hadCapture) {
         event.currentTarget.releasePointerCapture(event.pointerId);
       }
 
+      const stillExploring = isExploringRef.current;
       isExploringRef.current = false;
       setIsExploring(false);
       setPointerType(null);
-      setPosition(null);
-    },
+      setPosition(null);    },
     [clearTouchHold],
   );
 

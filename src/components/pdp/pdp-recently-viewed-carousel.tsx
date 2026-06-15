@@ -7,6 +7,7 @@ import { cn } from "@/lib/cn";
 
 import {
   pdpCarouselCard15Class,
+  pdpCarouselImageClass,
   pdpCarouselScrollClass,
 } from "./pdp-carousel";
 import { PDP_RECENTLY_VIEWED, PDP_RECENTLY_VIEWED_SECTION } from "./pdp-data";
@@ -38,10 +39,9 @@ export function PdpRecentlyViewedCarousel() {
                 key={item.id}
                 className={cn("flex flex-col", pdpCarouselCard15Class)}
               >
-                <button
-                  type="button"
-                  className="group relative w-full text-left"
-                  aria-label={`View again: ${item.name}, viewed ${item.viewedLabel}`}
+                <div
+                  className="group relative w-full"
+                  onPointerDown={(event) => {                  }}
                 >
                   <div
                     className="relative w-full overflow-hidden bg-neutral-100"
@@ -51,17 +51,21 @@ export function PdpRecentlyViewedCarousel() {
                       src={item.imageSrc}
                       alt={item.imageAlt}
                       fill
-                      className="object-cover object-center transition-[filter] duration-300 group-hover:brightness-[1.03]"
+                      className={cn(
+                        "object-cover object-center transition-[filter] duration-300 group-hover:brightness-[1.03]",
+                        pdpCarouselImageClass,
+                      )}
                       sizes="45vw"
                       priority={index === 0}
                     />
                     <span
-                      className={`font-extended absolute left-1.5 top-1.5 inline-flex items-center bg-white/90 px-2 py-0.5 leading-none text-neutral-700 shadow-sm backdrop-blur-sm ${pdpType.micro}`}
+                      aria-hidden
+                      className={`font-extended pointer-events-none absolute left-1.5 top-1.5 inline-flex items-center bg-white/90 px-2 py-0.5 leading-none text-neutral-700 shadow-sm backdrop-blur-sm ${pdpType.micro}`}
                     >
                       {item.viewedLabel}
                     </span>
                   </div>
-                </button>
+                </div>
                 <p
                   className={`font-extended mt-2 line-clamp-2 text-black ${pdpType.label}`}
                 >
@@ -70,7 +74,11 @@ export function PdpRecentlyViewedCarousel() {
                 <p className={`font-extended mt-0.5 text-black ${pdpType.micro}`}>
                   {item.price}
                 </p>
-                <PdpTextLinkCta type="button" className={cn("mt-2", pdpType.label)}>
+                <PdpTextLinkCta
+                  type="button"
+                  className={cn("mt-2", pdpType.label)}
+                  aria-label={`View again: ${item.name}, viewed ${item.viewedLabel}`}
+                >
                   View again
                 </PdpTextLinkCta>
               </li>
