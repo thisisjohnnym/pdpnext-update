@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { MaterialIcon } from "@/components/icons/material-icon";
 import { GridItem, PageGrid } from "@/components/grid/page-grid";
@@ -117,13 +117,15 @@ export function PdpCompareModule({
   const [addedIds, setAddedIds] = useState<Set<string>>(new Set());
   const [insightDismissed, setInsightDismissed] = useState(false);
 
-  useEffect(() => {
-    onPickerOpenChange?.(pickerOpen);
-  }, [onPickerOpenChange, pickerOpen]);
+  const handlePickerOpenChange = (open: boolean) => {
+    setPickerOpen(open);
+    onPickerOpenChange?.(open);
+  };
 
-  useEffect(() => {
+  const handleAlternativeSelect = (index: number) => {
+    setAlternativeIndex(index);
     setInsightDismissed(false);
-  }, [alternativeIndex]);
+  };
 
   const selected = PDP_COMPARE_SELECTED;
   const selectedShortName = selected.shortName ?? selected.name;
@@ -174,7 +176,7 @@ export function PdpCompareModule({
 
               <button
                 type="button"
-                onClick={() => setPickerOpen(true)}
+                onClick={() => handlePickerOpenChange(true)}
                 className="group min-w-0 bg-white text-left transition-colors active:bg-neutral-50"
                 aria-label={`Compare with ${alternative.shortName}. Tap to choose a different bag.`}
               >
@@ -210,13 +212,13 @@ export function PdpCompareModule({
                   aria-label="Dismiss recommendation"
                   className="absolute right-1 top-1 flex size-6 items-center justify-center rounded-full text-neutral-500 transition-colors active:bg-neutral-200/80"
                 >
-                  <MaterialIcon name="close" size={16} />
+                  <MaterialIcon name="close" size={18} />
                 </button>
                 <div className="flex items-start gap-2">
                   <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-black text-white">
                     <MaterialIcon
                       name="auto_awesome"
-                      size={14}
+                      size={18}
                       className="text-white"
                       aria-hidden
                     />
@@ -279,8 +281,8 @@ export function PdpCompareModule({
         open={pickerOpen}
         alternatives={PDP_FAMILY_COMPARE_ALTERNATIVES}
         selectedIndex={alternativeIndex}
-        onClose={() => setPickerOpen(false)}
-        onSelect={setAlternativeIndex}
+        onClose={() => handlePickerOpenChange(false)}
+        onSelect={handleAlternativeSelect}
       />
     </section>
   );
