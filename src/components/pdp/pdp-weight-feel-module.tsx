@@ -84,11 +84,13 @@ export function PdpWeightFeelModule({
             )}
           >
             <Image
+              key={liftedImage.src}
               src={liftedImage.src}
               alt={showLiftedAsset ? liftedImage.alt : ""}
               fill
               loading="lazy"
-              className="pointer-events-none object-contain px-6 py-4"
+              unoptimized
+              className="pointer-events-none object-cover px-2 py-2"
               style={{ objectPosition: liftedImage.objectPosition ?? "center center" }}
               sizes="100vw"
               draggable={false}

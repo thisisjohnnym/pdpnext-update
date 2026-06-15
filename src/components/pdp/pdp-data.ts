@@ -2008,10 +2008,10 @@ export const PDP_WEIGHT_FEEL = {
     backgroundColor: "#eeeeee",
   },
   liftedImage: {
-    src: "/images/gallery/tabby-weight-lift-lifted.jpg",
-    alt: "Tabby Shoulder Bag 26 floating after lift — black leather with gold C clasp and detachable straps",
-    objectPosition: "center 70%",
-    backgroundColor: "#f5ece7",
+    src: "/images/gallery/tabby-weight-lift-reveal.jpg",
+    alt: "Hand lifting Tabby Shoulder Bag 26 after press and hold — black leather with gold C clasp on a light gray background",
+    objectPosition: "center 42%",
+    backgroundColor: "#eeeeee",
   },
   reveal: {
     headline: "Lighter than a 2 lb puppy.",
