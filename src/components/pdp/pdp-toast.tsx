@@ -42,7 +42,7 @@ export function PdpToast({
       )}
       style={{ bottom: `calc(${BOTTOM_CTA_OFFSET} + 0.75rem)` }}
     >
-      <p className="font-extended rounded-full bg-black/80 px-4 py-2.5 text-xs tracking-[0.2px] text-white backdrop-blur-md">
+      <p className="font-extended rounded-full px-4 py-2.5 text-xs tracking-[0.2px] pdp-glass-light--cta">
         {message}
       </p>
     </div>
