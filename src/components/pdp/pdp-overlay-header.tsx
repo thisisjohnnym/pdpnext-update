@@ -51,7 +51,7 @@ export function PdpOverlayHeader({ bagCount = 0 }: { bagCount?: number }) {
         visible ? "translate-y-0" : "-translate-y-full",
       )}
     >
-      <PageGrid fullWidth className="pointer-events-auto relative pb-2.5 pt-[calc(env(safe-area-inset-top,0px)+0.75rem)]">
+      <PageGrid fullWidth className="pointer-events-auto relative pb-2.5 pt-[calc(var(--pdp-safe-area-top)+0.75rem)]">
         <GridItem mobile={12} desktop={24}>
           <div
             className="pdp-hero-header-enter grid grid-cols-[1fr_auto_1fr] items-center transition-colors duration-300"

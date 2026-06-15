@@ -123,7 +123,7 @@ export function PdpAddToBagSheet({
           <div className="mx-auto mb-5 h-[3px] w-[50px] rounded-full bg-black/70" />
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(24px,env(safe-area-inset-bottom))]">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(24px,var(--pdp-safe-area-bottom))]">
           {hasBeenOpen ? (
           <>
           <div className="flex items-center gap-2 pb-4">

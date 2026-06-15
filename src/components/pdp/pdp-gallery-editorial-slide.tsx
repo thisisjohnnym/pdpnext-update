@@ -112,7 +112,7 @@ export function PdpGalleryEditorialSlide({
           <div
             className={cn(
               "flex w-full flex-col gap-4 lg:gap-5",
-              panelScroll && "max-h-[calc(var(--pdp-screen-height,100dvh)-7rem)] justify-center",
+              panelScroll && "max-h-[calc(var(--pdp-screen-height,100svh)-7rem)] justify-center",
             )}
           >
             <div

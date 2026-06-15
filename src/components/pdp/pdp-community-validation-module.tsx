@@ -122,7 +122,7 @@ export function PdpCommunityValidationModule() {
   return (
     <section
       id="community-validation"
-      className="relative flex min-h-[100dvh] w-full shrink-0 flex-col justify-center bg-white py-10"
+      className="relative flex min-h-svh w-full shrink-0 flex-col justify-center bg-white py-10"
       style={{ paddingBottom: BOTTOM_CTA_OFFSET }}
     >
       <PageGrid fullWidth>

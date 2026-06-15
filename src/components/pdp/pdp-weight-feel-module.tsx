@@ -20,7 +20,7 @@ function triggerLiftHaptic(pattern: readonly number[]) {
 }
 
 const WEIGHT_LIFT_STRIP_CLASS =
-  "shrink-0 min-h-[7.25rem] px-4 pt-3 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] transition-colors duration-500 ease-out";
+  "shrink-0 min-h-[7.25rem] px-4 pt-3 pb-[calc(1rem+var(--pdp-safe-area-bottom))] transition-colors duration-500 ease-out";
 
 /** Weight & feel — press-and-hold lift with haptic, specs as sensation */
 export function PdpWeightFeelModule({

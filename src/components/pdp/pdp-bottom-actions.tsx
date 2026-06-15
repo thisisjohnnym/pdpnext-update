@@ -89,8 +89,8 @@ export function PdpBottomActions({
           "pdp-bottom-frost-gradient pointer-events-none fixed inset-x-0 bottom-0 z-[39] transition-[transform,opacity] duration-300 ease-out",
           suppressed ? "translate-y-full opacity-0" : "translate-y-0",
           docked
-            ? "pdp-bottom-frost-gradient--docked h-[calc(6.5rem+var(--pdp-browser-bottom-inset,0px)+env(safe-area-inset-bottom,0px))]"
-            : "pdp-bottom-frost-gradient--prominent h-[calc(15rem+var(--pdp-browser-bottom-inset,0px)+env(safe-area-inset-bottom,0px))]",
+            ? "pdp-bottom-frost-gradient--docked h-[calc(6.5rem+var(--pdp-fixed-bottom-offset))]"
+            : "pdp-bottom-frost-gradient--prominent h-[calc(15rem+var(--pdp-fixed-bottom-offset))]",
         )}
         style={{ opacity: suppressed ? 0 : frostOpacity }}
       />

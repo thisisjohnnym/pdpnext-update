@@ -7,16 +7,22 @@
   --foreground: #171717;
   /** Muted PDP surfaces — studio backdrops, module fills, image wells */
   --pdp-surface-grey: #eeeeee;
-  --pdp-screen-height: 100dvh;
-  --pdp-viewport-height: 100dvh;
-  --pdp-immersive-height: 100dvh;
-  --pdp-viewport-offset-top: 0px;
-  --pdp-browser-bottom-inset: 0px;
+
+  /* Safe area — single source of truth (env only, never JS-overwritten) */
   --pdp-safe-area-top: env(safe-area-inset-top, 0px);
   --pdp-safe-area-bottom: env(safe-area-inset-bottom, 0px);
-  --pdp-immersive-top-bleed: calc(
-    var(--pdp-safe-area-top) + var(--pdp-viewport-offset-top, 0px)
+
+  /* JS-managed — Safari/Chrome bottom toolbar only */
+  --pdp-browser-bottom-inset: 0px;
+
+  /* Derived layout tokens */
+  --pdp-fixed-top-offset: var(--pdp-safe-area-top);
+  --pdp-fixed-bottom-offset: calc(
+    var(--pdp-safe-area-bottom) + var(--pdp-browser-bottom-inset, 0px)
   );
+  --pdp-immersive-top-bleed: var(--pdp-safe-area-top);
+  --pdp-immersive-height: 100svh;
+  --pdp-screen-height: 100svh;
 
   /* PDP grid — Mobile 12/12/4 */
   --grid-columns-mobile: 12;
@@ -43,7 +49,7 @@
 
 html {
   height: -webkit-fill-available;
-  min-height: 100dvh;
+  min-height: 100svh;
   overflow-x: clip;
   max-width: 100%;
 }
@@ -54,8 +60,16 @@ body {
   overscroll-behavior-y: none;
   overflow-x: clip;
   max-width: 100%;
-  min-height: 100dvh;
+  min-height: 100svh;
   min-height: -webkit-fill-available;
+}
+
+/** Document-level safe-area boundary for default content flow */
+.pdp-safe-area-main {
+  box-sizing: border-box;
+  min-height: 100svh;
+  padding-top: var(--pdp-safe-area-top);
+  padding-bottom: var(--pdp-safe-area-bottom);
 }
 
 .pdp-grid-item {
@@ -742,35 +756,45 @@ html.pdp-panel-scroll {
   scroll-snap-align: start;
   scroll-snap-stop: always;
   width: 100%;
-  min-height: 100dvh;
-  height: var(--pdp-immersive-height, 100dvh);
+  min-height: 100svh;
+  height: var(--pdp-immersive-height, 100svh);
 }
 
-/* Immersive hero — media bleeds under notch; overlays stay in safe area */
+/* Edge-to-edge opt-out — breaks out of SafeAreaMain; media under Dynamic Island */
+.pdp-edge-to-edge,
 .pdp-hero-immersive {
   position: relative;
   isolation: isolate;
   width: 100%;
   max-width: none;
   margin: 0;
-  margin-top: calc(-1 * var(--pdp-immersive-top-bleed));
+  margin-top: calc(-1 * var(--pdp-safe-area-top));
+  margin-bottom: calc(-1 * var(--pdp-safe-area-bottom));
   padding: 0;
-  padding-top: var(--pdp-immersive-top-bleed);
   overflow: hidden;
   background: #000;
-  min-height: calc(var(--pdp-immersive-height, 100dvh) + var(--pdp-immersive-top-bleed));
-  height: calc(var(--pdp-immersive-height, 100dvh) + var(--pdp-immersive-top-bleed));
+  min-height: calc(
+    var(--pdp-immersive-height, 100svh) + var(--pdp-safe-area-top) +
+      var(--pdp-safe-area-bottom)
+  );
+  height: calc(
+    var(--pdp-immersive-height, 100svh) + var(--pdp-safe-area-top) +
+      var(--pdp-safe-area-bottom)
+  );
 }
 
+.pdp-edge-to-edge__media,
 .pdp-hero-immersive__media {
   position: absolute;
   inset-inline: 0;
   bottom: 0;
-  top: calc(-1 * var(--pdp-immersive-top-bleed));
+  top: calc(-1 * var(--pdp-safe-area-top));
   overflow: hidden;
   background: #000;
 }
 
+.pdp-edge-to-edge__media img,
+.pdp-edge-to-edge__media video,
 .pdp-hero-immersive__media img,
 .pdp-hero-immersive__media video {
   object-fit: cover;
@@ -783,7 +807,7 @@ html.pdp-panel-scroll {
   inset-inline: 0;
   top: 0;
   z-index: 5;
-  height: calc(var(--pdp-immersive-top-bleed) + 4.5rem);
+  height: calc(var(--pdp-safe-area-top) + 4.5rem);
   background: linear-gradient(to bottom, rgb(0 0 0 / 0.42), transparent);
 }
 

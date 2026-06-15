@@ -83,7 +83,7 @@ export function PdpGalleryPhotosSheet({ open, onClose }: PdpGalleryPhotosSheetPr
           </button>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(24px,env(safe-area-inset-bottom))]">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(24px,var(--pdp-safe-area-bottom))]">
           <ul className="m-0 grid list-none grid-cols-2 gap-1.5 p-0">
             {PDP_GALLERY_MORE_PHOTOS.map((photo) => (
               <li key={photo.id} className="relative aspect-[4/5] overflow-hidden bg-neutral-100">

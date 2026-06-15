@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { SafeAreaMain } from "@/components/layout/safe-area-main";
 import { PdpAddToBagSheet } from "./pdp-add-to-bag-sheet";
 import { PdpBottomActions } from "./pdp-bottom-actions";
 import { PdpBrowserChromeSync } from "./pdp-browser-chrome-sync";
@@ -43,19 +44,20 @@ export function PdpSocialView() {
   };
 
   return (
-    <div className="relative min-h-dvh w-full overflow-x-clip bg-black">
+    <div className="relative min-h-svh w-full overflow-x-clip bg-black">
       <PdpBrowserChromeSync />
-      <PdpGalleryView
-        onOpenReviews={() => setReviewsOpen(true)}
-        onAddSimilarToBag={handleQuickAddToBag}
-        onAddBundle={handleAddBundle}
-        onQuickAddStrap={() => handleQuickAddToBag()}
-        onStrapOptionsOpenChange={setStrapOptionsOpen}
-        onComparePickerOpenChange={setComparePickerOpen}
-        selectedColorId={selectedColorId}
-      />
-
       <PdpOverlayHeader bagCount={bagCount} />
+      <SafeAreaMain className="bg-black">
+        <PdpGalleryView
+          onOpenReviews={() => setReviewsOpen(true)}
+          onAddSimilarToBag={handleQuickAddToBag}
+          onAddBundle={handleAddBundle}
+          onQuickAddStrap={() => handleQuickAddToBag()}
+          onStrapOptionsOpenChange={setStrapOptionsOpen}
+          onComparePickerOpenChange={setComparePickerOpen}
+          selectedColorId={selectedColorId}
+        />
+      </SafeAreaMain>
       <PdpBottomActions
         selectedColorId={selectedColorId}
         onColorSelect={setSelectedColorId}

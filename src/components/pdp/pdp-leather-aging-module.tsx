@@ -14,19 +14,33 @@ import {
 import { pdpType, pdpStrokeCtaClass, pdpStrokeCtaMutedClass } from "./pdp-type";
 import { PdpTextReveal } from "./pdp-text-reveal";
 
+const AGING_COPY_MIN_HEIGHT_CLASS = "min-h-[4.25rem]";
+
 function formatCarePrice(amount: number): string {
   return `$${amount.toLocaleString("en-US")}`;
 }
 
-function snapStageIndex(clientX: number, track: HTMLElement, maxIndex: number): number {
+function progressFromClientX(clientX: number, track: HTMLElement): number {
+  const rect = track.getBoundingClientRect();
+  const ratio = (clientX - rect.left) / rect.width;
+
+  return Math.min(100, Math.max(0, ratio * 100));
+}
+
+function stageIndexFromProgress(progress: number, maxIndex: number): number {
   if (maxIndex <= 0) {
     return 0;
   }
 
-  const rect = track.getBoundingClientRect();
-  const ratio = (clientX - rect.left) / rect.width;
+  return Math.round((progress / 100) * maxIndex);
+}
 
-  return Math.round(Math.min(1, Math.max(0, ratio)) * maxIndex);
+function progressFromStageIndex(index: number, maxIndex: number): number {
+  if (maxIndex <= 0) {
+    return 0;
+  }
+
+  return (index / maxIndex) * 100;
 }
 
 function AgingCareUpsellRow({
@@ -147,14 +161,14 @@ export function PdpLeatherAgingModule({
   const { image, stages, careNudge } = PDP_LEATHER_AGING;
   const panel = experiencePanelSectionProps(isLastPanel);
   const maxIndex = stages.length - 1;
+  const [dragProgress, setDragProgress] = useState(0);
   const [stageIndex, setStageIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [careAddedIds, setCareAddedIds] = useState<Set<string>>(() => new Set());
   const trackRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
+  const dragProgressRef = useRef(0);
   const stage = stages[stageIndex]!;
-  const sliderProgress =
-    maxIndex > 0 ? (stageIndex / maxIndex) * 100 : 0;
   const careProducts = useMemo(
     () =>
       careNudge.productIds
@@ -167,16 +181,33 @@ export function PdpLeatherAgingModule({
     [careNudge.productIds],
   );
 
-  const updateStageFromPointer = useCallback(
+  const motionClass = isDragging ? "transition-none" : "transition-[width,left,opacity] duration-500 ease-out";
+  const imageMotionClass = isDragging ? "transition-none" : "transition-opacity duration-500 ease-out";
+  const labelMotionClass = isDragging ? "transition-none" : "transition-colors duration-200";
+
+  const setDragProgressValue = useCallback((progress: number) => {
+    dragProgressRef.current = progress;
+    setDragProgress(progress);
+  }, []);
+
+  const commitStageIndex = useCallback(
+    (index: number) => {
+      setStageIndex(index);
+      setDragProgressValue(progressFromStageIndex(index, maxIndex));
+    },
+    [maxIndex, setDragProgressValue],
+  );
+
+  const updateDragFromPointer = useCallback(
     (clientX: number) => {
       const track = trackRef.current;
       if (!track) {
         return;
       }
 
-      setStageIndex(snapStageIndex(clientX, track, maxIndex));
+      setDragProgressValue(progressFromClientX(clientX, track));
     },
-    [maxIndex],
+    [setDragProgressValue],
   );
 
   const handleScrubPointerDown = useCallback(
@@ -184,9 +215,9 @@ export function PdpLeatherAgingModule({
       draggingRef.current = true;
       setIsDragging(true);
       event.currentTarget.setPointerCapture(event.pointerId);
-      updateStageFromPointer(event.clientX);
+      updateDragFromPointer(event.clientX);
     },
-    [updateStageFromPointer],
+    [updateDragFromPointer],
   );
 
   const handleScrubPointerMove = useCallback(
@@ -195,21 +226,28 @@ export function PdpLeatherAgingModule({
         return;
       }
 
-      updateStageFromPointer(event.clientX);
+      updateDragFromPointer(event.clientX);
     },
-    [updateStageFromPointer],
+    [updateDragFromPointer],
   );
 
-  const endScrub = useCallback((event: PointerEvent<HTMLDivElement>) => {
-    draggingRef.current = false;
-    setIsDragging(false);
+  const endScrub = useCallback(
+    (event: PointerEvent<HTMLDivElement>) => {
+      draggingRef.current = false;
+      setIsDragging(false);
 
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-  }, []);
+      const snappedIndex = stageIndexFromProgress(dragProgressRef.current, maxIndex);
+      commitStageIndex(snappedIndex);
+
+      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      }
+    },
+    [commitStageIndex, maxIndex],
+  );
 
   const showSimulatedWear = !stage.image;
+  const previewStageIndex = stageIndexFromProgress(dragProgress, maxIndex);
 
   return (
     <section data-header-surface="light" className={panel.className} style={panel.style}>
@@ -234,10 +272,7 @@ export function PdpLeatherAgingModule({
               fill
               priority={index === 0}
               loading={index === 0 ? undefined : "lazy"}
-              className={cn(
-                "object-cover transition-opacity duration-500 ease-out",
-                active ? "opacity-100" : "opacity-0",
-              )}
+              className={cn("object-cover", imageMotionClass, active ? "opacity-100" : "opacity-0")}
               style={{
                 objectPosition: stageImage.objectPosition ?? "center",
                 filter,
@@ -251,7 +286,7 @@ export function PdpLeatherAgingModule({
           <>
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 transition-opacity duration-500"
+              className={cn("pointer-events-none absolute inset-0", imageMotionClass)}
               style={{
                 opacity: stage.visual.patinaOpacity,
                 background: stage.visual.patinaGradient,
@@ -259,7 +294,7 @@ export function PdpLeatherAgingModule({
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 transition-opacity duration-500"
+              className={cn("pointer-events-none absolute inset-0", imageMotionClass)}
               style={{
                 opacity: stage.visual.wearOpacity,
                 background: stage.visual.wearGradient,
@@ -267,7 +302,7 @@ export function PdpLeatherAgingModule({
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 transition-opacity duration-500"
+              className={cn("pointer-events-none absolute inset-0", imageMotionClass)}
               style={{
                 opacity: stage.visual.softenOpacity,
                 backdropFilter: `blur(${stage.visual.softenBlur}px)`,
@@ -282,10 +317,10 @@ export function PdpLeatherAgingModule({
 
       <div
         className="shrink-0 bg-white px-4 pt-3.5"
-        style={{ paddingBottom: `calc(0.75rem + env(safe-area-inset-bottom, 0px))` }}
+        style={{ paddingBottom: `calc(0.75rem + var(--pdp-safe-area-bottom))` }}
       >
         <div className="pdp-aging-timeline" aria-live="polite">
-          <div className="mb-3">
+          <div className={cn("mb-3", AGING_COPY_MIN_HEIGHT_CLASS)}>
             <PdpTextReveal
               as="p"
               className="font-extended text-lg tracking-[0.2px] text-black"
@@ -307,8 +342,10 @@ export function PdpLeatherAgingModule({
             tabIndex={0}
             aria-valuemin={0}
             aria-valuemax={maxIndex}
-            aria-valuenow={stageIndex}
-            aria-valuetext={stage.label}
+            aria-valuenow={isDragging ? previewStageIndex : stageIndex}
+            aria-valuetext={
+              isDragging ? stages[previewStageIndex]!.label : stage.label
+            }
             aria-label="Leather aging over time"
             className="relative flex h-11 cursor-grab touch-none select-none items-center active:cursor-grabbing"
             onPointerDown={handleScrubPointerDown}
@@ -318,12 +355,12 @@ export function PdpLeatherAgingModule({
             onKeyDown={(event) => {
               if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
                 event.preventDefault();
-                setStageIndex((current) => Math.max(0, current - 1));
+                commitStageIndex(Math.max(0, stageIndex - 1));
               }
 
               if (event.key === "ArrowRight" || event.key === "ArrowUp") {
                 event.preventDefault();
-                setStageIndex((current) => Math.min(maxIndex, current + 1));
+                commitStageIndex(Math.min(maxIndex, stageIndex + 1));
               }
             }}
           >
@@ -331,13 +368,12 @@ export function PdpLeatherAgingModule({
               <div
                 className={cn(
                   "absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-neutral-950 via-neutral-800 to-[#7a5c32]",
-                  isDragging ? "transition-none" : "transition-[width] duration-500 ease-out",
+                  motionClass,
                 )}
-                style={{ width: `${sliderProgress}%` }}
+                style={{ width: `${dragProgress}%` }}
               />
 
               {stages.map((item, index) => {
-                const active = stageIndex === index;
                 const isFirst = index === 0;
                 const isLast = index === maxIndex;
 
@@ -346,11 +382,7 @@ export function PdpLeatherAgingModule({
                     key={item.id}
                     aria-hidden
                     className={cn(
-                      "absolute top-1/2 -translate-y-1/2 rounded-full",
-                      active
-                        ? "size-3.5 bg-neutral-950 shadow-[0_0_0_4px_rgba(0,0,0,0.08)]"
-                        : "size-2 bg-neutral-300",
-                      active && !isDragging && "transition-all duration-300 ease-out",
+                      "absolute top-1/2 size-2 -translate-y-1/2 rounded-full bg-neutral-300",
                       isFirst && "left-0 -translate-x-1/2",
                       isLast && "right-0 translate-x-1/2",
                       !isFirst && !isLast && "left-1/2 -translate-x-1/2",
@@ -358,6 +390,15 @@ export function PdpLeatherAgingModule({
                   />
                 );
               })}
+
+              <span
+                aria-hidden
+                className={cn(
+                  "absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-950 shadow-[0_0_0_4px_rgba(0,0,0,0.08)] will-change-[left]",
+                  motionClass,
+                )}
+                style={{ left: `${dragProgress}%` }}
+              />
             </div>
           </div>
 
@@ -370,10 +411,11 @@ export function PdpLeatherAgingModule({
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => setStageIndex(index)}
+                  onClick={() => commitStageIndex(index)}
                   aria-current={stageIndex === index ? "step" : undefined}
                   className={cn(
-                    "font-extended min-h-8 py-1 text-[10px] tracking-[0.2px] transition-colors duration-200",
+                    "font-extended min-h-8 py-1 text-[10px] tracking-[0.2px]",
+                    labelMotionClass,
                     isFirst && "text-left",
                     isLast && "text-right",
                     !isFirst && !isLast && "text-center",
@@ -391,7 +433,10 @@ export function PdpLeatherAgingModule({
           {careProducts.length ? (
             <div
               className={cn(
-                "overflow-hidden transition-[max-height,margin,opacity] duration-500 ease-out",
+                "overflow-hidden",
+                isDragging
+                  ? "transition-none"
+                  : "transition-[max-height,margin,opacity] duration-500 ease-out",
                 stageIndex === 0
                   ? "max-h-0 opacity-0"
                   : "mt-1 max-h-56 pt-3 opacity-100",

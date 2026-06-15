@@ -6,11 +6,11 @@ import { PDP_MEDIA_SLIDES } from "./pdp-data";
 
 export function PdpMediaFeed() {
   return (
-    <div className="h-[100dvh] w-full snap-y snap-mandatory overflow-y-scroll overscroll-y-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="h-svh w-full snap-y snap-mandatory overflow-y-scroll overscroll-y-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {PDP_MEDIA_SLIDES.map((slide) => (
         <section
           key={slide.src}
-          className="relative h-[100dvh] w-full shrink-0 snap-start snap-always"
+          className="relative h-svh w-full shrink-0 snap-start snap-always"
         >
           <Image
             src={slide.src}

@@ -382,7 +382,7 @@ function PdpGalleryVideoSlide({
           {caption ? (
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-black/55 via-black/20 to-transparent px-4 pb-8 pt-[calc(env(safe-area-inset-top,0px)+3.25rem)]"
+              className="pointer-events-none absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-black/55 via-black/20 to-transparent px-4 pb-8 pt-[calc(var(--pdp-safe-area-top)+3.25rem)]"
             >
               <PdpTextReveal
                 as="p"

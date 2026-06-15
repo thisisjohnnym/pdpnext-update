@@ -102,7 +102,7 @@ export function PdpComparePickerSheet({
           </button>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(24px,env(safe-area-inset-bottom))]">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(24px,var(--pdp-safe-area-bottom))]">
           <h2 id={titleId} className={cn(pdpSheetHeadingClass(), "mb-1")}>
             Compare with
           </h2>

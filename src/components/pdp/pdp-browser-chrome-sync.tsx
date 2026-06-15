@@ -2,7 +2,7 @@
 
 import { useBrowserBottomInsetCssVar } from "./use-browser-bottom-inset";
 
-/** Sets viewport CSS vars on <html> for hero height + fixed chrome */
+/** Sets --pdp-browser-bottom-inset on <html> for fixed bottom chrome */
 export function PdpBrowserChromeSync() {
   useBrowserBottomInsetCssVar();
   return null;

@@ -25,32 +25,14 @@ export function readBrowserBottomInset(): number {
   return Math.min(Math.max(0, obscured), MAX_BROWSER_CHROME);
 }
 
-export function syncViewportCssVars() {
+/** Sync bottom browser chrome inset only — never affects top layout */
+export function syncBrowserBottomInset() {
   if (typeof window === "undefined") {
     return;
   }
 
-  const viewport = window.visualViewport;
-  const visualHeight = viewport?.height ?? window.innerHeight;
-  const offsetTop = viewport?.offsetTop ?? 0;
   const bottomInset = readBrowserBottomInset();
 
-  document.documentElement.style.setProperty(
-    "--pdp-screen-height",
-    `${window.innerHeight}px`,
-  );
-  document.documentElement.style.setProperty(
-    "--pdp-viewport-height",
-    `${visualHeight}px`,
-  );
-  document.documentElement.style.setProperty(
-    "--pdp-immersive-height",
-    `${visualHeight}px`,
-  );
-  document.documentElement.style.setProperty(
-    "--pdp-viewport-offset-top",
-    `${offsetTop}px`,
-  );
   document.documentElement.style.setProperty(
     "--pdp-browser-bottom-inset",
     `${bottomInset}px`,
@@ -70,15 +52,11 @@ export function useBrowserBottomInset() {
 
     const viewport = window.visualViewport;
     viewport?.addEventListener("resize", update);
-    viewport?.addEventListener("scroll", update);
-    window.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
     window.addEventListener("orientationchange", update);
 
     return () => {
       viewport?.removeEventListener("resize", update);
-      viewport?.removeEventListener("scroll", update);
-      window.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
       window.removeEventListener("orientationchange", update);
     };
@@ -87,32 +65,24 @@ export function useBrowserBottomInset() {
   return inset;
 }
 
-/** Sync viewport CSS vars on <html> for hero height + fixed chrome */
+/** Sets --pdp-browser-bottom-inset on <html> for fixed bottom chrome */
 export function useBrowserBottomInsetCssVar() {
   useEffect(() => {
     const update = () => {
-      syncViewportCssVars();
+      syncBrowserBottomInset();
     };
 
     update();
 
     const viewport = window.visualViewport;
     viewport?.addEventListener("resize", update);
-    viewport?.addEventListener("scroll", update);
-    window.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
     window.addEventListener("orientationchange", update);
 
     return () => {
       viewport?.removeEventListener("resize", update);
-      viewport?.removeEventListener("scroll", update);
-      window.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
       window.removeEventListener("orientationchange", update);
-      document.documentElement.style.removeProperty("--pdp-screen-height");
-      document.documentElement.style.removeProperty("--pdp-viewport-height");
-      document.documentElement.style.removeProperty("--pdp-immersive-height");
-      document.documentElement.style.removeProperty("--pdp-viewport-offset-top");
       document.documentElement.style.removeProperty("--pdp-browser-bottom-inset");
     };
   }, []);
