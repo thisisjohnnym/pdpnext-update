@@ -107,7 +107,7 @@ export function PdpAddToBagSheet({
         aria-modal="true"
         aria-labelledby={titleId}
         className={cn(
-          "relative flex max-h-[85dvh] w-full max-w-[430px] flex-col overflow-hidden rounded-t-[20px] bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out",
+          "font-extended relative flex max-h-[85dvh] w-full max-w-[430px] flex-col overflow-hidden rounded-t-[20px] bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out",
           open ? "translate-y-0" : "translate-y-full",
         )}
       >
@@ -132,7 +132,7 @@ export function PdpAddToBagSheet({
                   <p className="font-extended text-base tracking-[0.2px] text-black">
                     Your bundle
                   </p>
-                  <p className="mt-1 text-xs tracking-[0.2px] text-neutral-600">
+                  <p className="font-extended mt-1 text-xs tracking-[0.2px] text-neutral-600">
                     {bundle.items.length} item
                     {bundle.items.length === 1 ? "" : "s"}
                     {hasDiscount
@@ -142,7 +142,7 @@ export function PdpAddToBagSheet({
                 </div>
                 <div className="flex shrink-0 flex-col items-end">
                   {hasDiscount ? (
-                    <span className="text-xs tracking-[0.2px] text-neutral-400 line-through">
+                    <span className="font-extended text-xs tracking-[0.2px] text-neutral-400 line-through">
                       {formatPrice(bundle.subtotal)}
                     </span>
                   ) : null}
@@ -150,7 +150,7 @@ export function PdpAddToBagSheet({
                     {formatPrice(bundle.total)}
                   </span>
                   {hasDiscount ? (
-                    <span className="mt-0.5 text-[11px] tracking-[0.2px] text-neutral-600">
+                    <span className="font-extended mt-0.5 text-[11px] tracking-[0.2px] text-neutral-600">
                       You saved {formatPrice(savings)}
                     </span>
                   ) : null}
@@ -197,7 +197,7 @@ export function PdpAddToBagSheet({
                 <p className="font-extended text-base tracking-[0.2px] text-black">
                   {PDP_PRODUCT.name}
                 </p>
-                <p className="mt-1 text-xs tracking-[0.2px] text-neutral-600">
+                          <p className="font-extended mt-1 text-xs tracking-[0.2px] text-neutral-600">
                   {selectedColor.name} · {PDP_PRODUCT.subtitle}
                 </p>
                 <p className="font-extended mt-1.5 text-base tracking-[0.2px] text-black">
@@ -253,7 +253,7 @@ export function PdpAddToBagSheet({
                           <p className="font-extended truncate text-xs tracking-[0.2px] text-black">
                             {item.name}
                           </p>
-                          <p className="mt-1 text-xs tracking-[0.2px] text-neutral-600">
+                          <p className="font-extended mt-1 text-xs tracking-[0.2px] text-neutral-600">
                             {item.price}
                           </p>
                         </div>

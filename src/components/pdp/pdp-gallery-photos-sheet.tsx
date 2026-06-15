@@ -61,7 +61,7 @@ export function PdpGalleryPhotosSheet({ open, onClose }: PdpGalleryPhotosSheetPr
         aria-modal="true"
         aria-labelledby={titleId}
         className={cn(
-          "relative flex max-h-[88dvh] w-full max-w-[430px] flex-col overflow-hidden rounded-t-[20px] bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out",
+          "font-extended relative flex max-h-[88dvh] w-full max-w-[430px] flex-col overflow-hidden rounded-t-[20px] bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out",
           open ? "translate-y-0" : "translate-y-full",
         )}
       >

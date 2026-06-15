@@ -30,7 +30,7 @@ export function CartBagIcon({
         fill="#0e0d0c"
         fontSize="10"
         fontWeight="500"
-        fontFamily="var(--font-coach), Helvetica Neue, Helvetica, Arial, sans-serif"
+        fontFamily="var(--font-coach-extended), Helvetica Neue, Helvetica, Arial, sans-serif"
       >
         {count}
       </text>

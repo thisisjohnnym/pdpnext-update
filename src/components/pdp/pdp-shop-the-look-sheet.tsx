@@ -66,7 +66,7 @@ export function PdpShopTheLookSheet({ look, open, onClose }: PdpShopTheLookSheet
         aria-modal="true"
         aria-labelledby={titleId}
         className={cn(
-          "relative flex max-h-[85dvh] w-full max-w-[430px] flex-col overflow-hidden rounded-t-[20px] bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out",
+          "font-extended relative flex max-h-[85dvh] w-full max-w-[430px] flex-col overflow-hidden rounded-t-[20px] bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out",
           open ? "translate-y-0" : "translate-y-full",
         )}
       >
@@ -102,7 +102,7 @@ export function PdpShopTheLookSheet({ look, open, onClose }: PdpShopTheLookSheet
                     <p className="font-extended truncate text-xs tracking-[0.2px] text-black">
                       {item.name}
                     </p>
-                    <p className="mt-1 text-xs tracking-[0.2px] text-neutral-600">
+                    <p className="font-extended mt-1 text-xs tracking-[0.2px] text-neutral-600">
                       {item.price}
                     </p>
                   </div>

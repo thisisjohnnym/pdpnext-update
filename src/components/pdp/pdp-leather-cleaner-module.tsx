@@ -8,7 +8,7 @@ import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
 import { PDP_LEATHER_CLEANER, type PdpLeatherCleanerProduct } from "./pdp-data";
-import { pdpModuleHeadingClass, pdpModuleSectionClass } from "./pdp-module-section";
+import { pdpModuleHeadingClass, pdpModuleSectionClass, pdpModuleHeadingLeadClass } from "./pdp-module-section";
 import { pdpType } from "./pdp-type";
 
 function formatPrice(amount: number): string {
@@ -52,15 +52,15 @@ function LeatherCleanerCard({
           onClick={onAdd}
           disabled={added}
           className={cn(
-            "font-extended inline-flex items-center gap-0.5 rounded-full border px-2.5 py-1 text-[11px] tracking-[0.2px] transition-colors",
+            "font-extended inline-flex items-center justify-center gap-1 rounded-full border px-2.5 py-1 text-[11px] leading-none tracking-[0.2px] transition-colors",
             added
               ? "border-neutral-200 bg-neutral-100 text-neutral-500"
               : "border-neutral-300 bg-white text-black active:bg-neutral-50",
           )}
         >
-          <span className="-translate-y-px">{added ? "Added" : "Add"}</span>
+          <span>{added ? "Added" : "Add"}</span>
           {!added ? (
-            <MaterialIcon name="add" size={18} className="text-black" />
+            <MaterialIcon name="add" size={18} className="shrink-0 text-black" />
           ) : null}
         </button>
       </div>
@@ -89,17 +89,22 @@ export function PdpLeatherCleanerModule({
   return (
     <section
       data-header-surface="light"
-      className={pdpModuleSectionClass({ variant: "muted", rhythm: "compact" })}
+      className={pdpModuleSectionClass()}
     >
       <PageGrid fullWidth>
         <GridItem mobile={12} desktop={24}>
-          <div className="flex flex-col gap-3">
-            <h2 className={pdpModuleHeadingClass({ lead: false, size: "sm" })}>
+          <div className="flex flex-col gap-5">
+            <h2
+              className={cn(
+                pdpModuleHeadingClass({ lead: false }),
+                pdpModuleHeadingLeadClass(),
+              )}
+            >
               {title}
             </h2>
 
-            <div className="border border-neutral-200 bg-white p-3">
-              <div className="grid grid-cols-2 gap-3">
+            <div className="border border-neutral-200 bg-white p-4">
+              <div className="grid grid-cols-2 gap-4">
                 {products.map((product) => (
                   <LeatherCleanerCard
                     key={product.id}

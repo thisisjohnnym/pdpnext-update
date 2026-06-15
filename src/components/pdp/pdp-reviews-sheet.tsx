@@ -74,7 +74,7 @@ function RatingBreakdownRow({
     <div className="flex items-center gap-3">
       <div className="flex w-[26px] shrink-0 items-center gap-0.5">
         <MaterialIcon name="star" size={18} filled className="text-black" />
-        <span className="text-xs tracking-[0.2px] text-black">{stars}</span>
+        <span className="font-extended text-xs tracking-[0.2px] text-black">{stars}</span>
       </div>
       <div className="h-1 min-w-0 flex-1 overflow-hidden rounded-full bg-white">
         <div
@@ -82,7 +82,7 @@ function RatingBreakdownRow({
           style={{ width: `${percent}%` }}
         />
       </div>
-      <span className="w-8 shrink-0 text-right text-xs tracking-[0.2px] text-black">
+      <span className="font-extended w-8 shrink-0 text-right text-xs tracking-[0.2px] text-black">
         {percent}%
       </span>
     </div>
@@ -117,7 +117,7 @@ function CustomerReviewCard({ review }: { review: PdpFeaturedReview }) {
       ) : null}
 
       <div className="flex items-center justify-between gap-3">
-        <p className="min-w-0 text-xs tracking-[0.2px] text-neutral-500">
+        <p className="font-extended min-w-0 text-xs tracking-[0.2px] text-neutral-500">
           {review.author} · {review.date}
           {review.verified ? " · Verified buyer" : ""}
         </p>
@@ -184,7 +184,7 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
         aria-modal="true"
         aria-labelledby={titleId}
         className={cn(
-          "relative flex max-h-[92dvh] w-full max-w-[430px] flex-col overflow-hidden rounded-t-[20px] bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out",
+          "font-extended relative flex max-h-[92dvh] w-full max-w-[430px] flex-col overflow-hidden rounded-t-[20px] bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out",
           open ? "translate-y-0" : "translate-y-full",
         )}
       >
@@ -255,7 +255,7 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
 
           <div className="flex flex-col gap-6">
             <section className="flex flex-col gap-2.5">
-              <p className={pdpModuleHeadingClass({ lead: false })}>
+              <p className={pdpModuleHeadingClass({ lead: false, size: "sm" })}>
                 {PDP_REVIEWS_AI_SUMMARY.headline}
               </p>
               <p className="font-extended text-sm leading-[1.35] tracking-[0.2px] text-[#4a4a4a]">
@@ -276,13 +276,13 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
             <section className="flex flex-col gap-4 pt-1">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex flex-col gap-1">
-                  <p className={pdpModuleHeadingClass({ lead: false })}>
+                  <p className={pdpModuleHeadingClass({ lead: false, size: "sm" })}>
                     In real life
                   </p>
                 </div>
                 <button
                   type="button"
-                  className="flex shrink-0 items-center gap-0.5 text-sm leading-[1.35] text-black"
+                  className="font-extended flex shrink-0 items-center gap-0.5 text-sm leading-[1.35] text-black"
                 >
                   View all
                   <MaterialIcon name="arrow_forward" size={18} className="text-black" />

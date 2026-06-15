@@ -5,7 +5,7 @@ import { useState } from "react";
 import { PdpAddToBagSheet } from "./pdp-add-to-bag-sheet";
 import { PdpBottomActions } from "./pdp-bottom-actions";
 import { PdpBrowserChromeSync } from "./pdp-browser-chrome-sync";
-import { DEFAULT_COLOR_ID, PDP_FAMILY_SIZES } from "./pdp-data";
+import { DEFAULT_COLOR_ID } from "./pdp-data";
 import { PdpGalleryView } from "./pdp-gallery-view";
 import { PdpOverlayHeader } from "./pdp-overlay-header";
 import { PdpReviewsSheet } from "./pdp-reviews-sheet";
@@ -17,9 +17,6 @@ type BagConfirmation =
 
 export function PdpSocialView() {
   const [selectedColorId, setSelectedColorId] = useState(DEFAULT_COLOR_ID);
-  const [selectedFamilySizeId, setSelectedFamilySizeId] = useState<string>(
-    PDP_FAMILY_SIZES.selectedId,
-  );
   const [reviewsOpen, setReviewsOpen] = useState(false);
   const [bagSheetOpen, setBagSheetOpen] = useState(false);
   const [strapOptionsOpen, setStrapOptionsOpen] = useState(false);
@@ -46,7 +43,7 @@ export function PdpSocialView() {
 
   return (
     <div
-      className="relative w-full bg-black"
+      className="relative w-full overflow-x-clip bg-black"
       style={{ minHeight: "var(--pdp-screen-height, 100dvh)" }}
     >
       <PdpBrowserChromeSync />
@@ -63,8 +60,6 @@ export function PdpSocialView() {
       <PdpBottomActions
         selectedColorId={selectedColorId}
         onColorSelect={setSelectedColorId}
-        selectedFamilySizeId={selectedFamilySizeId}
-        onFamilySizeSelect={setSelectedFamilySizeId}
         onAddToBag={handleAddToBag}
         suppressed={reviewsOpen || bagSheetOpen || strapOptionsOpen}
       />

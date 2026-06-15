@@ -2,27 +2,26 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
 import {
   pdpCarouselInfiniteCenteredScrollClass,
+  pdpCarouselScrollWrapClass,
   pdpUgcVideoCardCenteredClass,
 } from "./pdp-carousel";
 import { PDP_UGC_VIDEO_CAROUSEL } from "./pdp-data";
-import { galleryPanelClassName } from "./pdp-gallery-panel";
+import { pdpModuleHeadingClass } from "./pdp-module-section";
 import { PdpUgcVideoCard } from "./pdp-ugc-video-card";
+import { pdpType } from "./pdp-type";
 import {
   loopCarouselItems,
   useInfiniteCenteredCarousel,
 } from "./use-infinite-centered-carousel";
 
-/** Horizontal UGC video rail — centered infinite carousel, no platform chrome */
-export function PdpUgcVideoCarouselModule({
-  isLastPanel = false,
-}: {
-  isLastPanel?: boolean;
-}) {
-  const { videos } = PDP_UGC_VIDEO_CAROUSEL;
+/** TikTok-style UGC rail — header, follow CTA, full-bleed infinite carousel */
+export function PdpUgcVideoCarouselModule() {
+  const { title, followCta, videos } = PDP_UGC_VIDEO_CAROUSEL;
   const loopVideos = useMemo(() => loopCarouselItems(videos), [videos]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollRoot, setScrollRoot] = useState<HTMLElement | null>(null);
@@ -36,24 +35,39 @@ export function PdpUgcVideoCarouselModule({
   return (
     <section
       data-header-surface="light"
-      aria-label="Customer videos"
-      className={cn(
-        "relative w-full shrink-0 bg-white",
-        galleryPanelClassName(isLastPanel),
-      )}
+      aria-label={title}
+      className="relative w-full shrink-0 overflow-x-clip bg-white pt-9"
     >
-      <div
-        ref={scrollRef}
-        className={cn(pdpCarouselInfiniteCenteredScrollClass, "flex gap-2")}
-      >
-        {loopVideos.map((video, index) => (
-          <PdpUgcVideoCard
-            key={`${video.id}-${index}`}
-            video={video}
-            scrollRoot={scrollRoot}
-            className={pdpUgcVideoCardCenteredClass}
-          />
-        ))}
+      <PageGrid fullWidth>
+        <GridItem mobile={12} desktop={24} className="min-w-0">
+          <div className="flex items-end justify-between gap-3">
+            <h2 className={pdpModuleHeadingClass({ lead: false })}>{title}</h2>
+            <a
+              href={followCta.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`font-extended shrink-0 text-black underline decoration-neutral-300 underline-offset-2 transition-colors hover:decoration-neutral-500 ${pdpType.label}`}
+            >
+              {followCta.label}
+            </a>
+          </div>
+        </GridItem>
+      </PageGrid>
+
+      <div className={cn(pdpCarouselScrollWrapClass, "mt-3")}>
+        <div
+          ref={scrollRef}
+          className={cn(pdpCarouselInfiniteCenteredScrollClass, "flex pb-0")}
+        >
+          {loopVideos.map((video, index) => (
+            <PdpUgcVideoCard
+              key={`${video.id}-${index}`}
+              video={video}
+              scrollRoot={scrollRoot}
+              className={pdpUgcVideoCardCenteredClass}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -54,7 +54,7 @@ export function PdpGalleryStrapCard({ set, onOpen }: PdpGalleryStrapCardProps) {
               <span className="font-extended block text-xs leading-tight tracking-[0.2px] text-neutral-900">
                 {set.title}
               </span>
-              <span className="mt-0.5 block text-[10px] leading-tight tracking-[0.2px] text-neutral-600">
+              <span className="mt-0.5 block font-extended text-[10px] leading-tight tracking-[0.2px] text-neutral-600">
                 {set.options.length} to shop · from {lowestPrice}
               </span>
             </span>

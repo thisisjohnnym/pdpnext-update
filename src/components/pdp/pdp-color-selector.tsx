@@ -7,6 +7,7 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
 
 import type { PdpColor } from "./pdp-data";
+import { getColorChromeForeground } from "./pdp-color-chrome";
 
 type PdpColorSelectorProps = {
   colors: PdpColor[];
@@ -104,8 +105,10 @@ function PdpColorDropup({
     setOpen(false);
   };
 
+  const chromeForeground = getColorChromeForeground(selected.chromeSample);
+
   return (
-    <div ref={rootRef} className={cn("relative min-w-0", flush ? "w-full" : "flex-1")}>
+    <div ref={rootRef} className="relative min-w-0 w-full">
       {open && (
         <ul
           role="listbox"
@@ -152,16 +155,24 @@ function PdpColorDropup({
         aria-label={`Color: ${selected.name}. Choose another color.`}
         onClick={() => setOpen((prev) => !prev)}
         className={cn(
-          "font-extended flex w-full items-center overflow-hidden tracking-[0.2px] transition-[border-radius] duration-300",
+          "font-extended flex w-full items-center overflow-hidden tracking-[0.2px] transition-[border-radius,background-color,color] duration-300",
           compact ? "h-12 text-[11px]" : "h-[54px] text-xs",
           flush
-            ? "pdp-glass-dark pdp-glass--flat justify-center gap-2 rounded-none px-3"
+            ? "justify-center gap-2 rounded-none px-3"
             : cn(
-                "pdp-glass-dark pdp-glass--flat rounded-full px-3",
-                iconOnly ? "justify-center gap-1.5" : "justify-between",
+                "rounded-full px-2.5",
+                iconOnly
+                  ? "justify-center gap-1.5"
+                  : compact
+                    ? "justify-center gap-1.5"
+                    : "justify-between gap-2.5",
                 compact ? "gap-2" : "gap-2.5",
               ),
         )}
+        style={{
+          backgroundColor: selected.chromeSample,
+          color: chromeForeground,
+        }}
       >
         <span className={cn("flex min-w-0 items-center", iconOnly ? "gap-0" : "gap-2")}>
           <ColorSwatchButton
@@ -175,7 +186,8 @@ function PdpColorDropup({
         <MaterialIcon
           name={open ? "expand_less" : "expand_more"}
           size={compact ? 18 : 20}
-          className="shrink-0 text-white"
+          className="shrink-0"
+          style={{ color: chromeForeground }}
         />
       </button>
     </div>

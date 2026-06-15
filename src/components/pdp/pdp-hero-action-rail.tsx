@@ -14,8 +14,22 @@ import {
 } from "./use-hero-scroll-opacity";
 
 const LIKE_RED = "#FE2C55";
-const BURST_DURATION_MS = 650;
+const BURST_DURATION_MS = 1050;
 const RAIL_ICON_SIZE = 26;
+
+/** Upward-floating hearts — rise distance, horizontal sway, spin, stagger */
+const HEART_BURST_PARTICLES = [
+  { rise: 78, sway: -12, size: 14, delay: 0, spin: -14 },
+  { rise: 96, sway: 14, size: 12, delay: 40, spin: 16 },
+  { rise: 64, sway: -8, size: 11, delay: 70, spin: -10 },
+  { rise: 108, sway: 10, size: 10, delay: 25, spin: 12 },
+  { rise: 88, sway: -18, size: 12, delay: 95, spin: -16 },
+  { rise: 72, sway: 8, size: 9, delay: 55, spin: 10 },
+  { rise: 112, sway: -6, size: 10, delay: 115, spin: -8 },
+  { rise: 58, sway: 16, size: 8, delay: 130, spin: 18 },
+  { rise: 102, sway: -14, size: 11, delay: 85, spin: -12 },
+  { rise: 84, sway: 6, size: 9, delay: 150, spin: 8 },
+] as const;
 
 function railIconStyle(filled = false): CSSProperties {
   return {
@@ -24,25 +38,15 @@ function railIconStyle(filled = false): CSSProperties {
   };
 }
 
-const HEART_BURST_PARTICLES = [
-  { angle: -90, distance: 32, size: 13, delay: 0 },
-  { angle: -135, distance: 36, size: 11, delay: 30 },
-  { angle: -45, distance: 36, size: 11, delay: 50 },
-  { angle: 180, distance: 30, size: 10, delay: 20 },
-  { angle: 0, distance: 30, size: 10, delay: 40 },
-  { angle: -110, distance: 40, size: 9, delay: 60 },
-  { angle: -70, distance: 40, size: 9, delay: 70 },
-  { angle: -160, distance: 34, size: 8, delay: 80 },
-] as const;
-
 type HeartBurstParticleProps = {
-  x: number;
-  y: number;
+  rise: number;
+  sway: number;
   size: number;
   delay: number;
+  spin: number;
 };
 
-function HeartBurstParticle({ x, y, size, delay }: HeartBurstParticleProps) {
+function HeartBurstParticle({ rise, sway, size, delay, spin }: HeartBurstParticleProps) {
   const particleRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -54,18 +58,22 @@ function HeartBurstParticle({ x, y, size, delay }: HeartBurstParticleProps) {
     const animation = particle.animate(
       [
         {
-          transform: "translate(-50%, -50%) scale(0.35)",
+          transform: "translate(-50%, -50%) scale(0.2) rotate(0deg)",
+          opacity: 0,
+        },
+        {
+          transform: `translate(calc(-50% + ${sway * 0.35}px), calc(-50% - 10px)) scale(1.25) rotate(${spin * 0.25}deg)`,
           opacity: 1,
         },
         {
-          transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(1)`,
+          transform: `translate(calc(-50% + ${sway}px), calc(-50% - ${rise}px)) scale(0.55) rotate(${spin}deg)`,
           opacity: 0,
         },
       ],
       {
         duration: BURST_DURATION_MS,
         delay,
-        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+        easing: "cubic-bezier(0.18, 1.05, 0.32, 1)",
         fill: "forwards",
       },
     );
@@ -73,17 +81,18 @@ function HeartBurstParticle({ x, y, size, delay }: HeartBurstParticleProps) {
     return () => {
       animation.cancel();
     };
-  }, [delay, x, y]);
+  }, [delay, rise, sway, spin]);
 
   return (
     <span
       ref={particleRef}
-      className="pointer-events-none absolute left-1/2 top-1/2"
+      className="pointer-events-none absolute left-1/2 top-1/2 will-change-transform"
       style={{ color: LIKE_RED } as CSSProperties}
     >
       <MaterialIcon
         name="favorite"
         size={18}
+        filled
         className="text-[#FE2C55]"
         style={{ fontSize: size }}
       />
@@ -162,7 +171,7 @@ function LikeRailAction({
 
     const timeoutId = window.setTimeout(() => {
       setBursting(false);
-    }, BURST_DURATION_MS + 120);
+    }, BURST_DURATION_MS + 200);
 
     return () => {
       window.clearTimeout(timeoutId);
@@ -188,28 +197,23 @@ function LikeRailAction({
         className,
       )}
     >
-      <span className="relative flex size-7 items-center justify-center overflow-visible">
+      <span className="relative flex size-8 items-center justify-center overflow-visible">
         {bursting ? (
           <span
             key={burstKey}
             aria-hidden
-            className="pointer-events-none absolute inset-0 overflow-visible"
+            className="pointer-events-none absolute bottom-2 left-1/2 h-36 w-28 -translate-x-1/2 overflow-visible"
           >
-            {HEART_BURST_PARTICLES.map((particle, index) => {
-              const rad = (particle.angle * Math.PI) / 180;
-              const x = Math.cos(rad) * particle.distance;
-              const y = Math.sin(rad) * particle.distance;
-
-              return (
-                <HeartBurstParticle
-                  key={`${burstKey}-${index}`}
-                  x={x}
-                  y={y}
-                  size={particle.size}
-                  delay={particle.delay}
-                />
-              );
-            })}
+            {HEART_BURST_PARTICLES.map((particle, index) => (
+              <HeartBurstParticle
+                key={`${burstKey}-${index}`}
+                rise={particle.rise}
+                sway={particle.sway}
+                size={particle.size}
+                delay={particle.delay}
+                spin={particle.spin}
+              />
+            ))}
           </span>
         ) : null}
         <MaterialIcon

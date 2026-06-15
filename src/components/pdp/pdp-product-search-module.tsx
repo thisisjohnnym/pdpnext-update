@@ -37,8 +37,7 @@ function ConciergeResponse({
       <div className="flex items-start gap-2.5">
         <span
           className={cn(
-            "flex size-8 shrink-0 items-center justify-center bg-black text-white",
-            !flat && "rounded-full",
+            "flex size-8 shrink-0 items-center justify-center rounded-full bg-black text-white",
           )}
         >
           <MaterialIcon name="auto_awesome" size={18} className="text-white" />

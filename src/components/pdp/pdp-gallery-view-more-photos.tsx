@@ -20,7 +20,7 @@ export function PdpGalleryViewMorePhotos({ onOpen }: PdpGalleryViewMorePhotosPro
   return (
     <section
       data-header-surface="light"
-      className="relative w-full shrink-0 bg-neutral-100"
+      className="relative mt-4 w-full shrink-0 bg-neutral-100"
     >
       <button
         type="button"

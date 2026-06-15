@@ -47,7 +47,7 @@ function CommunityVideoTile({
       <MaterialIcon
         name="play_circle"
         size={26}
-        className="pointer-events-none absolute bottom-2.5 right-2.5 text-white drop-shadow-sm"
+        className="pointer-events-none absolute bottom-2.5 right-2.5 text-white"
       />
     </div>
   );

@@ -1,18 +1,22 @@
 import { cn } from "@/lib/cn";
 
-/** Bleed scroll track to viewport edges; first-item ml restores grid alignment at rest */
+/** Bleed scroll track to viewport edges without widening the document */
 export const pdpCarouselBleedClass =
-  "-ml-3 -mr-3 pr-3 lg:-ml-5 lg:-mr-5 lg:pr-5";
+  "-mx-3 px-3 lg:-mx-5 lg:px-5";
 
-export const pdpCarouselTrackInsetClass =
-  "[&>*:first-child]:ml-3 lg:[&>*:first-child]:ml-5";
+/** Clips negative-margin bleed rails so they don't expand page scroll width */
+export const pdpCarouselBleedWrapClass = "w-full min-w-0 overflow-x-clip";
 
 export const pdpCarouselScrollClass = cn(
   "overflow-x-auto overscroll-x-contain touch-pan-y pb-1",
   pdpCarouselBleedClass,
-  pdpCarouselTrackInsetClass,
   "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
   "snap-x snap-mandatory scroll-pl-3 lg:scroll-pl-5",
+);
+
+/** Outer wrapper for bleed carousels — pair with pdpCarouselScrollClass */
+export const pdpCarouselScrollWrapClass = cn(
+  pdpCarouselBleedWrapClass,
 );
 
 /** 1.5 cards visible — gap-3 (12px) */
@@ -31,26 +35,33 @@ export const pdpCompareCarouselCardClass =
 export const pdpReviewPhotoCardClass =
   "relative aspect-[4/5] w-[calc((100vw-1.25rem)/2.05)] shrink-0 snap-start snap-always overflow-hidden bg-neutral-100 lg:w-[calc((100vw-2.25rem)/3.5)]";
 
-/** UGC story cards — ~1.2 across with context footer, gap-2 */
+/** UGC story cards — ~1.35 across with context footer, gap-2 */
 export const pdpUgcStoryCardClass =
-  "w-[calc((100vw-1.25rem)/1.2)] lg:w-[calc((100vw-2.25rem)/2.4)]";
+  "w-[calc((100vw-1.25rem)/1.35)] shrink-0 snap-start snap-always lg:w-[calc((100vw-2.25rem)/2.8)]";
 
-/** UGC video tiles (4:5) — ~1.1 across with next clip peek, gap-2 */
+/** UGC video tiles (9:16) — ~1.1 across with next clip peek, gap-2 */
 export const pdpUgcVideoCardClass =
   "w-[calc((100vw-1.25rem)/1.1)] shrink-0 snap-start snap-always lg:w-[calc((100vw-2.25rem)/2.2)]";
 
-/** UGC video tiles — center snap for infinite bilateral carousel */
+/** UGC video tiles — center snap, full-bleed (no side peek) */
 export const pdpUgcVideoCardCenteredClass =
-  "w-[calc((100vw-1.25rem)/1.1)] shrink-0 snap-center snap-always lg:w-[calc((100vw-2.25rem)/2.2)]";
+  "w-full shrink-0 snap-center snap-always flex-[0_0_100%]";
 
-/** Infinite centered carousel — symmetric padding so active tile sits mid-frame */
+/** Infinite centered carousel — full-width tiles, edge-to-edge */
 export const pdpCarouselInfiniteCenteredScrollClass = cn(
-  "overflow-x-auto overscroll-x-contain touch-pan-y pb-1",
-  "-mx-3 lg:-mx-5",
+  "w-full overflow-x-auto overscroll-x-contain touch-pan-y pb-1",
   "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
   "snap-x snap-mandatory",
-  "px-[calc((100vw-((100vw-1.25rem)/1.1))/2)]",
-  "lg:px-[calc((100vw-((100vw-2.25rem)/2.2))/2)]",
+);
+
+/** Infinite centered carousel — symmetric padding so active tile sits mid-frame with peek */
+export const pdpCarouselInfiniteCenteredPeekScrollClass = cn(
+  "overflow-x-auto overscroll-x-contain touch-pan-y pb-1",
+  pdpCarouselBleedClass,
+  "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+  "snap-x snap-mandatory",
+  "px-[calc((100%-((100%-1.25rem)/1.1))/2)]",
+  "lg:px-[calc((100%-((100%-2.25rem)/2.2))/2)]",
 );
 
 /** As seen on celebrity tiles — ~1.2 across with name overlay, gap-2 */
@@ -60,6 +71,9 @@ export const pdpAsSeenOnCardClass =
 /** Deemphasized as seen on — ~2.2 across, smaller editorial rail */
 export const pdpAsSeenOnCardCompactClass =
   "w-[calc((100vw-1.25rem)/2.2)] shrink-0 snap-start snap-always lg:w-[calc((100vw-2.25rem)/4)]";
+
+/** Profile-style as seen on avatars — width follows name */
+export const pdpAsSeenOnAvatarItemClass = "shrink-0 snap-start snap-always";
 
 /** Inset rails inside grouped discovery card — ~2 across with peek */
 export const pdpDiscoveryInnerScrollClass =

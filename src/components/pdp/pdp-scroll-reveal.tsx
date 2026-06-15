@@ -10,7 +10,7 @@ type PdpScrollRevealProps = {
   /** rise — modules below gallery · subtle — full-bleed gallery frames */
   variant?: "rise" | "subtle";
   /** Opaque shell color — prevents color flashes during opacity fade */
-  surface?: "dark" | "light" | "transparent";
+  surface?: "dark" | "light" | "muted" | "transparent";
 };
 
 /** Fade + rise into view once as the user scrolls */
@@ -30,6 +30,7 @@ export function PdpScrollReveal({
         "pdp-scroll-reveal overflow-hidden",
         resolvedSurface === "dark" && "bg-black",
         resolvedSurface === "light" && "bg-white",
+        resolvedSurface === "muted" && "bg-neutral-100",
         variant === "subtle" && "pdp-scroll-reveal--subtle",
         className,
       )}

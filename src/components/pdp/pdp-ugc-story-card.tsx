@@ -50,7 +50,7 @@ export function PdpUgcStoryCard({
   return (
     <article
       className={cn(
-        "flex shrink-0 snap-start snap-always flex-col overflow-hidden border border-neutral-200 bg-white",
+        "flex shrink-0 snap-start snap-always flex-col overflow-hidden bg-white",
         className,
       )}
     >
@@ -68,7 +68,7 @@ export function PdpUgcStoryCard({
         </span>
       </div>
 
-      <div className="flex flex-col gap-1.5 p-2.5">
+      <div className="flex flex-col gap-1 p-2">
         <p className="font-extended text-xs tracking-[0.2px] text-black">
           {story.wearer}
           {story.verified ? (

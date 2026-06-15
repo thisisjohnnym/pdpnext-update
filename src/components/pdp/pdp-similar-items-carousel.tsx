@@ -40,7 +40,7 @@ export function PdpSimilarItemsCarousel({ onAddToBag }: PdpSimilarItemsCarouselP
       className={pdpModuleSectionClass()}
     >
       <PageGrid fullWidth>
-        <GridItem mobile={12} desktop={24} className="min-w-0 overflow-visible">
+        <GridItem mobile={12} desktop={24} className="min-w-0">
           <h2 className={pdpModuleHeadingClass()}>Similar items</h2>
 
           <ul

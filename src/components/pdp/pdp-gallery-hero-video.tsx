@@ -107,7 +107,7 @@ export function PdpGalleryHeroVideo({
   };
 
   const controlButtonClass =
-    "flex size-8 items-center justify-center text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)] transition-opacity active:opacity-75";
+    "flex size-8 items-center justify-center text-white transition-opacity active:opacity-75";
 
   return (
     <div className="relative size-full">

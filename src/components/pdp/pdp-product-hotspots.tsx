@@ -32,6 +32,8 @@ function getCardTransform(y: number) {
   return `translateY(calc(-100% - ${CARD_OFFSET}))`;
 }
 
+const HOTSPOT_RING_COLORS = ["#FE2C55", "#F4C542", "#5BC8F5"] as const;
+
 /** Tappable detail markers on product photography */
 export function PdpProductHotspots({ hotspots }: PdpProductHotspotsProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -52,8 +54,10 @@ export function PdpProductHotspots({ hotspots }: PdpProductHotspotsProps) {
         />
       ) : null}
 
-      {hotspots.map((hotspot) => {
+      {hotspots.map((hotspot, index) => {
         const isActive = activeId === hotspot.id;
+        const staggerDelay = `${index * 0.45}s`;
+        const ringColor = HOTSPOT_RING_COLORS[index % HOTSPOT_RING_COLORS.length];
 
         if (isActive) {
           return null;
@@ -77,11 +81,23 @@ export function PdpProductHotspots({ hotspots }: PdpProductHotspotsProps) {
             >
               <span
                 aria-hidden
-                className="absolute size-11 animate-hotspot-pulse rounded-full border-2 border-white/35 bg-white/45 shadow-[0_0_0_8px_rgba(255,255,255,0.12)]"
+                className="pointer-events-none absolute size-8 rounded-full border-2 animate-hotspot-ring-ripple"
+                style={{
+                  borderColor: ringColor,
+                  animationDelay: staggerDelay,
+                }}
               />
               <span
                 aria-hidden
-                className="relative size-4 rounded-full border-2 border-white bg-white shadow-[0_2px_8px_rgba(0,0,0,0.24)]"
+                className="pointer-events-none absolute size-7 rounded-full border-2 animate-hotspot-pulse"
+                style={{
+                  borderColor: ringColor,
+                  animationDelay: staggerDelay,
+                }}
+              />
+              <span
+                aria-hidden
+                className="relative size-3.5 rounded-full border-2 border-white bg-white"
               />
             </button>
           </div>

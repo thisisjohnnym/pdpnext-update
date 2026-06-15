@@ -11,7 +11,6 @@ import {
   EXPERIENCE_PANEL_MEDIA_CLASS,
   experiencePanelSectionProps,
 } from "./pdp-experience-panel";
-import { pdpType } from "./pdp-type";
 
 /** Strap swap simulator — tap strap options to preview on the bag */
 export function PdpStrapSimulationModule({
@@ -40,9 +39,9 @@ export function PdpStrapSimulationModule({
 
   return (
     <section data-header-surface="light" className={panel.className} style={panel.style}>
-      <div className={cn(EXPERIENCE_PANEL_MEDIA_CLASS, "bg-[#ececec]")}>
+      <div className={cn(EXPERIENCE_PANEL_MEDIA_CLASS, "bg-white")}>
         {modes.map((mode, index) => {
-          const fit = mode.image.fit ?? "contain";
+          const fit = mode.image.fit ?? "cover";
           const isActive = index === activeIndex;
 
           return (
@@ -50,7 +49,7 @@ export function PdpStrapSimulationModule({
               key={mode.id}
               aria-hidden={!isActive}
               className={cn(
-                "absolute inset-x-0 bottom-[16%] top-[5%] transition-opacity duration-500 ease-out",
+                "absolute inset-0 transition-opacity duration-500 ease-out",
                 isActive ? "opacity-100" : "opacity-0",
               )}
             >
@@ -59,8 +58,8 @@ export function PdpStrapSimulationModule({
                 alt={isActive ? mode.image.alt : ""}
                 fill
                 className={cn(
-                  fit === "contain" ? "object-contain" : "object-cover scale-[1.06]",
                   "object-center",
+                  fit === "contain" ? "object-contain" : "object-cover scale-[1.08]",
                 )}
                 style={{ objectPosition: mode.image.objectPosition ?? "center" }}
                 sizes="100vw"
@@ -70,80 +69,72 @@ export function PdpStrapSimulationModule({
             </div>
           );
         })}
-
-        <div
-          className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent px-3 pb-3 pt-14"
-        >
-          <div aria-hidden className="pointer-events-none">
-            <p className="font-extended text-sm tracking-[0.2px] text-white">
-              {activeMode.label}
-              {activeMode.priceLabel ? (
-                <span className="text-white/75"> · {activeMode.priceLabel}</span>
-              ) : null}
-            </p>
-            <p className={`mt-1 text-white/80 ${pdpType.micro}`}>{activeMode.detail}</p>
-          </div>
-          {quickAddId && onQuickAddStrap ? (
-            <button
-              type="button"
-              onClick={handleQuickAdd}
-              disabled={quickAddAdded}
-              className={cn(
-                "font-extended mt-2 inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[11px] tracking-[0.2px] transition-colors",
-                quickAddAdded
-                  ? "bg-white/25 text-white/80"
-                  : "bg-white text-black active:bg-white/90",
-              )}
-            >
-              <span className="-translate-y-px">
-                {quickAddAdded ? "Added to bag" : `Add chain · ${activeMode.priceLabel}`}
-              </span>
-              {!quickAddAdded ? (
-                <MaterialIcon name="add" size={18} className="text-black" />
-              ) : null}
-            </button>
-          ) : null}
-        </div>
       </div>
 
-      <div className="shrink-0 px-3 pt-3">
+      <div className="shrink-0 px-3 pt-5 pb-5">
         <div className="grid grid-cols-4 gap-1.5" role="listbox" aria-label="Strap options">
           {modes.map((mode, index) => {
             const isActive = activeIndex === index;
+            const optionQuickAddId = mode.quickAddOptionId;
+            const optionAdded = optionQuickAddId
+              ? addedOptionIds.has(optionQuickAddId)
+              : false;
 
             return (
-              <button
+              <div
                 key={mode.id}
-                type="button"
                 role="option"
                 aria-selected={isActive}
-                onClick={() => setActiveIndex(index)}
                 className={cn(
                   "flex flex-col gap-1 rounded-xl p-1 transition-colors",
                   isActive
                     ? "bg-black text-white"
-                    : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
+                    : "bg-neutral-100 text-neutral-700",
                 )}
               >
-                <span
-                  className={cn(
-                    "relative aspect-[4/5] overflow-hidden rounded-lg bg-[#ececec]",
-                    isActive ? "ring-2 ring-white/90 ring-offset-1 ring-offset-black" : "",
-                  )}
+                <button
+                  type="button"
+                  onClick={() => setActiveIndex(index)}
+                  className="flex w-full flex-col gap-1 text-left"
                 >
-                  <Image
-                    src={mode.image.src}
-                    alt=""
-                    fill
-                    className="object-contain object-center p-0.5"
-                    sizes="20vw"
-                    draggable={false}
-                  />
-                </span>
-                <span className="font-extended px-0.5 text-center text-[10px] leading-tight tracking-[0.2px]">
-                  {mode.label}
-                </span>
-              </button>
+                  <span className="relative aspect-[4/5] overflow-hidden rounded-lg bg-white">
+                    <Image
+                      src={mode.image.src}
+                      alt=""
+                      fill
+                      className="object-cover object-center scale-[1.08]"
+                      sizes="20vw"
+                      draggable={false}
+                    />
+                  </span>
+                  <span className="font-extended px-0.5 text-center text-[10px] leading-tight tracking-[0.2px]">
+                    {mode.label}
+                  </span>
+                </button>
+
+                {isActive && optionQuickAddId && onQuickAddStrap ? (
+                  <button
+                    type="button"
+                    onClick={handleQuickAdd}
+                    disabled={optionAdded}
+                    className={cn(
+                      "inline-flex w-full items-center justify-center gap-0.5 rounded-full px-2 py-1.5 text-[10px] leading-none tracking-[0.2px] transition-colors",
+                      optionAdded
+                        ? "bg-white/20 text-white/75"
+                        : "bg-white text-black active:bg-white/90",
+                    )}
+                  >
+                    <span className="font-extended truncate">
+                      {optionAdded
+                        ? "Added"
+                        : `Add · ${mode.priceLabel}`}
+                    </span>
+                    {!optionAdded ? (
+                      <MaterialIcon name="add" size={16} className="shrink-0 text-black" />
+                    ) : null}
+                  </button>
+                ) : null}
+              </div>
             );
           })}
         </div>

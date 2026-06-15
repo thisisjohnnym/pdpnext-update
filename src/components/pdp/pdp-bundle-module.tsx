@@ -7,7 +7,7 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
-import { pdpModuleSectionClass, pdpModuleHeadingClass } from "./pdp-module-section";
+import { pdpModuleSectionClass, pdpModuleHeadingClass, pdpModuleHeadingLeadClass } from "./pdp-module-section";
 import {
   PDP_BUNDLE_DISCOUNT,
   PDP_BUNDLE_ITEMS,
@@ -36,14 +36,14 @@ type BundleRowProps = {
 
 function PrimaryBundleCard({ item }: { item: PdpBundleItem }) {
   return (
-    <div className="flex items-center gap-3.5 border border-black bg-neutral-50 p-4 ring-1 ring-inset ring-black">
-      <span className="relative size-16 shrink-0 overflow-hidden bg-neutral-100">
+    <div className="flex items-center gap-3 border border-black bg-neutral-50 px-3.5 py-3.5 ring-1 ring-inset ring-black">
+      <span className="relative size-12 shrink-0 overflow-hidden bg-neutral-100">
         <Image
           src={item.imageSrc}
           alt={item.imageAlt}
           fill
           className="object-cover object-center"
-          sizes="64px"
+          sizes="48px"
         />
       </span>
 
@@ -68,7 +68,7 @@ function AddonBundleRow({ item, selected, onToggle }: BundleRowProps) {
       disabled={item.locked}
       aria-pressed={selected}
       className={cn(
-        "flex w-full items-center gap-3.5 border border-neutral-200 p-4 text-left transition-colors",
+        "flex w-full items-center gap-3 border border-neutral-200 px-3.5 py-3.5 text-left transition-colors",
         selected ? "bg-neutral-50" : "bg-white",
         item.locked ? "cursor-default" : "active:bg-neutral-100",
       )}
@@ -86,13 +86,13 @@ function AddonBundleRow({ item, selected, onToggle }: BundleRowProps) {
         ) : null}
       </span>
 
-      <span className="relative size-16 shrink-0 overflow-hidden bg-neutral-100">
+      <span className="relative size-12 shrink-0 overflow-hidden bg-neutral-100">
         <Image
           src={item.imageSrc}
           alt={item.imageAlt}
           fill
           className="object-cover object-center"
-          sizes="64px"
+          sizes="48px"
         />
       </span>
 
@@ -170,18 +170,20 @@ export function PdpBundleModule({ onAddBundle }: PdpBundleModuleProps) {
   return (
     <section
       data-header-surface="light"
-      className={pdpModuleSectionClass({ rhythm: "roomy" })}
+      className={pdpModuleSectionClass()}
     >
       <PageGrid fullWidth>
         <GridItem mobile={12} desktop={24}>
-          <div className="flex flex-col gap-5">
-            <h2 className={pdpModuleHeadingClass({ lead: false })}>Build your bundle</h2>
+          <div className="flex flex-col gap-6">
+            <h2 className={cn(pdpModuleHeadingClass({ lead: false }), pdpModuleHeadingLeadClass())}>
+              Build your bundle
+            </h2>
 
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-4">
               {primaryItem ? <PrimaryBundleCard item={primaryItem} /> : null}
 
               {addonItems.length ? (
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-3">
                   {addonItems.map((item) => (
                     <AddonBundleRow
                       key={item.id}
@@ -203,7 +205,7 @@ export function PdpBundleModule({ onAddBundle }: PdpBundleModuleProps) {
                 </p>
                 <div className="mt-1 flex items-baseline gap-2">
                   {hasDiscount ? (
-                    <span className="text-sm tracking-[0.2px] text-neutral-400 line-through">
+                    <span className="font-extended text-sm tracking-[0.2px] text-neutral-400 line-through">
                       {formatPrice(subtotal)}
                     </span>
                   ) : null}
@@ -219,7 +221,7 @@ export function PdpBundleModule({ onAddBundle }: PdpBundleModuleProps) {
               onClick={handleAddBundle}
               disabled={selectedItems.length === 0 || justAdded}
               className={cn(
-                "inline-flex w-full items-center justify-center gap-1.5 rounded-full py-3.5 text-sm tracking-[0.2px] transition-colors",
+                "font-extended inline-flex w-full items-center justify-center gap-1.5 rounded-full py-3.5 text-sm tracking-[0.2px] transition-colors",
                 justAdded
                   ? "bg-neutral-100 text-neutral-500"
                   : "bg-black text-white",

@@ -1179,14 +1179,7 @@ export const PDP_GALLERY_DESIRE_SLIDES: PdpGallerySlide[] = [
     alt: "Model wearing Tabby Shoulder Bag 26 with a tan trench coat and plaid mini skirt",
     shopTheLookId: "trench-daytime",
   },
-  {
-    type: "video",
-    src: PDP_GALLERY_SHOWCASE_VIDEO,
-    poster: "/images/gallery/tabby-leather-on-model-tee.png",
-    alt: "Tabby Shoulder Bag 26 highlight montage",
-  },
   { type: "ugc-videos" },
-  { type: "as-seen-on" },
 ];
 
 /** Capacity, craft detail, and touch-first interactives */
@@ -1196,7 +1189,6 @@ export const PDP_GALLERY_FUNCTION_SLIDES: PdpGallerySlide[] = [
     src: PDP_GALLERY_WHAT_FITS_INSIDE_VIDEO,
     poster: "/images/gallery/tabby-leather-interior-packed.png",
     alt: "What fits inside Tabby Shoulder Bag 26",
-    caption: PDP_GALLERY_CAPACITY_EDITORIAL_SLIDE.caption,
   },
   {
     type: "video",
@@ -1380,28 +1372,29 @@ export const PDP_STRAP_OPTIONS: Record<string, PdpStrapOptionsSet> = {
     title: "Strap options",
     options: [
       {
+        id: "crossbody-strap",
+        name: "Crossbody strap",
+        subtitle: "Leather · gold hardware",
+        price: "$75",
+        imageSrc: "/images/similar/crossbody-strap.png",
+        imageAlt: "Black leather crossbody strap with gold hardware and adjustable buckle",
+      },
+      {
         id: "chain-strap",
-        name: "Signature Chain Strap",
-        subtitle: "Gold chain · crossbody",
+        name: "Charm chain strap",
+        subtitle: "Gold chain · charms",
         price: "$68",
-        imageSrc: "/images/similar/tabby-chain-crossbody.png",
-        imageAlt: "Signature chain strap with gold hardware",
+        imageSrc: "/images/similar/charm-chain-strap.png",
+        imageAlt: "Gold charm chain strap with bow, butterfly, star, and heart charms",
       },
       {
-        id: "strap-extender",
-        name: "Bag Strap Extender",
-        subtitle: "Adjustable leather",
-        price: "$38",
-        imageSrc: "/images/gallery/tabby-leather-back.png",
-        imageAlt: "Black leather bag strap extender",
-      },
-      {
-        id: "slim-shoulder-strap",
-        name: "Slim Leather Strap",
-        subtitle: "Shoulder carry",
-        price: "$45",
-        imageSrc: "/images/gallery/tabby-leather-product-alt.png",
-        imageAlt: "Slim black leather shoulder strap",
+        id: "chain-strap-with-charms",
+        name: "Chain Strap with Charms",
+        subtitle: "Gold chain · mixed charms",
+        price: "$68",
+        imageSrc: "/images/similar/chain-strap-with-charms.png",
+        imageAlt:
+          "Gold chain strap with mushroom, dinosaur, cherry, and crystal bow charms",
       },
     ],
   },
@@ -1452,48 +1445,53 @@ export const PDP_STRAP_SIMULATION = {
       image: {
         src: "/images/gallery/tabby-leather-product-alt.png",
         alt: "Tabby Shoulder Bag 26 with included shoulder and crossbody leather straps",
+        objectPosition: "center 42%",
+        fit: "cover",
+      },
+    },
+    {
+      id: "crossbody-strap",
+      label: "Crossbody strap",
+      detail: "Leather · adjustable length.",
+      answer:
+        "Detachable leather crossbody strap with gold hardware — clips onto the same Tabby hardware.",
+      priceLabel: "$75",
+      quickAddOptionId: "crossbody-strap",
+      image: {
+        src: "/images/similar/crossbody-strap.png",
+        alt: "Black leather crossbody strap with gold hardware and adjustable buckle",
         objectPosition: "center center",
-        fit: "contain",
+        fit: "cover",
       },
     },
     {
       id: "chain-strap",
-      label: "Chain",
-      detail: "Gold chain crossbody carry.",
-      answer: "Signature chain strap swaps onto the same hardware — dressier, hands-free.",
+      label: "Charm chain strap",
+      detail: "Gold chain with playful charms.",
+      answer:
+        "Charm chain strap swaps onto the same hardware — dressier crossbody with bow, star, and heart charms.",
       priceLabel: "$68",
       quickAddOptionId: "chain-strap",
       image: {
-        src: "/images/similar/tabby-chain-crossbody.png",
-        alt: "Tabby Shoulder Bag 26 with signature gold chain crossbody strap",
+        src: "/images/similar/charm-chain-strap.png",
+        alt: "Gold charm chain strap with bow, butterfly, star, and heart charms",
         objectPosition: "center center",
-        fit: "contain",
+        fit: "cover",
       },
     },
     {
-      id: "slim-shoulder",
-      label: "Slim strap",
-      detail: "Cleaner shoulder silhouette.",
-      answer: "Slim leather strap for a tighter shoulder carry — less bulk at the collar.",
-      priceLabel: "$45",
+      id: "chain-strap-with-charms",
+      label: "Chain Strap with Charms",
+      detail: "Mixed charms on gold chain.",
+      answer:
+        "Chain strap with charms — mushroom, cherries, dinosaur, and crystal bow on a gold curb chain.",
+      priceLabel: "$68",
+      quickAddOptionId: "chain-strap-with-charms",
       image: {
-        src: "/images/gallery/tabby-product-front-916.jpg",
-        alt: "Tabby Shoulder Bag 26 with slim shoulder strap",
+        src: "/images/similar/chain-strap-with-charms.png",
+        alt: "Gold chain strap with mushroom, dinosaur, cherry, and crystal bow charms",
         objectPosition: "center center",
-        fit: "contain",
-      },
-    },
-    {
-      id: "strap-extender",
-      label: "Extender",
-      detail: "Extra drop for layers.",
-      answer: "Strap extender adds length for coats and taller frames — same clips, longer hang.",
-      priceLabel: "$38",
-      image: {
-        src: "/images/gallery/tabby-leather-product-front.png",
-        alt: "Tabby Shoulder Bag 26 with extended strap drop",
-        objectPosition: "center center",
-        fit: "contain",
+        fit: "cover",
       },
     },
   ] satisfies PdpStrapSimulationMode[],
@@ -1858,18 +1856,67 @@ export const PDP_LEATHER_CLEANER = {
       name: "Leather Cleaner",
       detail: "Removes surface dirt without stripping natural oils.",
       price: 16,
-      imageSrc: "/images/gallery/tabby-leather-detail-hardware.png",
-      imageAlt: "Coach Leather Cleaner for glovetanned leather",
+      imageSrc: "/images/products/coach-leather-cleaner.png",
+      imageAlt: "Coach Leather Cleaner bottle — 4 fl. oz.",
     },
     {
       id: "coach-leather-moisturizer",
       name: "Leather Moisturizer",
       detail: "Conditions pebbled leather to stay soft and resist drying.",
       price: 22,
-      imageSrc: "/images/gallery/tabby-leather-back.png",
-      imageAlt: "Coach Leather Moisturizer for full-grain leather bags",
+      imageSrc: "/images/products/coach-leather-moisturizer.png",
+      imageAlt: "Coach Leather Moisturizer bottle — 4 fl. oz.",
     },
   ] satisfies PdpLeatherCleanerProduct[],
+} as const;
+
+export type PdpFaqItem = {
+  id: string;
+  question: string;
+  answer: string;
+};
+
+/** Product FAQs — bottom-of-page accordion */
+export const PDP_FAQ = {
+  title: "FAQs",
+  items: [
+    {
+      id: "what-fits",
+      question: "What fits inside the Tabby Shoulder Bag 26?",
+      answer:
+        "Phone, wallet, keys, sunglasses, and a slim card case fit comfortably. The main compartment holds daily essentials; the back slip pocket keeps your phone within reach.",
+    },
+    {
+      id: "straps-included",
+      question: "Which straps are included?",
+      answer:
+        "Your Tabby comes with a detachable shoulder strap and crossbody strap in matching glovetanned leather. Additional chain and charm straps are available as add-ons.",
+    },
+    {
+      id: "crossbody",
+      question: "Can I wear it crossbody?",
+      answer:
+        "Yes. Clip on the included crossbody strap or swap to a chain strap for hands-free carry. Hardware is the same on every Tabby strap option.",
+    },
+    {
+      id: "leather-care",
+      question: "How do I care for glovetanned leather?",
+      answer:
+        "Wipe with a soft dry cloth after wear. For deeper cleaning, use Coach Leather Cleaner and condition with Leather Moisturizer — both are formulated for glovetanned full-grain leather.",
+    },
+    {
+      id: "returns",
+      question: "What is the return policy?",
+      answer:
+        "Full-price items can be returned within 30 days with original receipt. Bags must be unworn with tags attached. Outlet purchases follow store policy — ask in store or chat for details.",
+    },
+    {
+      id: "hardware",
+      question: "Is the turnlock hardware durable?",
+      answer:
+        "The signature C turnlock is solid brass with a protective coating. It’s designed for daily open-and-close — the same hardware Coach has used on Tabby since the original archive design.",
+    },
+  ] satisfies PdpFaqItem[],
 } as const;
 
 export type PdpWeightFeelEntry = {
@@ -1992,6 +2039,8 @@ export type PdpColor = {
   swatch: string;
   hero: string;
   heroAlt: string;
+  /** Sampled tone for bottom-bar color chrome */
+  chromeSample: string;
 };
 
 export const PDP_COLORS: PdpColor[] = [
@@ -2001,6 +2050,7 @@ export const PDP_COLORS: PdpColor[] = [
     swatch: "/images/colors/soft-tabby/black.png",
     hero: "/images/colors/soft-tabby/black.png",
     heroAlt: "Tabby Shoulder Bag 26 in black leather",
+    chromeSample: "#1a1a1a",
   },
   {
     id: "canyon",
@@ -2008,6 +2058,7 @@ export const PDP_COLORS: PdpColor[] = [
     swatch: "/images/colors/soft-tabby/canyon.png",
     hero: "/images/colors/soft-tabby/canyon.png",
     heroAlt: "Tabby Shoulder Bag 26 in canyon suede",
+    chromeSample: "#a34e3d",
   },
   {
     id: "oxblood",
@@ -2015,6 +2066,7 @@ export const PDP_COLORS: PdpColor[] = [
     swatch: "/images/colors/soft-tabby/oxblood.png",
     hero: "/images/colors/soft-tabby/oxblood.png",
     heroAlt: "Tabby Shoulder Bag 26 in oxblood leather",
+    chromeSample: "#6b2c32",
   },
   {
     id: "black-charm",
@@ -2022,6 +2074,7 @@ export const PDP_COLORS: PdpColor[] = [
     swatch: "/images/colors/soft-tabby/black-charm.png",
     hero: "/images/colors/soft-tabby/black-charm.png",
     heroAlt: "Tabby Shoulder Bag 26 in black with bag charms",
+    chromeSample: "#1a1a1a",
   },
   {
     id: "beaded",
@@ -2029,6 +2082,7 @@ export const PDP_COLORS: PdpColor[] = [
     swatch: "/images/colors/soft-tabby/beaded.png",
     hero: "/images/colors/soft-tabby/beaded.png",
     heroAlt: "Tabby Shoulder Bag 26 in beaded floral",
+    chromeSample: "#8a7a6a",
   },
   {
     id: "tan-fringe",
@@ -2036,6 +2090,7 @@ export const PDP_COLORS: PdpColor[] = [
     swatch: "/images/colors/soft-tabby/tan-fringe.png",
     hero: "/images/colors/soft-tabby/tan-fringe.png",
     heroAlt: "Tabby Shoulder Bag 26 in tan suede with fringe",
+    chromeSample: "#c4a06a",
   },
   {
     id: "black-fringe",
@@ -2043,6 +2098,7 @@ export const PDP_COLORS: PdpColor[] = [
     swatch: "/images/colors/soft-tabby/black-fringe.png",
     hero: "/images/colors/soft-tabby/black-fringe.png",
     heroAlt: "Tabby Shoulder Bag 26 in black suede with fringe",
+    chromeSample: "#1a1a1a",
   },
   {
     id: "olive",
@@ -2050,6 +2106,7 @@ export const PDP_COLORS: PdpColor[] = [
     swatch: "/images/colors/soft-tabby/olive.png",
     hero: "/images/colors/soft-tabby/olive.png",
     heroAlt: "Tabby Shoulder Bag 26 in olive suede",
+    chromeSample: "#556847",
   },
   {
     id: "mustard",
@@ -2057,6 +2114,7 @@ export const PDP_COLORS: PdpColor[] = [
     swatch: "/images/colors/soft-tabby/mustard.png",
     hero: "/images/colors/soft-tabby/mustard.png",
     heroAlt: "Tabby Shoulder Bag 26 in mustard suede",
+    chromeSample: "#c9a227",
   },
 ];
 
@@ -2121,39 +2179,40 @@ export const PDP_UGC_VIDEO_CAROUSEL = {
   },
   videos: [
     {
-      id: "ugc-leather-detail",
-      src: "/videos/tabby-detail.mp4",
-      poster: "/images/gallery/tabby-leather-detail-hardware.png",
-      alt: "Customer close-up of Tabby glovetanned leather and gold hardware",
-      handle: "@stylebyjess",
-      context: "Leather detail",
+      id: "ugc-lolalilylang",
+      src: "/videos/ugc-lolalilylang.mp4",
+      poster: "/images/reviews/ugc-lolalilylang.png",
+      alt: "TikTok creator @lolalilylang styling Tabby Shoulder Bag 26",
+      handle: "@lolalilylang",
+      context: "Tabby styling",
       verified: true,
     },
     {
-      id: "ugc-coffee-run",
-      src: "/videos/soft-tabby-showcase.webm",
-      poster: "/images/reviews/ugc-coffee-run.png",
-      alt: "Customer styling Tabby Shoulder Bag 26 for a weekend coffee run",
-      handle: "@jordanl.bk",
-      context: "Saturday coffee run",
+      id: "ugc-itsnani333",
+      src: "/videos/ugc-itsnani333.mp4",
+      poster: "/images/reviews/ugc-itsnani333.png",
+      alt: "TikTok creator @itsnani333 styling Tabby Shoulder Bag 26",
+      handle: "@itsnani333",
+      context: "Tabby styling",
       verified: true,
     },
     {
-      id: "ugc-city-commute",
-      src: "/videos/what-fits-inside.webm",
-      poster: "/images/reviews/ugc-on-street.png",
-      alt: "Customer carrying Tabby through a city commute",
-      handle: "@alexr.nyc",
-      context: "City commute",
+      id: "ugc-katiemcev0y",
+      src: "/videos/ugc-katiemcev0y.mp4",
+      poster: "/images/reviews/ugc-katiemcev0y.png",
+      alt: "TikTok creator @katiemcev0y styling Tabby Shoulder Bag 26",
+      handle: "@katiemcev0y",
+      context: "Tabby styling",
       verified: true,
     },
     {
-      id: "ugc-creator-fit",
-      src: "/videos/gallery-360.webm",
-      poster: "/images/gallery/mode22.png",
-      alt: "Creator crossbody styling with Tabby Shoulder Bag 26",
-      handle: "@tabbyfits",
-      context: "How I wear it",
+      id: "ugc-rachblaire",
+      src: "/videos/ugc-rachblaire.mp4",
+      poster: "/images/reviews/ugc-rachblaire.png",
+      alt: "TikTok creator @rachblaire styling Tabby Shoulder Bag 26",
+      handle: "@rachblaire",
+      context: "Tabby styling",
+      verified: true,
     },
   ] satisfies PdpUgcVideo[],
 } as const;

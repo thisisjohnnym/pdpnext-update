@@ -9,16 +9,43 @@ type PdpAsSeenOnCardProps = {
   celebrity: PdpAsSeenOnCelebrity;
   className?: string;
   imageSizes?: string;
-  variant?: "default" | "compact";
+  variant?: "default" | "compact" | "avatar";
 };
 
-/** Celebrity sighting — portrait photo with name and context overlay */
+/** Celebrity sighting — portrait tile or small profile avatar */
 export function PdpAsSeenOnCard({
   celebrity,
   className,
   imageSizes = "48vw",
   variant = "default",
 }: PdpAsSeenOnCardProps) {
+  if (variant === "avatar") {
+    return (
+      <figure
+        className={cn("flex shrink-0 flex-col items-center gap-1.5", className)}
+        aria-label={`${celebrity.name}, ${celebrity.context}`}
+      >
+        <div
+          className="relative size-11 overflow-hidden rounded-full bg-neutral-100 ring-1 ring-black/8"
+        >
+          <Image
+            src={celebrity.src}
+            alt=""
+            fill
+            className="object-cover object-center"
+            style={{ objectPosition: celebrity.objectPosition ?? "center" }}
+            sizes="44px"
+          />
+        </div>
+        <figcaption className="text-center">
+          <p className={`whitespace-nowrap text-neutral-500 ${pdpType.micro}`}>
+            {celebrity.name}
+          </p>
+        </figcaption>
+      </figure>
+    );
+  }
+
   const compact = variant === "compact";
 
   return (

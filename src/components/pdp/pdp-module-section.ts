@@ -7,13 +7,16 @@ type PdpModuleSectionOptions = {
   first?: boolean;
   /**
    * Vertical rhythm tier for bottom-of-page modules:
-   * - compact — paired with the module above (e.g. Compare after Similar)
-   * - default — standard section spacing
-   * - roomy — new content chapter (e.g. Bundle builder)
-   * - break — major narrative shift (e.g. Reviews)
+   * - default / compact / roomy — uniform stack spacing (16 top · 16 bottom)
+   * - break — last major block; extra padding below (e.g. Reviews)
    */
   rhythm?: "compact" | "default" | "roomy" | "break";
 };
+
+/** Uniform vertical padding for stacked PDP modules */
+const PDP_MODULE_STACK_PADDING = "pt-16 pb-16";
+const PDP_MODULE_STACK_FIRST_PADDING = "pt-12 pb-16";
+const PDP_MODULE_BREAK_PADDING = "pt-16 pb-20";
 
 /** Shared vertical rhythm for stacked bottom-of-page modules */
 export function pdpModuleSectionClass({
@@ -21,26 +24,23 @@ export function pdpModuleSectionClass({
   first = false,
   rhythm = "default",
 }: PdpModuleSectionOptions = {}) {
+  const isStackRhythm =
+    rhythm === "default" || rhythm === "compact" || rhythm === "roomy";
+
   return cn(
-    "relative w-full shrink-0",
+    "relative w-full shrink-0 overflow-x-clip",
     variant === "muted" ? "bg-neutral-100" : "bg-white",
-    first && "pt-12",
-    !first &&
-      rhythm === "compact" &&
-      "pt-9 pb-4",
-    !first &&
-      rhythm === "default" &&
-      "pt-16 pb-6",
-    !first &&
-      rhythm === "roomy" &&
-      "pt-20 pb-8",
-    !first &&
-      rhythm === "break" &&
-      "pt-24 pb-10",
+    first && PDP_MODULE_STACK_FIRST_PADDING,
+    !first && isStackRhythm && PDP_MODULE_STACK_PADDING,
+    !first && rhythm === "break" && PDP_MODULE_BREAK_PADDING,
   );
 }
 
-/** Primary page title — modules, sheets, drawers (matches Shop the look) */
+/** Consistent space below module titles when `lead` is false */
+export function pdpModuleHeadingLeadClass() {
+  return "mb-4";
+}
+/** Primary H1 — modules, sheets, drawers */
 export function pdpPageHeadingClass({ lead = true }: { lead?: boolean } = {}) {
   return cn(
     "font-extended m-0 text-xl font-normal tracking-[0.4px] text-black",
@@ -53,14 +53,14 @@ export function pdpSheetHeadingClass() {
   return pdpPageHeadingClass({ lead: false });
 }
 
-/** Module section title — defaults to primary page title scale */
+/** Module section title — defaults to primary H1 scale */
 export function pdpModuleHeadingClass({
   lead = true,
   size = "lg",
 }: { lead?: boolean; size?: "lg" | "sm" } = {}) {
   if (size === "sm") {
     return cn(
-      "font-extended m-0 text-base font-normal tracking-[0.2px] text-black",
+      "font-extended m-0 text-sm font-normal tracking-[0.2px] text-black",
       lead && "mb-3",
     );
   }

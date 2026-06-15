@@ -91,7 +91,7 @@ export function PdpStrapOptionsSheet({
         aria-modal="true"
         aria-labelledby={titleId}
         className={cn(
-          "relative flex max-h-[85dvh] w-full max-w-[430px] flex-col overflow-hidden rounded-t-[20px] bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out",
+          "font-extended relative flex max-h-[85dvh] w-full max-w-[430px] flex-col overflow-hidden rounded-t-[20px] bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out",
           open ? "translate-y-0" : "translate-y-full",
         )}
       >
@@ -151,16 +151,16 @@ export function PdpStrapOptionsSheet({
                     onClick={() => handleAdd(option.id)}
                     disabled={added}
                     className={cn(
-                      "font-extended inline-flex shrink-0 items-center justify-center gap-0.5 rounded-full px-3.5 py-2.5 tracking-[0.2px] transition-colors",
+                      "font-extended inline-flex shrink-0 items-center justify-center gap-1 rounded-full px-3.5 py-2.5 leading-none tracking-[0.2px] transition-colors",
                       pdpType.label,
                       added
                         ? "bg-neutral-200 text-neutral-500"
                         : "bg-black text-white",
                     )}
                   >
-                    <span className="-translate-y-px">{added ? "Added" : "Add"}</span>
+                    <span>{added ? "Added" : "Add"}</span>
                     {!added ? (
-                      <MaterialIcon name="add" size={18} className="text-white" />
+                      <MaterialIcon name="add" size={18} className="shrink-0 text-white" />
                     ) : null}
                   </button>
                 </li>

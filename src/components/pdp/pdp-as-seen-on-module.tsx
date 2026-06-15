@@ -5,14 +5,14 @@ import { cn } from "@/lib/cn";
 
 import { PdpAsSeenOnCard } from "./pdp-as-seen-on-card";
 import {
-  pdpAsSeenOnCardCompactClass,
+  pdpAsSeenOnAvatarItemClass,
   pdpCarouselScrollClass,
 } from "./pdp-carousel";
 import { PDP_AS_SEEN_ON } from "./pdp-data";
 import { galleryPanelClassName } from "./pdp-gallery-panel";
 import { pdpModuleSectionClass } from "./pdp-module-section";
 
-/** Horizontal carousel of celebrity sightings — secondary editorial rail */
+/** Celebrity sightings — low-emphasis profile avatar rail */
 export function PdpAsSeenOnModule({
   isLastPanel = false,
 }: {
@@ -26,24 +26,25 @@ export function PdpAsSeenOnModule({
       className={cn(
         pdpModuleSectionClass({ variant: "white", rhythm: "compact" }),
         galleryPanelClassName(isLastPanel),
+        "pb-2",
       )}
     >
       <PageGrid fullWidth>
         <GridItem mobile={12} desktop={24}>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             <p
-              className="font-extended text-[10px] uppercase tracking-[0.6px] text-neutral-500"
+              className="font-extended text-[10px] uppercase tracking-[0.6px] text-neutral-400"
             >
               {title}
             </p>
 
-            <div className={cn(pdpCarouselScrollClass, "flex gap-2")}>
+            <div className={cn(pdpCarouselScrollClass, "flex gap-3")}>
               {celebrities.map((celebrity) => (
                 <PdpAsSeenOnCard
                   key={celebrity.id}
                   celebrity={celebrity}
-                  variant="compact"
-                  className={pdpAsSeenOnCardCompactClass}
+                  variant="avatar"
+                  className={pdpAsSeenOnAvatarItemClass}
                 />
               ))}
             </div>

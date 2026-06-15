@@ -103,10 +103,10 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
   return (
     <section
       data-header-surface="light"
-      className={pdpModuleSectionClass({ rhythm: "break" })}
+      className={pdpModuleSectionClass()}
     >
       <PageGrid fullWidth>
-        <GridItem mobile={12} desktop={24} className="min-w-0 overflow-visible">
+        <GridItem mobile={12} desktop={24} className="min-w-0">
           <div className="flex w-full flex-col gap-8">
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between gap-3">

@@ -18,10 +18,12 @@ import { PdpBundleModule } from "./pdp-bundle-module";
 import { PdpCompareModule } from "./pdp-compare-module";
 import { PdpShoppingDiscoveryModule } from "./pdp-shopping-discovery-module";
 import { PdpReviewsModule } from "./pdp-reviews-module";
+import { PdpRecentlyViewedCarousel } from "./pdp-recently-viewed-carousel";
 import { PdpScrollReveal } from "./pdp-scroll-reveal";
 import { PdpShopTheLookSheet } from "./pdp-shop-the-look-sheet";
 import { PdpLeatherAgingModule } from "./pdp-leather-aging-module";
 import { PdpLeatherCleanerModule } from "./pdp-leather-cleaner-module";
+import { PdpFaqModule } from "./pdp-faq-module";
 import { PdpBagStoriesModule } from "./pdp-bag-stories-module";
 import { PdpStrapSimulationModule } from "./pdp-strap-simulation-module";
 import { PdpWeightFeelModule } from "./pdp-weight-feel-module";
@@ -54,7 +56,7 @@ import { usePanelScrollRelease } from "./use-panel-scroll-release";
 export { BOTTOM_CTA_OFFSET } from "./pdp-viewport-chrome";
 export { PDP_PANEL_SCROLL } from "./pdp-panel-scroll";
 
-const GALLERY_CLASS = "w-full";
+const GALLERY_CLASS = "w-full overflow-x-clip";
 
 /** Reserve scroll space so modules aren't hidden behind the fixed bottom bar */
 const GALLERY_SCROLL_PAD = {
@@ -240,17 +242,17 @@ function PdpGalleryPortraitSlide({
             onClick={() => onOpenShopTheLook(shopTheLookId)}
             aria-label="Shop the look"
             className={cn(
-              "absolute bottom-4 left-3 z-10 flex items-center gap-1.5 rounded-full border border-white/55 bg-white/80 py-1.5 pl-1.5 pr-3.5 text-neutral-900 shadow-[0_4px_20px_rgba(0,0,0,0.14)] backdrop-blur-md transition-colors active:bg-white/95 lg:left-5",
-              pdpType.label,
+              "absolute bottom-4 left-3 z-10 flex items-center gap-1 rounded-full border border-white/55 bg-white/80 py-1 pl-1 pr-2.5 text-neutral-900 shadow-[0_4px_20px_rgba(0,0,0,0.14)] backdrop-blur-md transition-colors active:bg-white/95 lg:left-5",
+              pdpType.micro,
             )}
           >
             <span
               aria-hidden
-              className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white/90"
+              className="flex size-7 shrink-0 items-center justify-center rounded-full bg-white/90"
             >
-              <MaterialIcon name="checkroom" size={20} className="text-neutral-900" />
+              <MaterialIcon name="checkroom" size={18} className="text-neutral-900" />
             </span>
-            <span className="font-extended">(Shop the look)</span>
+            <span className="font-extended">Shop the look</span>
           </button>
         ) : null}
 
@@ -499,10 +501,7 @@ export function PdpGalleryView({
 
           if (slide.type === "ugc-videos") {
             return [
-              <PdpUgcVideoCarouselModule
-                key={`ugc-videos-${index}`}
-                isLastPanel={isLastPanel}
-              />,
+              <PdpUgcVideoCarouselModule key={`ugc-videos-${index}`} />,
             ];
           }
 
@@ -555,23 +554,32 @@ export function PdpGalleryView({
       </div>
 
       {/* Ecommerce — after desire + function gallery scroll */}
+      <PdpScrollReveal className="w-full shrink-0" surface="muted">
+        <PdpCompareModule
+          selectedColorId={selectedColorId}
+          onAddToBag={() => onAddSimilarToBag?.()}
+        />
+      </PdpScrollReveal>
+      <PdpScrollReveal className="w-full shrink-0" surface="light">
+        <PdpBundleModule onAddBundle={(payload) => onAddBundle?.(payload)} />
+      </PdpScrollReveal>
+      <PdpScrollReveal className="w-full shrink-0" surface="muted">
+        <PdpShoppingDiscoveryModule onAddToBag={() => onAddSimilarToBag?.()} />
+      </PdpScrollReveal>
+      <PdpScrollReveal className="w-full shrink-0" surface="light">
+        <PdpLeatherCleanerModule onQuickAdd={() => onAddSimilarToBag?.()} />
+      </PdpScrollReveal>
+      <PdpScrollReveal className="w-full shrink-0" surface="muted">
+        <PdpFaqModule />
+      </PdpScrollReveal>
       <PdpScrollReveal className="w-full shrink-0" surface="light">
         <PdpReviewsModule
           onReadAll={onOpenReviews}
           onWriteReview={onOpenReviews}
         />
       </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="light">
-        <PdpCompareModule onAddToBag={() => onAddSimilarToBag?.()} />
-      </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="light">
-        <PdpBundleModule onAddBundle={(payload) => onAddBundle?.(payload)} />
-      </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="light">
-        <PdpShoppingDiscoveryModule onAddToBag={() => onAddSimilarToBag?.()} />
-      </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="light">
-        <PdpLeatherCleanerModule onQuickAdd={() => onAddSimilarToBag?.()} />
+      <PdpScrollReveal className="w-full shrink-0" surface="muted">
+        <PdpRecentlyViewedCarousel />
       </PdpScrollReveal>
     </div>
     <PdpGalleryPhotosSheet open={photosOpen} onClose={() => setPhotosOpen(false)} />
