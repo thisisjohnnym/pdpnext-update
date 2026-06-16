@@ -65,6 +65,7 @@ export function PdpGalleryHeroVideo({
   const userMutedRef = useRef(true);
   const hintTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const mountedRef = useRef(true);
+  const previewShownRef = useRef(false);
 
   const { lifecycle, lowPowerMode, network, reducedMotion } = usePdpRuntime();
   const resolvedDecoderId = decoderId ?? src;
@@ -136,6 +137,7 @@ export function PdpGalleryHeroVideo({
   useEffect(() => {
     setIsReady(false);
     setPreviewVisible(false);
+    previewShownRef.current = false;
     setAutoplayRestricted(false);
     userStartedRef.current = false;
     userPausedRef.current = false;
@@ -214,22 +216,26 @@ export function PdpGalleryHeroVideo({
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) {
+    if (!video || !isClientReady) {
       return;
     }
 
     const syncPlaying = () => {
-      setIsPlaying(!video.paused);
+      setIsPlaying(!video.paused && !video.ended);
     };
 
-    video.addEventListener("play", syncPlaying);
-    video.addEventListener("pause", syncPlaying);
+    syncPlaying();
+
+    for (const type of ["play", "playing", "pause", "ended"] as const) {
+      video.addEventListener(type, syncPlaying);
+    }
 
     return () => {
-      video.removeEventListener("play", syncPlaying);
-      video.removeEventListener("pause", syncPlaying);
+      for (const type of ["play", "playing", "pause", "ended"] as const) {
+        video.removeEventListener(type, syncPlaying);
+      }
     };
-  }, [isMounted]);
+  }, [isMounted, isClientReady, src]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -244,9 +250,14 @@ export function PdpGalleryHeroVideo({
     };
 
     const markPreviewFrame = () => {
-      if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA || previewVisible) {
+      if (
+        video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA ||
+        previewShownRef.current
+      ) {
         return;
       }
+
+      previewShownRef.current = true;
 
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -276,6 +287,27 @@ export function PdpGalleryHeroVideo({
       video.removeEventListener("loadeddata", markPreviewFrame);
     };
   }, [src, isMounted, isClientReady]);
+
+  useEffect(() => {
+    if (!priorityAutoplay || poster || !previewVisible || isPlaying) {
+      return;
+    }
+
+    const video = videoRef.current;
+    if (!video) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      if (video.paused) {
+        setAutoplayRestricted(true);
+      }
+    }, 1200);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [priorityAutoplay, poster, previewVisible, isPlaying, isClientReady]);
 
   const onPlayRejected = () => {
     if (!mountedRef.current) {
@@ -418,15 +450,16 @@ export function PdpGalleryHeroVideo({
   const showControlChrome = showMuteControl || showPlaybackButton;
   const showBlurReveal = priorityAutoplay && !poster;
   const isRevealed =
-    showBlurReveal && !reducedMotion ? isPlaying && isReady : isReady;
+    !showBlurReveal || reducedMotion ? isReady : isPlaying && isReady;
 
   const showLandingPoster = Boolean(poster) && !isReady && !priorityAutoplay;
   const showFrozenPlayOverlay =
     isActive &&
     !isPlaying &&
     !userStarted &&
-    (priorityHeroNeedsManualPlay ||
-      (manualPlaybackRequired && !priorityAutoplay && (isReady || Boolean(poster))));
+    (priorityAutoplay && previewVisible
+      ? priorityHeroNeedsManualPlay || autoplayRestricted || !canAutoplayPriorityHero
+      : manualPlaybackRequired && (isReady || Boolean(poster)));
 
   const effectivePreload = (() => {
     if (priorityAutoplay && isActive) {
@@ -485,6 +518,9 @@ export function PdpGalleryHeroVideo({
       poster={priorityAutoplay ? undefined : poster}
       aria-label={ariaLabel}
       onClick={canTapVideo ? togglePlayback : undefined}
+      onPlay={() => setIsPlaying(true)}
+      onPlaying={() => setIsPlaying(true)}
+      onPause={() => setIsPlaying(false)}
       style={style}
       className={videoClassName}
     >
