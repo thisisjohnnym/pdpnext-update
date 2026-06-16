@@ -69,25 +69,25 @@ export function PdpBottomActions({
         type="button"
         onClick={onAddToBag}
         className={cn(
-          "font-extended relative isolate flex min-w-0 items-center justify-center gap-2 overflow-hidden border border-neutral-200 bg-white text-center leading-none text-black transition-[border-radius,background-color,color,box-shadow,transform] duration-300 active:bg-neutral-100",
+          "font-extended relative isolate flex min-w-0 items-center justify-center gap-2 overflow-hidden border border-blue-600 bg-blue-600 text-center leading-none text-white transition-[border-radius,background-color,color,box-shadow,transform] duration-300 active:bg-blue-700 active:border-blue-700",
           pdpPressableSolidClass,
           docked
-            ? "h-[54px] w-full rounded-none border-y-0 border-r-0 px-4 shadow-none"
-            : "h-12 w-full rounded-full px-3 shadow-[0_4px_24px_rgba(0,0,0,0.16)]",
+            ? "h-[54px] w-full rounded-none border-y-0 border-r-0 border-l-neutral-200 px-4 shadow-none"
+            : "h-12 w-full rounded-full border-blue-600 px-3 shadow-[0_4px_24px_rgba(37,99,235,0.35)]",
         )}
       >
         <span
           ref={shimmerRef}
           aria-hidden
-          className="pdp-atb-shimmer pointer-events-none absolute inset-y-[-25%] left-0 w-[36%] -skew-x-[20deg] bg-gradient-to-r from-transparent via-black/18 to-transparent opacity-0 will-change-transform"
+          className="pdp-atb-shimmer pointer-events-none absolute inset-y-[-25%] left-0 w-[36%] -skew-x-[20deg] bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 will-change-transform"
         />
         <MaterialIcon
           name="shopping_bag"
           size={18}
-          className="relative z-[1] shrink-0 -translate-y-px text-black"
+          className="relative z-[1] shrink-0 -translate-y-px text-white"
           aria-hidden
         />
-        <span className="relative z-[1] translate-y-px text-[12px] text-black">
+        <span className="relative z-[1] translate-y-px text-[12px] text-white">
           Add to bag
         </span>
       </button>
