@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 const MAX_BROWSER_CHROME = 120;
 
 /** Space obscured below the visual viewport (Safari/Chrome bottom toolbars) */
-export function readBrowserBottomInset(): number {
+function readBrowserBottomInset(): number {
   if (typeof window === "undefined") {
     return 0;
   }
@@ -26,7 +26,7 @@ export function readBrowserBottomInset(): number {
 }
 
 /** Sync bottom browser chrome inset only — never affects top layout */
-export function syncBrowserBottomInset() {
+function syncBrowserBottomInset() {
   if (typeof window === "undefined") {
     return;
   }
@@ -40,7 +40,7 @@ export function syncBrowserBottomInset() {
 }
 
 /** Track Safari/Chrome bottom toolbar show/hide via Visual Viewport API */
-export function useBrowserBottomInset() {
+function useBrowserBottomInset() {
   const [inset, setInset] = useState(0);
 
   useEffect(() => {

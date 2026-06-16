@@ -41,7 +41,7 @@ export function pdpModuleHeadingLeadClass() {
   return "mb-4";
 }
 /** Primary H1 — modules, sheets, drawers */
-export function pdpPageHeadingClass({ lead = true }: { lead?: boolean } = {}) {
+function pdpPageHeadingClass({ lead = true }: { lead?: boolean } = {}) {
   return cn(
     "font-extended m-0 text-xl font-normal tracking-[0.4px] text-black",
     lead && "mb-4",

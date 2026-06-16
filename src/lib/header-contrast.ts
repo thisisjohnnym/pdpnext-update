@@ -4,11 +4,11 @@ export type HeaderForeground = "light" | "dark";
 const LUMINANCE_THRESHOLD = 0.58;
 const HYSTERESIS = 0.05;
 
-export function relativeLuminance(r: number, g: number, b: number): number {
+function relativeLuminance(r: number, g: number, b: number): number {
   return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
 }
 
-export function parseCssRgbLuminance(color: string): number | null {
+function parseCssRgbLuminance(color: string): number | null {
   const match = color.match(
     /rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+([\d.]+))?\s*\)/,
   );

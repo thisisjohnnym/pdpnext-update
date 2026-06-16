@@ -2,7 +2,7 @@
 
 import { GridItem, PageGrid } from "@/components/grid/page-grid";
 
-import { BOTTOM_CTA_OFFSET } from "./pdp-gallery-view";
+import { BOTTOM_CTA_OFFSET } from "./pdp-viewport-chrome";
 import { PDP_PRODUCT } from "./pdp-data";
 import { pdpType } from "./pdp-type";
 import {

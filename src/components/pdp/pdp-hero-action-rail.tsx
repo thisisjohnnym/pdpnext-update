@@ -6,7 +6,7 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
 
 import { PDP_COMMENTS_SUMMARY, PDP_LIKE_SUMMARY, PDP_SAVE_SUMMARY } from "./pdp-data";
-import { BOTTOM_CTA_OFFSET } from "./pdp-gallery-view";
+import { BOTTOM_CTA_OFFSET } from "./pdp-viewport-chrome";
 import { pdpPressableIconClass } from "./pdp-type";
 import { PdpToast } from "./pdp-toast";
 import {

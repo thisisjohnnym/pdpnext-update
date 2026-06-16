@@ -57,9 +57,6 @@ import { PDP_PANEL_SCROLL } from "./pdp-panel-scroll";
 import { galleryPanelClassName, getLastGalleryPanelSlideIndex } from "./pdp-gallery-panel";
 import { usePanelScrollRelease } from "./use-panel-scroll-release";
 
-export { BOTTOM_CTA_OFFSET } from "./pdp-viewport-chrome";
-export { PDP_PANEL_SCROLL } from "./pdp-panel-scroll";
-
 const GALLERY_CLASS = "w-full overflow-x-clip bg-white";
 
 /** Reserve scroll space so modules aren't hidden behind the fixed bottom bar */

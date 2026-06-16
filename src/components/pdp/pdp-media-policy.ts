@@ -37,7 +37,7 @@ export function computePriorityHeroShouldPlay(
   });
 }
 
-export function computeShouldRun(input: { isVisible: boolean; isFrozen: boolean }): boolean {
+function computeShouldRun(input: { isVisible: boolean; isFrozen: boolean }): boolean {
   return input.isVisible && !input.isFrozen;
 }
 

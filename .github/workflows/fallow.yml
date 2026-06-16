@@ -1,0 +1,33 @@
+name: Fallow
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  fallow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - uses: fallow-rs/fallow@v2
+        with:
+          command: audit
+          annotations: true
+          comment: true
+          review-comments: true
+          artifacts-dir: .fallow/ci

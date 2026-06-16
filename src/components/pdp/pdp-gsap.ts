@@ -14,7 +14,7 @@ export function ensureGsapPlugins() {
 }
 
 /** Sync read — prefer `useReducedMotion()` in React components for live updates */
-export function prefersReducedMotion(): boolean {
+function prefersReducedMotion(): boolean {
   if (typeof window === "undefined") {
     return false;
   }
@@ -23,13 +23,13 @@ export function prefersReducedMotion(): boolean {
 }
 
 export const REVEAL_EASE = "power3.out";
-export const REVEAL_START = "top 90%";
+const REVEAL_START = "top 90%";
 export const REVEAL_MODULE_START = "top 92%";
-export const TEXT_STAGGER_S = 0.07;
+const TEXT_STAGGER_S = 0.07;
 
 export type RevealLayout = "stack" | "module";
 
-export function textRevealStagger(index: number, target: Element) {
+function textRevealStagger(index: number, target: Element) {
   const customMs = Number((target as HTMLElement).dataset.pdpTextDelay ?? 0);
   return index * TEXT_STAGGER_S + customMs / 1000;
 }
@@ -40,7 +40,7 @@ export function queryRevealTargets(root: ParentNode) {
   );
 }
 
-export function setRevealHidden(
+function setRevealHidden(
   inner: HTMLElement,
   targets: NodeListOf<HTMLElement> | HTMLElement[],
   layout: RevealLayout,

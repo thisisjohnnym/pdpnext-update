@@ -73,7 +73,7 @@ export function GridItem({
   );
 }
 
-export function PageShell({ children }: { children: ReactNode }) {
+function PageShell({ children }: { children: ReactNode }) {
   return (
     <div className="mx-auto min-h-full w-full bg-white lg:max-w-[90rem]">
       {children}

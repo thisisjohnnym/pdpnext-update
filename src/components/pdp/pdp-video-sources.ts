@@ -16,7 +16,7 @@ export function resolveVideoSources(src: string): VideoSource[] {
 }
 
 /** WebM assets that require MP4 counterparts for Safari */
-export const WEBM_ASSETS = [
+const WEBM_ASSETS = [
   "/videos/gallery-360.webm",
   "/videos/soft-tabby-360.webm",
   "/videos/soft-tabby-showcase.webm",

@@ -280,7 +280,7 @@ export function PdpAiConciergePanel({
 }
 
 /** AI Concierge — experiential prompts with inline styling answers */
-export function PdpAiConciergeModule() {
+function PdpAiConciergeModule() {
   return (
     <section
       data-header-surface="light"
@@ -296,4 +296,4 @@ export function PdpAiConciergeModule() {
 }
 
 /** @deprecated Use PdpAiConciergeModule */
-export const PdpProductSearchModule = PdpAiConciergeModule;
+const PdpProductSearchModule = PdpAiConciergeModule;

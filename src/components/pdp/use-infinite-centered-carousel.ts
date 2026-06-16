@@ -119,7 +119,7 @@ export function useInfiniteCenteredCarousel(
 }
 
 /** Maps center-snapped scroll position to the active source item index */
-export function useCarouselActiveIndex(
+function useCarouselActiveIndex(
   scrollRef: RefObject<HTMLDivElement | null>,
   itemCount: number,
 ) {

@@ -14,7 +14,7 @@ function smoothstep(value: number) {
  * Hero overlay opacity — hold full visibility, then ease out over a long band.
  * Fade starts after ~12% viewport scroll, completes by ~72%.
  */
-export function getHeroScrollOpacity(scrollY: number, viewportHeight: number) {
+function getHeroScrollOpacity(scrollY: number, viewportHeight: number) {
   const fadeStart = viewportHeight * 0.12;
   const fadeEnd = viewportHeight * 0.72;
 

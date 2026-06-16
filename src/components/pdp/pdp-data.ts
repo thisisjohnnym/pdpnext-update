@@ -126,7 +126,7 @@ export const PDP_BUNDLE_ITEMS: PdpBundleItem[] = [
   },
 ];
 
-export type PdpBagSizeHotspot = {
+type PdpBagSizeHotspot = {
   id: string;
   /** Horizontal position within the image frame (0–100) */
   x: number;
@@ -139,7 +139,7 @@ export type PdpBagSizeHotspot = {
 };
 
 /** Interactive capacity explorer — tap hotspots on product shot */
-export const PDP_BAG_SIZE = {
+const PDP_BAG_SIZE = {
   title: "What fits inside",
   imageSrc: PDP_PRODUCT.imageSrc,
   imageAlt: PDP_PRODUCT.imageAlt,
@@ -174,7 +174,7 @@ export const PDP_BAG_SIZE = {
   ] satisfies PdpBagSizeHotspot[],
 } as const;
 
-export type PdpFamilySizeOption = {
+type PdpFamilySizeOption = {
   id: string;
   label: string;
   imageSrc: string;
@@ -182,7 +182,7 @@ export type PdpFamilySizeOption = {
 };
 
 /** Tabby family size picker — Mini / Medium / Large silhouettes */
-export const PDP_FAMILY_SIZES = {
+const PDP_FAMILY_SIZES = {
   title: "Also available in this family",
   selectedId: "medium",
   options: [
@@ -207,7 +207,7 @@ export const PDP_FAMILY_SIZES = {
   ] satisfies PdpFamilySizeOption[],
 } as const;
 
-export const PDP_COMPARE_TEASER = {
+const PDP_COMPARE_TEASER = {
   title: "Compare with similar",
   linkLabel: "Compare sizes, style, occasions",
   /** Current PDP item */
@@ -226,7 +226,7 @@ export const PDP_COMPARE_TEASER = {
   },
 } as const;
 
-export const PDP_COMPLETE_THE_LOOK = {
+const PDP_COMPLETE_THE_LOOK = {
   title: "Complete the look",
   items: [
     {
@@ -294,7 +294,7 @@ export type PdpFamilyCompareAlternative = PdpCompareItem & {
   };
 };
 
-export const PDP_COMPARE_CATEGORIES = [
+const PDP_COMPARE_CATEGORIES = [
   { id: "size", label: "Size" },
   { id: "strap", label: "Strap" },
   { id: "material", label: "Material" },
@@ -619,7 +619,7 @@ export const PDP_FAMILY_COMPARE_ALTERNATIVES: PdpFamilyCompareAlternative[] = [
 ];
 
 /** @deprecated Carousel compare — use PDP_FAMILY_COMPARE_ALTERNATIVES */
-export const PDP_COMPARE_OPTIONS: PdpCompareItem[] = [
+const PDP_COMPARE_OPTIONS: PdpCompareItem[] = [
   {
     id: "beaded-floral-tabby",
     name: "Beaded Floral Tabby",
@@ -687,7 +687,7 @@ export const PDP_COMPARE_OPTIONS: PdpCompareItem[] = [
 ];
 
 /** Recommendation carousel — similar bags below gallery */
-export const PDP_SIMILAR_ITEMS: PdpSimilarItem[] = [
+const PDP_SIMILAR_ITEMS: PdpSimilarItem[] = [
   {
     id: "crochet-fringe-tabby",
     name: "Crochet Tabby Shoulder Bag",
@@ -719,7 +719,7 @@ export const PDP_SIMILAR_ITEMS: PdpSimilarItem[] = [
 ];
 
 /** Cross-sell grid — often bought with Tabby 26 */
-export const PDP_YMAL = {
+const PDP_YMAL = {
   eyebrow: "You might also like",
   subtitle: "Based on what others bought with this bag",
   items: [
@@ -1011,7 +1011,7 @@ export const PDP_AI_CONCIERGE = {
 } as const;
 
 /** @deprecated Use PDP_AI_CONCIERGE */
-export const PDP_PRODUCT_SEARCH = {
+const PDP_PRODUCT_SEARCH = {
   title: PDP_AI_CONCIERGE.title,
   placeholder: PDP_AI_CONCIERGE.placeholder,
   suggestions: PDP_AI_CONCIERGE.prompts.map((prompt) => prompt.question),
@@ -1031,13 +1031,13 @@ export const PDP_GALLERY_IMMERSIVE_HERO_VIDEO = "/videos/tabby-hero.mp4";
 export const PDP_GALLERY_HERO_VIDEO = "/videos/soft-tabby-360.webm";
 
 /** Capacity showcase — what fits inside the bag */
-export const PDP_GALLERY_WHAT_FITS_INSIDE_VIDEO = "/videos/what-fits-inside.webm";
+const PDP_GALLERY_WHAT_FITS_INSIDE_VIDEO = "/videos/what-fits-inside.webm";
 
 /** Highlight montage — styling, details, and product moments */
-export const PDP_GALLERY_SHOWCASE_VIDEO = "/videos/soft-tabby-showcase.webm";
+const PDP_GALLERY_SHOWCASE_VIDEO = "/videos/soft-tabby-showcase.webm";
 
 /** Match studio backdrop so letterboxing feels seamless */
-export const PDP_GALLERY_VIDEO_BG = "#eeeeee";
+const PDP_GALLERY_VIDEO_BG = "#eeeeee";
 
 /** Tailwind class for studio product photography frames */
 export const PDP_STUDIO_BACKDROP_CLASS = "bg-pdp-surface-grey";
@@ -1053,7 +1053,7 @@ export type PdpProductHotspot = {
 };
 
 /** Detail hotspots — interior leather + hardware close-up */
-export const PDP_PRODUCT_IMMERSIVE_HOTSPOTS: PdpProductHotspot[] = [
+const PDP_PRODUCT_IMMERSIVE_HOTSPOTS: PdpProductHotspot[] = [
   {
     id: "c-clasp",
     x: 44,
@@ -1181,7 +1181,7 @@ export type PdpGalleryProductCollageSlide = {
   type: "product-collage";
 };
 
-export type PdpGalleryProductCollageTile = {
+type PdpGalleryProductCollageTile = {
   src: string;
   alt: string;
   objectPosition?: string;
@@ -1223,21 +1223,21 @@ export const PDP_GALLERY_PRODUCT_DETAIL_COLLAGE = {
 } as const;
 
 /** First portrait below hero — lifestyle follow-up */
-export const PDP_GALLERY_HERO_FOLLOWUP_IMAGE =
+const PDP_GALLERY_HERO_FOLLOWUP_IMAGE =
   "/images/gallery/tabby-leather-on-model-laugh.png";
 
 /** Product hero — front view with charm (posters, compare, hotspots) */
-export const PDP_GALLERY_PRODUCT_IMMERSIVE =
+const PDP_GALLERY_PRODUCT_IMMERSIVE =
   "/images/gallery/tabby-leather-front-charm.png";
 
 /** Native 9:16 studio product shot — 2nd frame in scroll (below hero) */
-export const PDP_GALLERY_PRODUCT_FRONT_IMAGE =
+const PDP_GALLERY_PRODUCT_FRONT_IMAGE =
   "/images/gallery/tabby-product-front-916.jpg";
 
 /** Lead product shot — first frame below hero (native 9:16) */
 export const PDP_GALLERY_DRAG_ZOOM_HINT = "Hold and drag to zoom";
 
-export const PDP_GALLERY_PRODUCT_FRONT_SLIDE: PdpGalleryImmersiveSlide = {
+const PDP_GALLERY_PRODUCT_FRONT_SLIDE: PdpGalleryImmersiveSlide = {
   type: "immersive",
   src: PDP_GALLERY_PRODUCT_FRONT_IMAGE,
   alt: "Tabby Shoulder Bag 26 in black full-grain leather, front view with gold C turnlock clasp and detachable straps",
@@ -1248,7 +1248,7 @@ export const PDP_GALLERY_PRODUCT_FRONT_SLIDE: PdpGalleryImmersiveSlide = {
 };
 
 /** On-model — editorial inset below product front */
-export const PDP_GALLERY_ON_MODEL_DENIM_SLIDE: PdpGalleryEditorialSlide = {
+const PDP_GALLERY_ON_MODEL_DENIM_SLIDE: PdpGalleryEditorialSlide = {
   type: "editorial",
   src: "/images/gallery/mode22.png",
   alt: "Model wearing Tabby Shoulder Bag 26 crossbody with a Coach tee and suede mini skirt",
@@ -1258,11 +1258,11 @@ export const PDP_GALLERY_ON_MODEL_DENIM_SLIDE: PdpGalleryEditorialSlide = {
 };
 
 /** On-model trench — fourth frame in scroll (below hero + product + editorial) */
-export const PDP_GALLERY_ON_MODEL_TRENCH_IMAGE =
+const PDP_GALLERY_ON_MODEL_TRENCH_IMAGE =
   "/images/gallery/tabby-on-model-trench.jpg";
 
 /** On-model trench + plaid — first frame below hero */
-export const PDP_GALLERY_ON_MODEL_FULL_DENIM_SLIDE: PdpGalleryImmersiveSlide = {
+const PDP_GALLERY_ON_MODEL_FULL_DENIM_SLIDE: PdpGalleryImmersiveSlide = {
   type: "immersive",
   src: PDP_GALLERY_ON_MODEL_TRENCH_IMAGE,
   alt: "Model wearing Tabby Shoulder Bag 26 with a tan trench coat over the shoulder",
@@ -1270,7 +1270,7 @@ export const PDP_GALLERY_ON_MODEL_FULL_DENIM_SLIDE: PdpGalleryImmersiveSlide = {
 };
 
 /** Interior open — fourth frame below hero */
-export const PDP_GALLERY_INTERIOR_OPEN_SLIDE: PdpGalleryImmersiveSlide = {
+const PDP_GALLERY_INTERIOR_OPEN_SLIDE: PdpGalleryImmersiveSlide = {
   type: "immersive",
   src: "/images/gallery/tabby-leather-interior-open.png",
   alt: "Tabby Shoulder Bag 26 interior open showing accordion compartments and gold hardware",
@@ -1278,7 +1278,7 @@ export const PDP_GALLERY_INTERIOR_OPEN_SLIDE: PdpGalleryImmersiveSlide = {
 };
 
 /** Capacity editorial break — what fits inside (inset video + caption) */
-export const PDP_GALLERY_CAPACITY_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
+const PDP_GALLERY_CAPACITY_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
   type: "editorial",
   videoSrc: PDP_GALLERY_WHAT_FITS_INSIDE_VIDEO,
   src: "/images/gallery/tabby-leather-interior-packed.png",
@@ -1293,7 +1293,7 @@ export const PDP_GALLERY_CAPACITY_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
 };
 
 /** Craftsmanship editorial break — glovetanned leather story */
-export const PDP_GALLERY_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
+const PDP_GALLERY_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
   type: "editorial",
   src: "/images/gallery/tabby-leather-detail-hardware.png",
   alt: "Close-up of Tabby Shoulder Bag 26 full-grain leather and gold C clasp hardware",
@@ -1302,7 +1302,7 @@ export const PDP_GALLERY_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
 };
 
 /** Standard studio product photography — hardware detail with hotspots */
-export const PDP_GALLERY_PRODUCT_SHOTS: PdpGallerySlide[] = [
+const PDP_GALLERY_PRODUCT_SHOTS: PdpGallerySlide[] = [
   {
     type: "immersive",
     src: "/images/gallery/tabby-leather-detail-hardware.png",
@@ -1317,7 +1317,7 @@ export const PDP_GALLERY_PRODUCT_SHOTS: PdpGallerySlide[] = [
  *
  * Tightened gallery: one lifestyle beat per idea, overflow in View more photos.
  */
-export const PDP_GALLERY_DESIRE_SLIDES: PdpGallerySlide[] = [
+const PDP_GALLERY_DESIRE_SLIDES: PdpGallerySlide[] = [
   PDP_GALLERY_PRODUCT_FRONT_SLIDE,
   PDP_GALLERY_ON_MODEL_DENIM_SLIDE,
   {
@@ -1330,7 +1330,7 @@ export const PDP_GALLERY_DESIRE_SLIDES: PdpGallerySlide[] = [
 ];
 
 /** 360 spin — editorial inset after material detail */
-export const PDP_GALLERY_360_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
+const PDP_GALLERY_360_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
   type: "editorial",
   videoSrc: PDP_GALLERY_HERO_VIDEO,
   src: PDP_GALLERY_PRODUCT_FRONT_IMAGE,
@@ -1342,7 +1342,7 @@ export const PDP_GALLERY_360_EDITORIAL_SLIDE: PdpGalleryEditorialSlide = {
 };
 
 /** Capacity, craft detail, and touch-first interactives */
-export const PDP_GALLERY_FUNCTION_SLIDES: PdpGallerySlide[] = [
+const PDP_GALLERY_FUNCTION_SLIDES: PdpGallerySlide[] = [
   PDP_GALLERY_CAPACITY_EDITORIAL_SLIDE,
   ...PDP_GALLERY_PRODUCT_SHOTS,
   PDP_GALLERY_360_EDITORIAL_SLIDE,
@@ -1353,10 +1353,10 @@ export const PDP_GALLERY_FUNCTION_SLIDES: PdpGallerySlide[] = [
 ];
 
 /** @deprecated Use PDP_GALLERY_DESIRE_SLIDES */
-export const PDP_GALLERY_MEDIA_SLIDES: PdpGallerySlide[] = PDP_GALLERY_DESIRE_SLIDES;
+const PDP_GALLERY_MEDIA_SLIDES: PdpGallerySlide[] = PDP_GALLERY_DESIRE_SLIDES;
 
 /** @deprecated Use PDP_GALLERY_FUNCTION_SLIDES */
-export const PDP_GALLERY_EXPERIENCE_SLIDES: PdpGallerySlide[] = PDP_GALLERY_FUNCTION_SLIDES;
+const PDP_GALLERY_EXPERIENCE_SLIDES: PdpGallerySlide[] = PDP_GALLERY_FUNCTION_SLIDES;
 
 /** Tabby Shoulder Bag 26 gallery — desire scroll, then function, then ecommerce below */
 export const PDP_GALLERY_SLIDES: PdpGallerySlide[] = [
@@ -1548,7 +1548,7 @@ export const PDP_STRAP_OPTIONS: Record<string, PdpStrapOptionsSet> = {
   },
 };
 
-export type PdpBagStory = {
+type PdpBagStory = {
   id: string;
   title: string;
   mood: string;
@@ -1759,14 +1759,14 @@ export const PDP_BAG_STORIES = {
 } as const;
 
 /** Editorial — everyday carry capacity */
-export const PDP_EVERYDAY_CARRY = {
+const PDP_EVERYDAY_CARRY = {
   src: "/images/gallery/tabby-leather-interior-packed.png",
   alt: "Tabby Shoulder Bag 26 interior packed with phone, wallet, keys, and everyday essentials",
   caption:
     "Designed for every day — however your Saturday, workday, or dinner plans unfold.",
 } as const;
 
-export type PdpWearStyle = {
+type PdpWearStyle = {
   id: string;
   label: string;
   src: string;
@@ -1774,7 +1774,7 @@ export type PdpWearStyle = {
 };
 
 /** Moment #3 — styling validation */
-export const PDP_HOW_TO_WEAR = {
+const PDP_HOW_TO_WEAR = {
   moment: "Moment #3",
   title: "How to wear it",
   caption: "One icon, multiple ways to wear it.",
@@ -1812,14 +1812,14 @@ export const PDP_HOW_TO_WEAR = {
   ] satisfies PdpWearStyle[],
 } as const;
 
-export type PdpMaterialDetail = {
+type PdpMaterialDetail = {
   id: string;
   label: string;
   src: string;
   alt: string;
 };
 
-export type PdpMaterialExploreZone = {
+type PdpMaterialExploreZone = {
   id: string;
   label: string;
   detail: string;
@@ -1834,11 +1834,11 @@ export type PdpMaterialExploreZone = {
 };
 
 /** Craftsmanship editorial — Material Story follows this slide */
-export const PDP_CRAFTSMANSHIP_EDITORIAL_SRC =
+const PDP_CRAFTSMANSHIP_EDITORIAL_SRC =
   "/images/gallery/tabby-leather-front-charm.png";
 
 /** Moment #4 — touch-to-reveal leather macro exploration */
-export const PDP_MATERIAL_EXPLORATION = {
+const PDP_MATERIAL_EXPLORATION = {
   moment: "Moment #4",
   title: "Material exploration",
   intro:
@@ -1901,20 +1901,20 @@ export const PDP_MATERIAL_EXPLORATION = {
   ] satisfies PdpMaterialExploreZone[],
 } as const;
 
-export type PdpLeatherAgingTrait = {
+type PdpLeatherAgingTrait = {
   id: "patina" | "softening" | "wear";
   label: string;
   detail: string;
 };
 
-export type PdpLeatherAgingStageImage = {
+type PdpLeatherAgingStageImage = {
   src: string;
   alt: string;
   objectPosition?: string;
   objectFit?: "contain" | "cover";
 };
 
-export type PdpLeatherAgingStage = {
+type PdpLeatherAgingStage = {
   id: string;
   label: string;
   timeline: string;
@@ -1938,21 +1938,21 @@ export type PdpLeatherAgingStage = {
 };
 
 /** Leather aging simulator — trust builder for long-term material quality */
-export const PDP_LEATHER_AGING_NEW_IMAGE = {
+const PDP_LEATHER_AGING_NEW_IMAGE = {
   src: "/images/gallery/tabby-leather-aging-new-day-one.jpg",
   alt: "Tabby Shoulder Bag 26 in black leather with gold C clasp hardware — new, day one",
   objectPosition: "center center",
   objectFit: "cover",
 } as const satisfies PdpLeatherAgingStageImage;
 
-export const PDP_LEATHER_AGING_SIX_MONTHS_IMAGE = {
+const PDP_LEATHER_AGING_SIX_MONTHS_IMAGE = {
   src: "/images/gallery/tabby-leather-aging-six-months.jpg",
   alt: "Tabby Shoulder Bag 26 after six months of daily carry — softened leather with creasing and warm patina",
   objectPosition: "center center",
   objectFit: "cover",
 } as const satisfies PdpLeatherAgingStageImage;
 
-export const PDP_LEATHER_AGING_TWO_YEARS_IMAGE = {
+const PDP_LEATHER_AGING_TWO_YEARS_IMAGE = {
   src: "/images/gallery/tabby-leather-aging-two-years.jpg",
   alt: "Tabby Shoulder Bag 26 after two years of daily carry — rich patina and honest wear",
   objectPosition: "center center",
@@ -2100,7 +2100,7 @@ export const PDP_LEATHER_AGING = {
   },
 } as const;
 
-export type PdpLeatherCleanerProduct = {
+type PdpLeatherCleanerProduct = {
   id: string;
   name: string;
   detail: string;
@@ -2181,7 +2181,7 @@ export const PDP_FAQ = {
   ] satisfies PdpFaqItem[],
 } as const;
 
-export type PdpWeightFeelEntry = {
+type PdpWeightFeelEntry = {
   id: string;
   label: string;
   detail: string;
@@ -2236,7 +2236,7 @@ export const PDP_WEIGHT_FEEL = {
 } as const;
 
 /** @deprecated Use PDP_MATERIAL_EXPLORATION — kept for legacy references */
-export const PDP_MATERIAL_STORY = {
+const PDP_MATERIAL_STORY = {
   moment: PDP_MATERIAL_EXPLORATION.moment,
   title: PDP_MATERIAL_EXPLORATION.title,
   caption: PDP_MATERIAL_EXPLORATION.intro,
@@ -2302,7 +2302,7 @@ export const PDP_SIGNATURE_SOUNDS = {
 } as const;
 
 /** Moment #5 — brand heritage */
-export const PDP_HERITAGE_STORY = {
+const PDP_HERITAGE_STORY = {
   moment: "Moment #5",
   title: "Heritage story",
   src: "/images/gallery/tabby-leather-front-charm.png",
@@ -2396,7 +2396,7 @@ export const PDP_COLORS: PdpColor[] = [
   },
 ];
 
-export const PDP_MEDIA_SLIDES = [
+const PDP_MEDIA_SLIDES = [
   {
     src: PDP_GALLERY_ON_MODEL_TRENCH_IMAGE,
     alt: "Model wearing Tabby Shoulder Bag 26 in black full-grain leather",
@@ -2553,7 +2553,7 @@ export const PDP_AS_SEEN_ON = {
 } as const;
 
 /** UGC with context — who's wearing it, how, and where */
-export const PDP_UGC_CONTEXT = {
+const PDP_UGC_CONTEXT = {
   moment: "Community",
   title: "In real life",
   intro: "Not random customer photos — context for who's wearing it, how, and where.",
@@ -2630,7 +2630,7 @@ export const PDP_UGC_CONTEXT = {
   ] satisfies PdpUgcStory[],
 } as const;
 
-export type PdpCommunityMediaItem = {
+type PdpCommunityMediaItem = {
   id: string;
   label: string;
   type: "photo" | "video";
@@ -2647,7 +2647,7 @@ export type PdpCommunityMediaItem = {
 };
 
 /** Moment #6 — community validation with contextual UGC */
-export const PDP_COMMUNITY_VALIDATION = {
+const PDP_COMMUNITY_VALIDATION = {
   moment: "Moment #6",
   title: "Community validation",
   caption: "Real people, real context — not random snaps.",
@@ -2923,7 +2923,7 @@ export const PDP_REVIEW_REPLIES: Record<string, PdpReviewReply[]> = {
   ],
 };
 
-export const PDP_FEATURED_REVIEWS = PDP_CUSTOMER_REVIEWS.slice(0, 2);
+const PDP_FEATURED_REVIEWS = PDP_CUSTOMER_REVIEWS.slice(0, 2);
 
 export const PDP_REVIEWS_SUMMARY = {
   average: 4.8,
@@ -2989,7 +2989,7 @@ export const PDP_UGC_REVIEW_STORIES: PdpUgcStory[] = [
 ];
 
 /** @deprecated Use PDP_UGC_REVIEW_STORIES — plain src/alt for legacy callers */
-export const PDP_REVIEW_PHOTOS: PdpReviewPhoto[] = PDP_UGC_REVIEW_STORIES.map(
+const PDP_REVIEW_PHOTOS: PdpReviewPhoto[] = PDP_UGC_REVIEW_STORIES.map(
   (story) => ({
     src: story.src,
     alt: story.alt,

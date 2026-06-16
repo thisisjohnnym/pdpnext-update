@@ -132,7 +132,7 @@ function useScrollBus() {
 }
 
 /** Shared RAF-coalesced scroll subscription — one listener for all consumers */
-export function useCoalescedScroll(listener: ScrollListener) {
+function useCoalescedScroll(listener: ScrollListener) {
   const bus = useScrollBus();
 
   useEffect(

@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "fallow": "fallow",
+    "fallow:audit": "fallow audit",
+    "fallow:health": "fallow health --score --hotspots",
+    "fallow:dead-code": "fallow dead-code",
+    "prepare": "fallow hooks install --target git || true"
   },
   "dependencies": {
     "gsap": "^3.15.0",
@@ -22,6 +27,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.7",
+    "fallow": "^2.97.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

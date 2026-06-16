@@ -1,4 +1,4 @@
-export type VideoDecoderState = "ACTIVE" | "PAUSED" | "DETACHED" | "UNLOADED";
+type VideoDecoderState = "ACTIVE" | "PAUSED" | "DETACHED" | "UNLOADED";
 
 type RegistryEntry = {
   state: VideoDecoderState;
@@ -124,7 +124,7 @@ class VideoDecoderRegistry {
 
 export const videoDecoderRegistry = new VideoDecoderRegistry();
 
-export const DECODER_LIMITS = {
+const DECODER_LIMITS = {
   maxActiveDecoders: MAX_ACTIVE_DECODERS,
   maxMountedVideos: MAX_ACTIVE_DECODERS,
   inactiveUnloadMs: INACTIVE_UNLOAD_MS,

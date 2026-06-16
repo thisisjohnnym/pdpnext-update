@@ -7,7 +7,7 @@ import {
 import { cn } from "@/lib/cn";
 
 /** Every gallery frame is a full-height snap panel when panel scroll is on */
-export function isGalleryPanelSlide(_slide: PdpGallerySlide): boolean {
+function isGalleryPanelSlide(_slide: PdpGallerySlide): boolean {
   return true;
 }
 
@@ -30,6 +30,6 @@ export function galleryPanelClassName(isLastPanel = false) {
 }
 
 /** @deprecated Use galleryPanelClassName — all modules are full snap panels */
-export function galleryPassThroughPanelClassName(isLastPanel = false) {
+function galleryPassThroughPanelClassName(isLastPanel = false) {
   return galleryPanelClassName(isLastPanel);
 }
