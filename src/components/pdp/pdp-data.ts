@@ -804,6 +804,50 @@ export const PDP_COACH_PREMIUM = {
   ] satisfies PdpCoachPremiumPerk[],
 } as const;
 
+export type PdpSiteFooterLink = {
+  label: string;
+  href: string;
+};
+
+export type PdpSiteFooterGroup = {
+  id: string;
+  title: string;
+  links: PdpSiteFooterLink[];
+};
+
+export const PDP_SITE_FOOTER = {
+  brand: "Coach Outlet",
+  groups: [
+    {
+      id: "help",
+      title: "Customer Care",
+      links: [
+        { label: "Order status", href: "#" },
+        { label: "Shipping & returns", href: "#" },
+        { label: "Start a return", href: "#" },
+        { label: "Contact us", href: "#" },
+      ],
+    },
+    {
+      id: "about",
+      title: "About Coach",
+      links: [
+        { label: "Our story", href: "#" },
+        { label: "Sustainability", href: "#" },
+        { label: "Careers", href: "#" },
+        { label: "Store locator", href: "#" },
+      ],
+    },
+  ] satisfies PdpSiteFooterGroup[],
+  legal: [
+    { label: "Privacy Policy", href: "#" },
+    { label: "Terms of Use", href: "#" },
+    { label: "Accessibility", href: "#" },
+    { label: "Do Not Sell", href: "#" },
+  ] satisfies PdpSiteFooterLink[],
+  copyright: "© 2026 Coach IP Holdings LLC. All rights reserved.",
+} as const;
+
 export type PdpRecentlyViewedItem = PdpSimilarItem & {
   viewedLabel: string;
 };
@@ -2682,7 +2726,7 @@ export const PDP_CUSTOMER_REVIEWS: PdpFeaturedReview[] = [
     author: "Maren K.",
     date: "Oct 12, 2025",
     verified: true,
-    likes: 21_200,
+    likes: 31_400,
     photos: [
       {
         src: "/images/reviews/comment-cat.webp",
@@ -2893,8 +2937,8 @@ export const PDP_REVIEWS_SUMMARY = {
 } as const;
 
 export const PDP_LIKE_SUMMARY = {
-  count: 100_000,
-  label: "100k",
+  count: 1_200_000,
+  label: "1.2M",
 } as const;
 
 export const PDP_SAVE_SUMMARY = {

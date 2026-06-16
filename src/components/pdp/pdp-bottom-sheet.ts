@@ -33,3 +33,14 @@ export function pdpBottomSheetPanelClass({
     open ? "translate-y-0" : "translate-y-full",
   );
 }
+
+/** Shared tray chrome — grab handle + close button placement */
+export const pdpBottomSheetHeaderClass = "relative shrink-0 px-2.5 pb-0 pt-2.5";
+
+export const pdpBottomSheetGrabHandleClass =
+  "mx-auto mb-6 h-[3px] w-[50px] rounded-full bg-black/70";
+
+export const pdpBottomSheetCloseButtonClass =
+  "absolute right-2.5 top-2.5 flex size-8 items-center justify-center rounded-full text-neutral-900";
+
+export const PDP_BOTTOM_SHEET_CLOSE_ICON_SIZE = 24;

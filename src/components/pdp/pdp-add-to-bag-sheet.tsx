@@ -9,6 +9,8 @@ import { cn } from "@/lib/cn";
 
 import {
   pdpBottomSheetBackdropClass,
+  pdpBottomSheetGrabHandleClass,
+  pdpBottomSheetHeaderClass,
   pdpBottomSheetOverlayClass,
   pdpBottomSheetPanelClass,
 } from "./pdp-bottom-sheet";
@@ -129,8 +131,8 @@ export function PdpAddToBagSheet({
         aria-labelledby={titleId}
         className={pdpBottomSheetPanelClass({ open })}
       >
-        <div className="shrink-0 px-2.5 pb-0 pt-2.5">
-          <div className="mx-auto mb-5 h-[3px] w-[50px] rounded-full bg-black/70" />
+        <div className={pdpBottomSheetHeaderClass}>
+          <div className={pdpBottomSheetGrabHandleClass} />
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(24px,var(--pdp-safe-area-bottom))]">

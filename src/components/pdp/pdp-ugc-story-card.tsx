@@ -7,18 +7,6 @@ import type { PdpUgcStory } from "./pdp-data";
 import { pdpCarouselImageClass } from "./pdp-carousel";
 import { pdpType } from "./pdp-type";
 
-function parseWearer(wearer: string) {
-  const separator = wearer.indexOf(" · ");
-  if (separator === -1) {
-    return { name: wearer, location: null as string | null };
-  }
-
-  return {
-    name: wearer.slice(0, separator),
-    location: wearer.slice(separator + 3),
-  };
-}
-
 type PdpUgcStoryCardProps = {
   story: PdpUgcStory;
   variant?: "carousel" | "overlay";
@@ -86,9 +74,7 @@ export function PdpUgcStoryCard({
         />
       </div>
 
-      {size === "compact" ? (
-        <CompactStoryCaption story={story} />
-      ) : (
+      {size === "default" ? (
         <div className="flex flex-col gap-1 p-2">
           <p className="font-extended text-xs tracking-[0.2px] text-black">
             {story.wearer}
@@ -109,37 +95,7 @@ export function PdpUgcStoryCard({
             <p className={`text-neutral-800 ${pdpType.micro}`}>&ldquo;{story.quote}&rdquo;</p>
           ) : null}
         </div>
-      )}
-    </article>
-  );
-}
-
-function CompactStoryCaption({ story }: { story: PdpUgcStory }) {
-  const { name, location } = parseWearer(story.wearer);
-
-  return (
-    <div className="flex flex-col gap-1 p-2 pt-2.5">
-      <div className="flex items-center gap-1">
-        <p className={`text-black ${pdpType.label}`}>{name}</p>
-        {story.verified ? (
-          <MaterialIcon
-            name="verified"
-            size={18}
-            filled
-            className="shrink-0 text-[#0095F6]"
-            style={{ fontSize: 11 }}
-            aria-label="Verified buyer"
-          />
-        ) : null}
-      </div>
-      {location ? (
-        <p className={`text-neutral-500 ${pdpType.micro}`}>{location}</p>
       ) : null}
-      <p className={`leading-snug text-neutral-600 ${pdpType.micro}`}>
-        {story.colorway}
-        <span className="text-neutral-400"> · </span>
-        {story.carry}
-      </p>
-    </div>
+    </article>
   );
 }

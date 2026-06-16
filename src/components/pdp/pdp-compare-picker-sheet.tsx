@@ -10,8 +10,12 @@ import { cn } from "@/lib/cn";
 import type { PdpFamilyCompareAlternative } from "./pdp-data";
 import {
   pdpBottomSheetBackdropClass,
+  pdpBottomSheetCloseButtonClass,
+  pdpBottomSheetGrabHandleClass,
+  pdpBottomSheetHeaderClass,
   pdpBottomSheetOverlayClass,
   pdpBottomSheetPanelClass,
+  PDP_BOTTOM_SHEET_CLOSE_ICON_SIZE,
 } from "./pdp-bottom-sheet";
 import { pdpSheetHeadingClass } from "./pdp-module-section";
 import { pdpType } from "./pdp-type";
@@ -89,15 +93,15 @@ export function PdpComparePickerSheet({
         aria-labelledby={titleId}
         className={pdpBottomSheetPanelClass({ open })}
       >
-        <div className="shrink-0 px-2.5 pb-0 pt-2.5">
-          <div className="mx-auto mb-6 h-[3px] w-[50px] rounded-full bg-black/70" />
+        <div className={pdpBottomSheetHeaderClass}>
+          <div className={pdpBottomSheetGrabHandleClass} />
           <button
             type="button"
             aria-label="Close"
             onClick={onClose}
-            className="absolute right-2.5 top-2.5 flex size-8 items-center justify-center rounded-full text-neutral-900"
+            className={pdpBottomSheetCloseButtonClass}
           >
-            <MaterialIcon name="close" size={24} />
+            <MaterialIcon name="close" size={PDP_BOTTOM_SHEET_CLOSE_ICON_SIZE} />
           </button>
         </div>
 

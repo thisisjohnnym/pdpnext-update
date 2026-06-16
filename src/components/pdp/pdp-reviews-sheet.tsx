@@ -7,7 +7,11 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
 
 import {
+  pdpBottomSheetCloseButtonClass,
+  pdpBottomSheetGrabHandleClass,
+  pdpBottomSheetHeaderClass,
   pdpBottomSheetPanelClass,
+  PDP_BOTTOM_SHEET_CLOSE_ICON_SIZE,
 } from "./pdp-bottom-sheet";
 
 import {
@@ -38,6 +42,7 @@ import {
   type PdpReviewCommentData,
 } from "./pdp-review-comment";
 import { PdpAiInsightCard } from "./pdp-ai-insight-card";
+import { PdpCoachPremiumModule } from "./pdp-coach-premium-module";
 import { PdpUgcStoryCard } from "./pdp-ugc-story-card";
 import { pdpType } from "./pdp-type";
 import { PdpTextLinkCta } from "./pdp-text-link-cta";
@@ -264,15 +269,15 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
             "relative z-[1] max-h-full min-h-0",
           )}
         >
-        <div className="relative shrink-0 px-2.5 pb-0 pt-2.5">
-          <div className="mx-auto mb-[30px] h-[3px] w-[50px] rounded-full bg-black/70" />
+        <div className={pdpBottomSheetHeaderClass}>
+          <div className={pdpBottomSheetGrabHandleClass} />
           <button
             type="button"
             aria-label="Close"
             onClick={onClose}
-            className="absolute right-2.5 top-2.5 flex size-8 items-center justify-center rounded-full text-neutral-900"
+            className={pdpBottomSheetCloseButtonClass}
           >
-            <MaterialIcon name="close" size={24} />
+            <MaterialIcon name="close" size={PDP_BOTTOM_SHEET_CLOSE_ICON_SIZE} />
           </button>
         </div>
 
@@ -325,7 +330,7 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
             ))}
           </PdpReviewCommentsSection>
 
-          <div className="flex flex-col gap-2 border-t border-neutral-200 pt-6">
+          <div className="flex flex-col gap-2 border-t border-neutral-200 pt-6 pb-2">
             <div className="flex items-start justify-between gap-4">
               <p className={cn(pdpModuleHeadingClass({ lead: false, size: "sm" }), "text-neutral-600")}>
                 In real life
@@ -349,6 +354,8 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
               </div>
             </div>
           </div>
+
+          <PdpCoachPremiumModule embedded />
           </>
           ) : null}
           </div>

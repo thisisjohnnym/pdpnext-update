@@ -437,9 +437,9 @@ export function PdpReviewCommentBox({
           }}
           placeholder="Add a comment..."
           className={cn(
-            "pdp-comment-composer__input min-h-11 min-w-0 flex-1 rounded-lg border border-neutral-200 bg-white px-3 py-2.5",
-            "font-extended text-base leading-normal tracking-[0.2px] text-black outline-none",
-            "placeholder:text-neutral-400 focus:border-neutral-400",
+            "pdp-comment-composer__input min-h-11 min-w-0 flex-1 rounded-full border-0 bg-[#f3f3f3] px-4 pt-3 pb-2.5",
+            "font-extended text-base tracking-[0.2px] text-black outline-none",
+            "placeholder:text-neutral-500 focus:bg-[#ececec]",
             "[touch-action:manipulation] [-webkit-tap-highlight-color:transparent]",
           )}
         />

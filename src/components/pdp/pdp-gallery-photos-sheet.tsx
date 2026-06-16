@@ -8,8 +8,12 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 
 import {
   pdpBottomSheetBackdropClass,
+  pdpBottomSheetCloseButtonClass,
+  pdpBottomSheetGrabHandleClass,
+  pdpBottomSheetHeaderClass,
   pdpBottomSheetOverlayClass,
   pdpBottomSheetPanelClass,
+  PDP_BOTTOM_SHEET_CLOSE_ICON_SIZE,
 } from "./pdp-bottom-sheet";
 import { PDP_GALLERY_MORE_PHOTOS } from "./pdp-data";
 import { pdpSheetHeadingClass } from "./pdp-module-section";
@@ -73,22 +77,22 @@ export function PdpGalleryPhotosSheet({ open, onClose }: PdpGalleryPhotosSheetPr
         aria-labelledby={titleId}
         className={pdpBottomSheetPanelClass({ open, maxHeight: "88dvh" })}
       >
-        <div className="shrink-0 px-2.5 pb-0 pt-2.5">
-          <div className="mx-auto mb-4 h-[3px] w-[50px] rounded-full bg-black/70" />
-        </div>
-
-        <div className="flex shrink-0 items-center justify-between px-3 pb-4">
-          <h2 id={titleId} className={pdpSheetHeadingClass()}>
-            All media
-          </h2>
+        <div className={pdpBottomSheetHeaderClass}>
+          <div className={pdpBottomSheetGrabHandleClass} />
           <button
             type="button"
             aria-label="Close"
             onClick={onClose}
-            className="flex size-8 items-center justify-center rounded-full text-neutral-900"
+            className={pdpBottomSheetCloseButtonClass}
           >
-            <MaterialIcon name="close" size={24} />
+            <MaterialIcon name="close" size={PDP_BOTTOM_SHEET_CLOSE_ICON_SIZE} />
           </button>
+        </div>
+
+        <div className="flex shrink-0 px-3 pb-4">
+          <h2 id={titleId} className={pdpSheetHeadingClass()}>
+            All media
+          </h2>
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(24px,var(--pdp-safe-area-bottom))]">
