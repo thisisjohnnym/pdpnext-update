@@ -224,18 +224,28 @@ export function PdpReviewComment({
       />
 
       {replies.length > 0 ? (
-        <div className="pl-4">
+        <div className="relative ml-3 pl-3.5">
+          <div
+            aria-hidden
+            className="absolute bottom-0 left-0 top-3 w-px bg-neutral-300"
+          />
+
           {visibleReplies.map((reply) => (
-            <CommentRow
-              key={reply.id}
-              author={reply.author}
-              quote={reply.quote}
-              date={reply.date}
-              verified={reply.verified}
-              likes={reply.likes}
-              variant={variant}
-              isReply
-            />
+            <div key={reply.id} className="relative">
+              <div
+                aria-hidden
+                className="absolute -left-3.5 top-[1.125rem] h-px w-3.5 bg-neutral-300"
+              />
+              <CommentRow
+                author={reply.author}
+                quote={reply.quote}
+                date={reply.date}
+                verified={reply.verified}
+                likes={reply.likes}
+                variant={variant}
+                isReply
+              />
+            </div>
           ))}
 
           {hiddenReplyCount > 0 && !repliesExpanded ? (
@@ -243,12 +253,11 @@ export function PdpReviewComment({
               type="button"
               onClick={() => setRepliesExpanded(true)}
               className={cn(
-                "flex items-center gap-2 py-2 text-neutral-500",
+                "relative flex items-center gap-2 py-2 pl-0 text-neutral-500",
                 pdpType.micro,
                 pdpPressableClass,
               )}
             >
-              <span className="h-px w-6 bg-neutral-300" aria-hidden />
               View {hiddenReplyCount} more replies
             </button>
           ) : null}
@@ -258,12 +267,11 @@ export function PdpReviewComment({
               type="button"
               onClick={() => setRepliesExpanded(false)}
               className={cn(
-                "flex items-center gap-2 py-2 text-neutral-500",
+                "relative flex items-center gap-2 py-2 pl-0 text-neutral-500",
                 pdpType.micro,
                 pdpPressableClass,
               )}
             >
-              <span className="h-px w-6 bg-neutral-300" aria-hidden />
               Hide replies
             </button>
           ) : null}

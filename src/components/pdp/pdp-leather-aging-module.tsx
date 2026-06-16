@@ -14,7 +14,7 @@ import {
 import { pdpType, pdpStrokeCtaClass, pdpStrokeCtaMutedClass } from "./pdp-type";
 import { PdpTextReveal } from "./pdp-text-reveal";
 
-const AGING_COPY_MIN_HEIGHT_CLASS = "min-h-[4.25rem]";
+const AGING_TITLE_MIN_HEIGHT_CLASS = "min-h-7";
 
 function formatCarePrice(amount: number): string {
   return `$${amount.toLocaleString("en-US")}`;
@@ -320,21 +320,21 @@ export function PdpLeatherAgingModule({
         style={{ paddingBottom: `calc(0.75rem + var(--pdp-safe-area-bottom))` }}
       >
         <div className="pdp-aging-timeline" aria-live="polite">
-          <div className={cn("mb-3", AGING_COPY_MIN_HEIGHT_CLASS)}>
+          <div className={AGING_TITLE_MIN_HEIGHT_CLASS}>
             <PdpTextReveal
               as="p"
               className="font-extended text-lg tracking-[0.2px] text-black"
             >
               {stage.label}
             </PdpTextReveal>
-            <PdpTextReveal
-              as="p"
-              delay={100}
-              className={`mt-0.5 text-neutral-500 ${pdpType.micro}`}
-            >
-              {stage.summary}
-            </PdpTextReveal>
           </div>
+          <PdpTextReveal
+            as="p"
+            delay={100}
+            className={`mt-0.5 text-neutral-500 ${pdpType.micro}`}
+          >
+            {stage.summary}
+          </PdpTextReveal>
 
           <div
             ref={trackRef}
@@ -347,7 +347,7 @@ export function PdpLeatherAgingModule({
               isDragging ? stages[previewStageIndex]!.label : stage.label
             }
             aria-label="Leather aging over time"
-            className="relative flex h-11 cursor-grab touch-none select-none items-center active:cursor-grabbing"
+            className="relative mt-1 flex h-8 cursor-grab touch-none select-none items-center active:cursor-grabbing"
             onPointerDown={handleScrubPointerDown}
             onPointerMove={handleScrubPointerMove}
             onPointerUp={endScrub}
@@ -402,7 +402,7 @@ export function PdpLeatherAgingModule({
             </div>
           </div>
 
-          <div className="mt-2 grid grid-cols-3">
+          <div className="mt-0.5 grid grid-cols-3">
             {stages.map((item, index) => {
               const isFirst = index === 0;
               const isLast = index === maxIndex;
@@ -414,7 +414,7 @@ export function PdpLeatherAgingModule({
                   onClick={() => commitStageIndex(index)}
                   aria-current={stageIndex === index ? "step" : undefined}
                   className={cn(
-                    "font-extended min-h-8 py-1 text-[10px] tracking-[0.2px]",
+                    "font-extended min-h-6 py-0 text-[10px] tracking-[0.2px]",
                     labelMotionClass,
                     isFirst && "text-left",
                     isLast && "text-right",

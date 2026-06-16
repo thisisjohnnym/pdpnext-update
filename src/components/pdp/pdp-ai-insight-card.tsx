@@ -106,8 +106,9 @@ export type PdpAiInsightCardProps = PdpAiInsightContentProps & {
   /** polite for live recommendations */
   ariaLive?: "polite" | "off";
   variant?: "card" | "minimal";
-  /** Minimal only — compact elevated callout on muted sections */
+  /** Minimal only — compact callout; pair with containedSurface for flat grey vs elevated white */
   contained?: boolean;
+  containedSurface?: "elevated" | "flat";
 };
 
 /** White insight card — browsing nudges, compare tips, reviews summary, etc. */
@@ -126,6 +127,7 @@ export function PdpAiInsightCard({
   size = "default",
   variant = "card",
   contained = false,
+  containedSurface = "elevated",
 }: PdpAiInsightCardProps) {
   const minimal = variant === "minimal";
   const extraSmall = size === "xs";
@@ -137,7 +139,10 @@ export function PdpAiInsightCard({
         minimal
           ? contained
             ? cn(
-                "rounded-lg bg-white shadow-sm",
+                "rounded-lg",
+                containedSurface === "flat"
+                  ? "bg-neutral-50"
+                  : "bg-white shadow-sm",
                 extraSmall ? "px-3 py-2.5" : "px-3.5 py-3",
                 onDismiss && (extraSmall ? "pr-8" : "pr-9"),
               )

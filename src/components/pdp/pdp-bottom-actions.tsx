@@ -87,7 +87,7 @@ export function PdpBottomActions({
           className="relative z-[1] shrink-0 -translate-y-px text-black"
           aria-hidden
         />
-        <span className="relative z-[1] -translate-y-px text-[12px] text-black">
+        <span className="relative z-[1] translate-y-px text-[12px] text-black">
           Add to bag
         </span>
       </button>

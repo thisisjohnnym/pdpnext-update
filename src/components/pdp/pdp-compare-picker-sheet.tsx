@@ -102,12 +102,9 @@ export function PdpComparePickerSheet({
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(24px,var(--pdp-safe-area-bottom))]">
-          <h2 id={titleId} className={cn(pdpSheetHeadingClass(), "mb-1")}>
+          <h2 id={titleId} className={cn(pdpSheetHeadingClass(), "mb-4")}>
             Compare with
           </h2>
-          <p className={`mb-4 text-neutral-600 ${pdpType.caption}`}>
-            Choose another Tabby to see key differences.
-          </p>
 
           <ul className="m-0 flex list-none flex-col gap-2">
             {alternatives.map((item, index) => {

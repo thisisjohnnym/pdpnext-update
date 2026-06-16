@@ -370,36 +370,48 @@ export const PDP_FAMILY_COMPARE_ALTERNATIVES: PdpFamilyCompareAlternative[] = [
     closure: "C clasp turn-lock",
     differences: [
       {
-        id: "carry-capacity",
-        label: "Carry capacity",
-        display: "Larger",
-        advantage: "selected",
+        id: "size",
+        label: "Size",
+        display: "Slightly larger",
+        advantage: "alternative",
       },
       {
-        id: "weight",
-        label: "Weight",
-        display: "Similar",
-        advantage: "neutral",
+        id: "material",
+        label: "Material",
+        display: "Pillow-quilted leather",
+        advantage: "alternative",
+      },
+      {
+        id: "carry-capacity",
+        label: "Carry capacity",
+        display: "More room",
+        advantage: "alternative",
+      },
+      {
+        id: "structured-shape",
+        label: "Silhouette",
+        display: "Softer, puffed",
+        advantage: "alternative",
+      },
+      {
+        id: "strap-options",
+        label: "Strap style",
+        display: "Chain & leather",
+        advantage: "alternative",
       },
       {
         id: "best-for",
         label: "Best for",
-        display: "Work",
-        advantage: "selected",
+        display: "Weekends & travel",
+        advantage: "alternative",
       },
       {
-        id: "structured-shape",
-        label: "Structured shape",
-        display: "Yes",
-        advantage: "selected",
+        id: "weight",
+        label: "Weight",
+        display: "Lighter feel",
+        advantage: "alternative",
       },
       buildPriceDifferenceRow(PDP_COMPARE_SELECTED.price, "$595"),
-      {
-        id: "strap-options",
-        label: "Strap options",
-        display: "More",
-        advantage: "selected",
-      },
     ],
     aiInsight: {
       title: "Based on your browsing",
@@ -424,10 +436,40 @@ export const PDP_FAMILY_COMPARE_ALTERNATIVES: PdpFamilyCompareAlternative[] = [
     closure: "C clasp turn-lock",
     differences: [
       {
+        id: "size",
+        label: "Size",
+        display: "Same footprint",
+        advantage: "neutral",
+      },
+      {
+        id: "material",
+        label: "Material",
+        display: "Quilted leather",
+        advantage: "alternative",
+      },
+      {
         id: "carry-capacity",
         label: "Carry capacity",
         display: "Similar",
         advantage: "neutral",
+      },
+      {
+        id: "structured-shape",
+        label: "Silhouette",
+        display: "Quilted, dressier",
+        advantage: "alternative",
+      },
+      {
+        id: "strap-options",
+        label: "Strap style",
+        display: "Chain crossbody",
+        advantage: "alternative",
+      },
+      {
+        id: "best-for",
+        label: "Best for",
+        display: "Evenings out",
+        advantage: "alternative",
       },
       {
         id: "weight",
@@ -435,25 +477,7 @@ export const PDP_FAMILY_COMPARE_ALTERNATIVES: PdpFamilyCompareAlternative[] = [
         display: "Similar",
         advantage: "neutral",
       },
-      {
-        id: "best-for",
-        label: "Best for",
-        display: "Evenings",
-        advantage: "alternative",
-      },
-      {
-        id: "structured-shape",
-        label: "Structured shape",
-        display: "Yes",
-        advantage: "selected",
-      },
       buildPriceDifferenceRow(PDP_COMPARE_SELECTED.price, "$650"),
-      {
-        id: "strap-options",
-        label: "Strap options",
-        display: "More",
-        advantage: "selected",
-      },
     ],
     aiInsight: {
       title: "Based on your browsing",
@@ -478,36 +502,48 @@ export const PDP_FAMILY_COMPARE_ALTERNATIVES: PdpFamilyCompareAlternative[] = [
     closure: "C clasp turn-lock",
     differences: [
       {
+        id: "size",
+        label: "Size",
+        display: "Same footprint",
+        advantage: "neutral",
+      },
+      {
+        id: "material",
+        label: "Material",
+        display: "Beaded floral",
+        advantage: "alternative",
+      },
+      {
         id: "carry-capacity",
         label: "Carry capacity",
         display: "Similar",
         advantage: "neutral",
       },
       {
-        id: "weight",
-        label: "Weight",
-        display: "Similar",
+        id: "structured-shape",
+        label: "Silhouette",
+        display: "Structured, embellished",
+        advantage: "alternative",
+      },
+      {
+        id: "strap-options",
+        label: "Strap style",
+        display: "Detachable leather",
         advantage: "neutral",
       },
       {
         id: "best-for",
         label: "Best for",
-        display: "Occasions",
+        display: "Events & occasions",
         advantage: "alternative",
       },
       {
-        id: "structured-shape",
-        label: "Structured shape",
-        display: "Yes",
-        advantage: "selected",
+        id: "weight",
+        label: "Weight",
+        display: "Slightly heavier",
+        advantage: "alternative",
       },
       buildPriceDifferenceRow(PDP_COMPARE_SELECTED.price, "$695"),
-      {
-        id: "strap-options",
-        label: "Strap options",
-        display: "Fewer",
-        advantage: "alternative",
-      },
     ],
     aiInsight: {
       title: "Based on your browsing",
@@ -532,36 +568,48 @@ export const PDP_FAMILY_COMPARE_ALTERNATIVES: PdpFamilyCompareAlternative[] = [
     closure: "C clasp turn-lock",
     differences: [
       {
+        id: "size",
+        label: "Size",
+        display: "Same",
+        advantage: "neutral",
+      },
+      {
+        id: "material",
+        label: "Material",
+        display: "Full-grain leather",
+        advantage: "neutral",
+      },
+      {
         id: "carry-capacity",
         label: "Carry capacity",
         display: "Same",
         advantage: "neutral",
       },
       {
-        id: "weight",
-        label: "Weight",
-        display: "Similar",
+        id: "structured-shape",
+        label: "Silhouette",
+        display: "Structured",
         advantage: "neutral",
+      },
+      {
+        id: "strap-options",
+        label: "Strap style",
+        display: "Detachable leather",
+        advantage: "neutral",
+      },
+      {
+        id: "charm-styling",
+        label: "Charm styling",
+        display: "Pre-styled set",
+        advantage: "alternative",
       },
       {
         id: "best-for",
         label: "Best for",
-        display: "Everyday",
-        advantage: "neutral",
-      },
-      {
-        id: "structured-shape",
-        label: "Structured shape",
-        display: "Yes",
-        advantage: "selected",
-      },
-      buildPriceDifferenceRow(PDP_COMPARE_SELECTED.price, "$550"),
-      {
-        id: "strap-options",
-        label: "Charm styling",
-        display: "Pre-styled",
+        display: "Gifting",
         advantage: "alternative",
       },
+      buildPriceDifferenceRow(PDP_COMPARE_SELECTED.price, "$550"),
     ],
     aiInsight: {
       title: "Based on your browsing",
@@ -1474,6 +1522,12 @@ export type PdpBagStory = {
   items: string[];
 };
 
+export type PdpStrapSimulationPreview = {
+  src: string;
+  alt: string;
+  objectPosition?: string;
+};
+
 export type PdpStrapSimulationMode = {
   id: string;
   label: string;
@@ -1483,24 +1537,34 @@ export type PdpStrapSimulationMode = {
   priceLabel?: string;
   /** Matches PDP_STRAP_OPTIONS id — enables quick add on this preview */
   quickAddOptionId?: string;
-  image: {
-    src: string;
-    alt: string;
-    objectPosition?: string;
+  /** Carousel thumbnail — accessory close-up */
+  image: PdpStrapSimulationPreview & {
     fit?: "cover" | "contain";
   };
+  /** Hero preview — full bag wearing this configuration */
+  previewImage: PdpStrapSimulationPreview;
+};
+
+export type PdpStrapSimulationCharm = {
+  id: string;
+  label: string;
+  priceLabel: string;
+  /** Omitted for included stock options */
+  quickAddOptionId?: string;
+  stock?: boolean;
+  image: PdpStrapSimulationPreview;
 };
 
 /** Strap swap simulator — preview detachable carry setups on the bag */
 export const PDP_STRAP_SIMULATION = {
   moment: "Customize",
-  title: "Swap the straps",
-  intro: "Detachable clips — tap a strap to preview it on your Tabby.",
-  hint: "Tap to swap straps",
+  title: "Build your bag",
+  intro: "Start with what’s included, then preview add-on straps and charms on your Tabby.",
+  hint: "Tap to customize",
   modes: [
     {
       id: "included-dual",
-      label: "Dual leather",
+      label: "Default straps",
       detail: "Shoulder + crossbody straps included.",
       answer: "Both leather straps clip on — wear shoulder or crossbody out of the box.",
       priceLabel: "Included",
@@ -1510,10 +1574,15 @@ export const PDP_STRAP_SIMULATION = {
         objectPosition: "center 42%",
         fit: "cover",
       },
+      previewImage: {
+        src: "/images/gallery/tabby-leather-product-alt.png",
+        alt: "Tabby Shoulder Bag 26 with included shoulder and crossbody leather straps",
+        objectPosition: "center 42%",
+      },
     },
     {
       id: "crossbody-strap",
-      label: "Crossbody strap",
+      label: "Crossbody",
       detail: "Leather · adjustable length.",
       answer:
         "Detachable leather crossbody strap with gold hardware — clips onto the same Tabby hardware.",
@@ -1525,10 +1594,15 @@ export const PDP_STRAP_SIMULATION = {
         objectPosition: "center center",
         fit: "cover",
       },
+      previewImage: {
+        src: "/images/gallery/tabby-leather-product-front.png",
+        alt: "Tabby Shoulder Bag 26 with detachable crossbody leather strap",
+        objectPosition: "center 38%",
+      },
     },
     {
       id: "chain-strap",
-      label: "Charm chain strap",
+      label: "Charm chain",
       detail: "Gold chain with playful charms.",
       answer:
         "Charm chain strap swaps onto the same hardware — dressier crossbody with bow, star, and heart charms.",
@@ -1540,10 +1614,15 @@ export const PDP_STRAP_SIMULATION = {
         objectPosition: "center center",
         fit: "cover",
       },
+      previewImage: {
+        src: "/images/similar/tabby-chain-crossbody.png",
+        alt: "Tabby Shoulder Bag 26 with gold charm chain strap",
+        objectPosition: "center center",
+      },
     },
     {
       id: "chain-strap-with-charms",
-      label: "Chain Strap with Charms",
+      label: "Chain + charms",
       detail: "Mixed charms on gold chain.",
       answer:
         "Chain strap with charms — mushroom, cherries, dinosaur, and crystal bow on a gold curb chain.",
@@ -1555,8 +1634,48 @@ export const PDP_STRAP_SIMULATION = {
         objectPosition: "center center",
         fit: "cover",
       },
+      previewImage: {
+        src: "/images/compare/tabby-charms.png",
+        alt: "Tabby Shoulder Bag 26 with charm chain strap and mixed bag charms",
+        objectPosition: "center center",
+      },
     },
   ] satisfies PdpStrapSimulationMode[],
+  charms: [
+    {
+      id: "none",
+      label: "No charm",
+      priceLabel: "Included",
+      stock: true,
+      image: {
+        src: "/images/gallery/tabby-leather-product-alt.png",
+        alt: "Tabby Shoulder Bag 26 without bag charms",
+        objectPosition: "center 42%",
+      },
+    },
+    {
+      id: "cherry-charm",
+      label: "Cherry charm",
+      priceLabel: "$45",
+      quickAddOptionId: "cherry-charm",
+      image: {
+        src: "/images/gallery/tabby-leather-front-charm.png",
+        alt: "Cherry bag charm on Tabby Shoulder Bag 26",
+        objectPosition: "center 78%",
+      },
+    },
+    {
+      id: "heart-charm",
+      label: "Heart charm",
+      priceLabel: "$42",
+      quickAddOptionId: "heart-charm",
+      image: {
+        src: "/images/gallery/tabby-leather-front-charm.png",
+        alt: "Heart bag charm on Tabby Shoulder Bag 26",
+        objectPosition: "center 78%",
+      },
+    },
+  ] satisfies PdpStrapSimulationCharm[],
 } as const;
 
 /** What's in my bag — lifestyle carry stories, not inventory specs */

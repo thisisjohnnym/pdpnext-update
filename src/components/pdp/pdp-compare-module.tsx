@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import { MaterialIcon } from "@/components/icons/material-icon";
 import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
@@ -41,10 +40,10 @@ function CompareProductCard({
         />
         {showChangeAffordance ? (
           <span
-            className="absolute left-2.5 top-2.5 z-10 flex size-8 items-center justify-center rounded-full border border-neutral-200 bg-white/95 text-black shadow-sm"
+            className="absolute left-2 top-2 z-10 rounded-full border border-neutral-200 bg-white/95 px-2.5 py-1 text-black shadow-sm"
             aria-hidden
           >
-            <MaterialIcon name="swap_horiz" size={18} />
+            <span className={pdpType.micro}>Change</span>
           </span>
         ) : null}
       </div>
@@ -58,16 +57,11 @@ function CompareProductCard({
   );
 }
 
-function getKeyDifferences(rows: PdpCompareDifferenceRow[]) {
-  const wins = rows.filter((row) => row.advantage === "selected");
+function getCompareDifferenceRows(rows: PdpCompareDifferenceRow[]) {
   const price = rows.find((row) => row.variant === "price");
-  const picked = wins.slice(0, 3);
+  const rest = rows.filter((row) => row.variant !== "price");
 
-  if (price && !picked.includes(price)) {
-    picked.push(price);
-  }
-
-  return picked.slice(0, 4);
+  return price ? [...rest, price] : rest;
 }
 
 function DifferenceRow({ row }: { row: PdpCompareDifferenceRow }) {
@@ -153,7 +147,7 @@ export function PdpCompareModule({
   const alternative =
     PDP_FAMILY_COMPARE_ALTERNATIVES[alternativeIndex] ??
     PDP_FAMILY_COMPARE_ALTERNATIVES[0];
-  const keyDifferences = getKeyDifferences(alternative.differences);
+  const keyDifferences = getCompareDifferenceRows(alternative.differences);
 
   const handleAdd = (id: string) => {
     setAddedIds((current) => {

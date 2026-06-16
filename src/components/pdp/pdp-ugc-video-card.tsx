@@ -59,10 +59,7 @@ export function PdpUgcVideoCard({
         className,
       )}
     >
-      <div
-        className="relative aspect-[9/16] w-full touch-pan-y overflow-hidden bg-black"
-        onPointerDown={(event) => {        }}
-      >
+      <div className="relative aspect-[9/16] w-full overflow-hidden bg-black">
         {mounted ? (
           <PdpGalleryHeroVideo
             src={video.src}
@@ -71,6 +68,7 @@ export function PdpUgcVideoCard({
             preload={isActive ? "auto" : "metadata"}
             skeletonTone="dark"
             passThroughTouch
+            allowHorizontalPan
             showControls
             showMuteControl
             className="size-full object-cover object-center"

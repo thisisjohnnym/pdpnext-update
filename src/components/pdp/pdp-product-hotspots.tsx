@@ -115,7 +115,7 @@ export function PdpProductHotspots({ hotspots }: PdpProductHotspotsProps) {
           <p className="font-extended text-[13px] font-normal leading-tight tracking-[0.2px] text-black">
             {activeHotspot.title}
           </p>
-          <p className="mt-0.5 line-clamp-2 font-extended text-[11px] leading-snug tracking-[0.2px] text-neutral-600">
+          <p className="mt-0.5 font-extended text-[11px] leading-snug tracking-[0.2px] text-neutral-600">
             {activeHotspot.body}
           </p>
         </div>

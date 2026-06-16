@@ -28,7 +28,7 @@ export function pdpModuleSectionClass({
     rhythm === "default" || rhythm === "compact" || rhythm === "roomy";
 
   return cn(
-    "relative w-full shrink-0 overflow-x-clip",
+    "relative w-full shrink-0",
     variant === "muted" ? "bg-neutral-100" : "bg-white",
     first && PDP_MODULE_STACK_FIRST_PADDING,
     !first && isStackRhythm && PDP_MODULE_STACK_PADDING,

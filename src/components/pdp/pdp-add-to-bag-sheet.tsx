@@ -292,7 +292,7 @@ export function PdpAddToBagSheet({
                               : pdpStrokeCtaClass,
                           )}
                         >
-                          <span>
+                          <span className="translate-y-px">
                             {added ? "Added" : "Quick add"}
                           </span>
                           {!added ? (

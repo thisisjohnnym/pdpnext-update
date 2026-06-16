@@ -96,6 +96,9 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
             <PdpAiInsightCard
               variant="minimal"
               size="compact"
+              contained
+              containedSurface="flat"
+              showIcon={false}
               eyebrow={PDP_REVIEWS_AI_SUMMARY.attribution}
               eyebrowPosition="below"
               title={PDP_REVIEWS_AI_SUMMARY.headline}

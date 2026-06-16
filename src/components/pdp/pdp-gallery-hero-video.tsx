@@ -26,8 +26,10 @@ type PdpGalleryHeroVideoProps = {
   preload?: "auto" | "metadata" | "none";
   /** Pulse skeleton while the first frame buffers — no poster image */
   skeletonTone?: "dark" | "light";
-  /** UGC rails — video layer ignores touch so vertical page scroll works */
+  /** UGC rails — video layer ignores touch so page/carousel scroll works */
   passThroughTouch?: boolean;
+  /** With passThroughTouch — allow horizontal carousel swipes (default vertical only) */
+  allowHorizontalPan?: boolean;
   /** Tap video surface to pause/play — hero immersive */
   tapToTogglePlayback?: boolean;
 };
@@ -43,6 +45,7 @@ export function PdpGalleryHeroVideo({
   preload = "none",
   skeletonTone = "dark",
   passThroughTouch = false,
+  allowHorizontalPan = false,
   tapToTogglePlayback = false,
 }: PdpGalleryHeroVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -184,7 +187,13 @@ export function PdpGalleryHeroVideo({
     !passThroughTouch && (tapToTogglePlayback || showControls);
 
   return (
-    <div className={cn("relative size-full", passThroughTouch && "touch-pan-y")}>
+    <div
+      className={cn(
+        "relative size-full",
+        passThroughTouch &&
+          (allowHorizontalPan ? "[touch-action:pan-x_pan-y]" : "touch-pan-y"),
+      )}
+    >
       {!isReady ? (
         <div
           aria-hidden

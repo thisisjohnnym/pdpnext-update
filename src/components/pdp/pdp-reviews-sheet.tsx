@@ -289,6 +289,9 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
           <PdpAiInsightCard
             variant="minimal"
             size="compact"
+            contained
+            containedSurface="flat"
+            showIcon={false}
             className="pb-4"
             eyebrow={PDP_REVIEWS_AI_SUMMARY.attribution}
             eyebrowPosition="below"

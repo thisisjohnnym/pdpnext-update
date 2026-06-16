@@ -391,14 +391,18 @@ html.font-extended {
   }
 }
 
-/* Horizontal carousel rails — track handles both axes; images don't capture touch */
+/* Horizontal carousel rails — scroll track owns horizontal pan; children defer to it */
 .pdp-carousel-scroll {
   touch-action: pan-x pan-y;
   -webkit-overflow-scrolling: touch;
+  scroll-behavior: auto;
 }
 
-.pdp-carousel-scroll > *,
-.pdp-carousel-scroll :is(button, a, [role="button"]) {
+.pdp-carousel-scroll > * {
+  touch-action: pan-x pan-y;
+}
+
+.pdp-carousel-scroll :is(button, a, [role="button"], [role="option"]) {
   touch-action: pan-x pan-y;
 }
 
@@ -406,7 +410,11 @@ html.font-extended {
   pointer-events: none;
 }
 
-/* UGC video — native video element must not trap vertical scroll */
+/* UGC video — native video element must not trap scroll; cards allow horizontal carousel pan */
+.pdp-ugc-video-card {
+  touch-action: pan-x pan-y;
+}
+
 .pdp-ugc-video-card video {
   pointer-events: none;
 }

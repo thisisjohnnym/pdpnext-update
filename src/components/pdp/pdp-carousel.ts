@@ -1,11 +1,13 @@
 import { cn } from "@/lib/cn";
 
-/** Bleed scroll track to viewport edges without widening the document */
-export const pdpCarouselBleedClass =
-  "-mx-3 px-3 lg:-mx-5 lg:px-5";
+/** First tile aligns to grid margin; trailing tiles scroll off the viewport edge */
+export const pdpCarouselBleedClass = "pl-3 lg:pl-5";
 
-/** Clips negative-margin bleed rails so they don't expand page scroll width */
-export const pdpCarouselBleedWrapClass = "w-full min-w-0 overflow-x-clip";
+/** Viewport-width rail — breaks out of grid/panel padding; do not clip overflow here */
+export const pdpCarouselBleedWrapClass = cn(
+  "relative min-w-0",
+  "left-1/2 w-screen max-w-[100vw] -translate-x-1/2",
+);
 
 /** Flex parents that contain a bleed carousel rail */
 export const pdpCarouselBlockClass = "min-w-0 w-full";
@@ -18,9 +20,7 @@ export const pdpCarouselScrollClass = cn(
 );
 
 /** Outer wrapper for bleed carousels — pair with pdpCarouselScrollClass */
-export const pdpCarouselScrollWrapClass = cn(
-  pdpCarouselBleedWrapClass,
-);
+export const pdpCarouselScrollWrapClass = pdpCarouselBleedWrapClass;
 
 /** 1.5 cards visible — gap-3 (12px) */
 export const pdpCarouselCard15Class =
@@ -69,6 +69,17 @@ export const pdpCarouselInfiniteCenteredPeekScrollClass = cn(
   "snap-x snap-mandatory",
   "px-[calc((100%-((100%-1.25rem)/1.1))/2)]",
   "lg:px-[calc((100%-((100%-2.25rem)/2.2))/2)]",
+);
+
+/** UGC video tiles — center snap for infinite peek rail */
+export const pdpUgcVideoCardInfiniteClass =
+  "w-[calc((100vw-1.25rem)/1.1)] shrink-0 snap-center snap-always lg:w-[calc((100vw-2.25rem)/2.2)]";
+
+/** UGC video infinite rail — active tile centered with side peek */
+export const pdpUgcVideoInfiniteScrollClass = cn(
+  pdpCarouselInfiniteCenteredScrollClass,
+  "px-[calc((100vw-((100vw-1.25rem)/1.1))/2)]",
+  "lg:px-[calc((100vw-((100vw-2.25rem)/2.2))/2)]",
 );
 
 /** As seen on celebrity tiles — ~1.2 across with name overlay, gap-2 */

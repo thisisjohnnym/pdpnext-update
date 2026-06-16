@@ -6,9 +6,9 @@ import { GridItem, PageGrid } from "@/components/grid/page-grid";
 import { cn } from "@/lib/cn";
 
 import {
-  pdpCarouselInfiniteCenteredScrollClass,
   pdpCarouselScrollWrapClass,
-  pdpUgcVideoCardCenteredClass,
+  pdpUgcVideoCardInfiniteClass,
+  pdpUgcVideoInfiniteScrollClass,
 } from "./pdp-carousel";
 import { PDP_UGC_VIDEO_CAROUSEL } from "./pdp-data";
 import { PdpModuleHeading } from "./pdp-module-heading";
@@ -21,12 +21,12 @@ import {
   useInfiniteCenteredCarousel,
 } from "./use-infinite-centered-carousel";
 
-/** TikTok-style UGC rail — header, follow CTA, full-bleed infinite carousel */
+/** TikTok-style UGC rail — center-snapped, infinite loop left and right */
 export function PdpUgcVideoCarouselModule() {
   const { title, followCta, videos } = PDP_UGC_VIDEO_CAROUSEL;
-  const loopVideos = useMemo(() => loopCarouselItems(videos), [videos]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollRoot, setScrollRoot] = useState<HTMLElement | null>(null);
+  const loopedVideos = useMemo(() => loopCarouselItems(videos), [videos]);
 
   useInfiniteCenteredCarousel(scrollRef, videos.length);
 
@@ -56,24 +56,25 @@ export function PdpUgcVideoCarouselModule() {
               </PdpTextLinkCta>
             </PdpTextReveal>
           </div>
+
+          <div className={cn(pdpCarouselScrollWrapClass, "relative mt-3")}>
+            <div
+              ref={scrollRef}
+              className={cn("flex gap-2", pdpUgcVideoInfiniteScrollClass)}
+              aria-label="TikTok videos"
+            >
+              {loopedVideos.map((video, index) => (
+                <PdpUgcVideoCard
+                  key={`${video.id}-${index}`}
+                  video={video}
+                  scrollRoot={scrollRoot}
+                  className={pdpUgcVideoCardInfiniteClass}
+                />
+              ))}
+            </div>
+          </div>
         </GridItem>
       </PageGrid>
-
-      <div className={cn(pdpCarouselScrollWrapClass, "relative mt-3 w-full")}>
-        <div
-          ref={scrollRef}
-          className={cn(pdpCarouselInfiniteCenteredScrollClass, "flex pb-0")}
-        >
-          {loopVideos.map((video, index) => (
-            <PdpUgcVideoCard
-              key={`${video.id}-${index}`}
-              video={video}
-              scrollRoot={scrollRoot}
-              className={pdpUgcVideoCardCenteredClass}
-            />
-          ))}
-        </div>
-      </div>
     </section>
   );
 }
