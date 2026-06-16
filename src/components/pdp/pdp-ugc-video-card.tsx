@@ -7,7 +7,6 @@ import { cn } from "@/lib/cn";
 
 import type { PdpUgcVideo } from "./pdp-data";
 import { PdpGalleryHeroVideo } from "./pdp-gallery-hero-video";
-import { pdpType } from "./pdp-type";
 
 type PdpUgcVideoCardProps = {
   video: PdpUgcVideo;
@@ -39,9 +38,9 @@ export function PdpUgcVideoCard({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsActive(entry.isIntersecting && entry.intersectionRatio >= 0.55);
+        setIsActive(entry.isIntersecting && entry.intersectionRatio >= 0.35);
       },
-      { root: scrollRoot, threshold: [0, 0.55, 0.85] },
+      { root: scrollRoot, threshold: [0, 0.35, 0.55, 0.85] },
     );
 
     observer.observe(card);
@@ -62,22 +61,35 @@ export function PdpUgcVideoCard({
       <div className="relative aspect-[9/16] w-full overflow-hidden bg-black">
         {mounted ? (
           <PdpGalleryHeroVideo
+            decoderId={video.id}
             src={video.src}
+            poster={video.poster}
             ariaLabel={video.alt}
             isActive={isActive}
             preload={isActive ? "auto" : "metadata"}
             skeletonTone="dark"
-            passThroughTouch
             allowHorizontalPan
-            showControls
+            tapToTogglePlayback
             showMuteControl
             className="size-full object-cover object-center"
           />
         ) : (
-          <div aria-hidden className="absolute inset-0 animate-pulse bg-neutral-900" />
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-neutral-900"
+            style={
+              video.poster
+                ? {
+                    backgroundImage: `url(${video.poster})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }
+                : undefined
+            }
+          />
         )}
 
-        <div className="pointer-events-none absolute bottom-3 left-3 z-[1] max-w-[calc(100%-5.5rem)] drop-shadow-[0_1px_4px_rgba(0,0,0,0.65)]">
+        <div className="pointer-events-none absolute bottom-3 left-3 z-[1] max-w-[calc(100%-3rem)] drop-shadow-[0_1px_4px_rgba(0,0,0,0.65)]">
           <p className="font-extended text-sm tracking-[0.2px] text-white">
             {video.handle}
             {video.verified ? (
@@ -88,7 +100,6 @@ export function PdpUgcVideoCard({
               />
             ) : null}
           </p>
-          <p className={`mt-0.5 text-white/85 ${pdpType.micro}`}>{video.context}</p>
         </div>
       </div>
     </article>

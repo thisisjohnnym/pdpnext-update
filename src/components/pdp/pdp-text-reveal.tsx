@@ -14,12 +14,12 @@ import {
   clearRevealTargets,
   ensureGsapPlugins,
   gsap,
-  prefersReducedMotion,
   REVEAL_EASE,
   REVEAL_MODULE_START,
 } from "./pdp-gsap";
 import { PDP_PANEL_SCROLL } from "./pdp-panel-scroll";
 import { useScrollRevealSection } from "./scroll-reveal-section-context";
+import { useReducedMotion } from "./use-reduced-motion";
 
 type PdpTextRevealProps<T extends ElementType> = {
   as?: T;
@@ -41,6 +41,7 @@ export function PdpTextReveal<T extends ElementType = "div">({
   const Tag = as ?? "div";
   const section = useScrollRevealSection();
   const nestedInSection = section !== null;
+  const reducedMotion = useReducedMotion();
   const ref = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
@@ -55,7 +56,7 @@ export function PdpTextReveal<T extends ElementType = "div">({
 
     ensureGsapPlugins();
 
-    if (prefersReducedMotion() || !PDP_PANEL_SCROLL) {
+    if (reducedMotion || !PDP_PANEL_SCROLL) {
       clearRevealTargets(node);
       return;
     }
@@ -95,7 +96,7 @@ export function PdpTextReveal<T extends ElementType = "div">({
     return () => {
       timeline.kill();
     };
-  }, [nestedInSection, delay]);
+  }, [nestedInSection, delay, reducedMotion]);
 
   return (
     <Tag

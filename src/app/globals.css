@@ -170,6 +170,30 @@ html.font-extended {
   animation: hotspot-ring-ripple 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .animate-heart-pop,
+  .animate-bag-badge-pop,
+  .animate-hotspot-pulse,
+  .animate-hotspot-ring-ripple {
+    animation: none !important;
+  }
+}
+
+.pdp-backdrop-blur-degrade {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 1023px) {
+    .pdp-backdrop-blur-degrade {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background-color: rgba(0, 0, 0, 0.55);
+    }
+  }
+}
+
 /* Leather aging — custom timeline scrubber */
 .pdp-aging-timeline__input {
   -webkit-appearance: none;
@@ -408,6 +432,18 @@ html.font-extended {
 
 .pdp-carousel-scroll img {
   pointer-events: none;
+}
+
+/* Build picker pills — overflow-x scroll clips vertically unless padded */
+.pdp-build-picker-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding-block: 6px;
+  margin-block: -6px;
+}
+
+.pdp-build-picker-scroll > * {
+  flex-shrink: 0;
 }
 
 /* UGC video — native video element must not trap scroll; cards allow horizontal carousel pan */

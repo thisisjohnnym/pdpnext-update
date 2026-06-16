@@ -19,7 +19,7 @@ function triggerLiftHaptic(pattern: readonly number[]) {
 }
 
 const WEIGHT_LIFT_OVERLAY_CLASS =
-  "absolute inset-x-0 bottom-0 z-10 flex min-h-[7.25rem] flex-col justify-end bg-gradient-to-t from-white/95 via-white/60 to-transparent px-4 pt-8 pb-[calc(1rem+var(--pdp-safe-area-bottom))]";
+  "absolute inset-x-0 bottom-0 z-10 flex min-h-[13.5rem] flex-col justify-end px-4 pt-20 pb-[calc(1rem+var(--pdp-safe-area-bottom))]";
 
 /** Weight & feel — press-and-hold lift with haptic, specs as sensation */
 export function PdpWeightFeelModule({
@@ -42,12 +42,16 @@ export function PdpWeightFeelModule({
     : (image.backgroundColor ?? "#eeeeee");
 
   return (
-    <section data-header-surface="light" className={panel.className} style={panel.style}>
+    <section
+      data-header-surface="light"
+      className={panel.className}
+      style={{ ...panel.style, backgroundColor: surfaceColor }}
+    >
       <div
         className={cn(
           EXPERIENCE_PANEL_MEDIA_CLASS,
           "pdp-weight-lift-media relative transition-colors duration-500 ease-out",
-          !panel.style && "aspect-[4/5]",
+          !panel.style && "aspect-[9/16]",
         )}
         style={{ backgroundColor: surfaceColor }}
       >
@@ -98,7 +102,12 @@ export function PdpWeightFeelModule({
           </div>
         </div>
 
-        <div className={cn(WEIGHT_LIFT_OVERLAY_CLASS, "touch-pan-y")}>
+        <div
+          className={cn(WEIGHT_LIFT_OVERLAY_CLASS, "touch-pan-y")}
+          style={{
+            backgroundImage: `linear-gradient(to top, ${surfaceColor} 42%, color-mix(in srgb, ${surfaceColor} 88%, transparent) 68%, transparent 100%)`,
+          }}
+        >
           <div
             role="button"
             tabIndex={0}
@@ -117,6 +126,29 @@ export function PdpWeightFeelModule({
               }
             }}
           >
+            <div
+              aria-live="polite"
+              className="min-h-[2.75rem] px-2 text-center"
+            >
+              {showLiftedAsset ? (
+                <>
+                  <p className="font-extended text-sm leading-snug tracking-[0.2px] text-black">
+                    {reveal.headline}
+                  </p>
+                  <p className="font-extended mt-1 text-xs tracking-[0.2px] text-neutral-600">
+                    {reveal.subline}
+                  </p>
+                </>
+              ) : isHolding ? (
+                <p className="font-extended text-center text-xs tracking-[0.2px] text-neutral-900">
+                  Keep holding…
+                </p>
+              ) : (
+                <p className="pdp-weight-lift__hint font-extended text-center text-[11px] uppercase tracking-[0.14em] text-neutral-900">
+                  {hint}
+                </p>
+              )}
+            </div>
             <div className="relative flex size-[4.25rem] items-center justify-center">
               <span
                 aria-hidden
@@ -165,29 +197,6 @@ export function PdpWeightFeelModule({
                   className="relative text-neutral-800"
                 />
               </span>
-            </div>
-            <div
-              aria-live="polite"
-              className="min-h-[2.75rem] px-2 text-center"
-            >
-              {showLiftedAsset ? (
-                <>
-                  <p className="font-extended text-sm leading-snug tracking-[0.2px] text-black">
-                    {reveal.headline}
-                  </p>
-                  <p className="font-extended mt-1 text-xs tracking-[0.2px] text-neutral-600">
-                    {reveal.subline}
-                  </p>
-                </>
-              ) : isHolding ? (
-                <p className="font-extended text-center text-xs tracking-[0.2px] text-neutral-900">
-                  Keep holding…
-                </p>
-              ) : (
-                <p className="pdp-weight-lift__hint font-extended text-center text-[11px] uppercase tracking-[0.14em] text-neutral-900">
-                  {hint}
-                </p>
-              )}
             </div>
           </div>
         </div>

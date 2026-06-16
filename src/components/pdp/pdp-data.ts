@@ -1197,7 +1197,7 @@ export const PDP_GALLERY_PRODUCT_FRONT_IMAGE =
   "/images/gallery/tabby-product-front-916.jpg";
 
 /** Lead product shot — first frame below hero (native 9:16) */
-export const PDP_GALLERY_DRAG_ZOOM_HINT = "Press & hold, then drag to zoom";
+export const PDP_GALLERY_DRAG_ZOOM_HINT = "Hold and drag to zoom";
 
 export const PDP_GALLERY_PRODUCT_FRONT_SLIDE: PdpGalleryImmersiveSlide = {
   type: "immersive",
@@ -2162,13 +2162,13 @@ export const PDP_WEIGHT_FEEL = {
   image: {
     src: "/images/gallery/tabby-weight-lift-hand-hold.jpg",
     alt: "Hand lifting Tabby Shoulder Bag 26 by the strap — black leather with gold C clasp on a light gray background",
-    objectPosition: "center 42%",
+    objectPosition: "center 38%",
     backgroundColor: "#eeeeee",
   },
   liftedImage: {
     src: "/images/gallery/tabby-weight-lift-reveal.jpg",
     alt: "Hand lifting Tabby Shoulder Bag 26 after press and hold — black leather with gold C clasp on a light gray background",
-    objectPosition: "center 42%",
+    objectPosition: "center 38%",
     backgroundColor: "#eeeeee",
   },
   reveal: {
@@ -2678,11 +2678,17 @@ export const PDP_CUSTOMER_REVIEWS: PdpFeaturedReview[] = [
   {
     id: "maren",
     rating: 5,
-    quote: "Perfect everyday bag — fits everything without feeling bulky ✨",
+    quote: "me walking out with this bag 😭",
     author: "Maren K.",
     date: "Oct 12, 2025",
     verified: true,
     likes: 21_200,
+    photos: [
+      {
+        src: "/images/reviews/comment-cat.gif",
+        alt: "Funny cat GIF uploaded with review",
+      },
+    ],
   },
   {
     id: "jules",

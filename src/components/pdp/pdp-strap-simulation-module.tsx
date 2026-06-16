@@ -7,24 +7,20 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
 
 import {
-  pdpCarouselScrollClass,
-  pdpCarouselScrollWrapClass,
-} from "./pdp-carousel";
-import {
   PDP_STRAP_SIMULATION,
   type PdpStrapSimulationCharm,
   type PdpStrapSimulationMode,
 } from "./pdp-data";
 import { resolveStrapSimulationPreview } from "./pdp-strap-simulation-preview";
 import { pdpPressableClass, pdpPressableSolidClass } from "./pdp-type";
-import {
-  experiencePanelSectionProps,
-} from "./pdp-experience-panel";
+import { experiencePanelSectionProps } from "./pdp-experience-panel";
 
-const BUILD_PICKER_CARD_CLASS =
-  "w-[calc((100vw-1.25rem)/3.4)] shrink-0 snap-start snap-always lg:w-[calc((100vw-2.25rem)/5.5)]";
+const STRAP_PREVIEW_MEDIA_CLASS = "relative aspect-[4/3] w-full overflow-hidden";
 
-const STRAP_PREVIEW_MEDIA_CLASS = "relative aspect-[5/4] w-full overflow-hidden";
+const BUILD_ROW_SCROLL_CLASS = cn(
+  "pdp-carousel-scroll pdp-build-picker-scroll flex items-center gap-2",
+  "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+);
 
 type BuildPickerOption = {
   id: string;
@@ -51,91 +47,124 @@ function BuildPickerRow({
   options: BuildPickerOption[];
   activeId: string;
   onSelect: (id: string) => void;
-  addedOptionIds: ReadonlySet<string>;
+  addedOptionIds?: ReadonlySet<string>;
   onQuickAdd?: (optionId: string) => void;
 }) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1.5">
       <p className="font-extended px-0.5 text-[10px] uppercase tracking-[0.14em] text-neutral-500">
         {label}
       </p>
 
-      <div className={pdpCarouselScrollWrapClass}>
+      <div className="-mx-1 overflow-visible px-1">
         <div
-          className={cn("flex gap-1.5", pdpCarouselScrollClass)}
+          className={BUILD_ROW_SCROLL_CLASS}
           role="listbox"
           aria-label={label}
         >
-          {options.map((option) => {
-            const isActive = activeId === option.id;
-            const isStock = option.stock || option.priceLabel === "Included";
-            const quickAddId = option.quickAddOptionId;
-            const added = quickAddId ? addedOptionIds.has(quickAddId) : false;
+        {options.map((option) => {
+          const isActive = activeId === option.id;
+          const isIncluded = option.stock || option.priceLabel === "Included";
+          const quickAddId = option.quickAddOptionId;
+          const showQuickAdd =
+            isActive &&
+            !isIncluded &&
+            Boolean(quickAddId) &&
+            Boolean(onQuickAdd);
+          const added =
+            showQuickAdd && quickAddId
+              ? addedOptionIds?.has(quickAddId) ?? false
+              : false;
 
-            return (
-              <div
-                key={option.id}
-                role="option"
-                aria-selected={isActive}
+          return (
+            <div
+              key={option.id}
+              role="option"
+              aria-selected={isActive}
+              className={cn(
+                "inline-flex shrink-0 items-stretch overflow-hidden rounded-full border text-left transition-colors",
+                isActive
+                  ? "border-black bg-white"
+                  : "border-neutral-200 bg-white text-neutral-700",
+              )}
+            >
+              <button
+                type="button"
+                onClick={() => onSelect(option.id)}
                 className={cn(
-                  "flex flex-col gap-0.5 rounded-lg p-0.5 transition-colors",
-                  BUILD_PICKER_CARD_CLASS,
-                  isActive ? "bg-black text-white" : "bg-neutral-100 text-neutral-700",
+                  "inline-flex min-w-0 items-center gap-2 py-1 pl-1 text-left transition-colors",
+                  showQuickAdd ? "pr-2" : "pr-3",
+                  pdpPressableClass,
                 )}
               >
-                <button
-                  type="button"
-                  onClick={() => onSelect(option.id)}
-                  className={cn("flex w-full flex-col gap-0.5 text-left", pdpPressableClass)}
-                >
-                  <span className="relative aspect-[5/4] overflow-hidden rounded-md bg-white">
-                    <Image
-                      src={option.image.src}
-                      alt=""
-                      fill
-                      className="object-cover object-center"
-                      style={{
-                        objectPosition: option.image.objectPosition ?? "center center",
-                      }}
-                      sizes="24vw"
-                      draggable={false}
-                    />
-                  </span>
-                  <span className="font-extended px-0.5 text-center text-[10px] leading-tight tracking-[0.2px]">
+                <span className="relative size-9 shrink-0 overflow-hidden rounded-full bg-neutral-100">
+                  <Image
+                    src={option.image.src}
+                    alt=""
+                    fill
+                    className="object-cover object-center"
+                    style={{
+                      objectPosition: option.image.objectPosition ?? "center center",
+                    }}
+                    sizes="36px"
+                    draggable={false}
+                  />
+                </span>
+                <span className="flex min-w-0 flex-col">
+                  <span className="font-extended text-[11px] leading-tight tracking-[0.2px] text-black">
                     {option.label}
                   </span>
-                </button>
-
-                {isActive ? (
-                  isStock ? (
-                    <span className="font-extended block px-0.5 pb-0.5 text-center text-[10px] tracking-[0.2px] text-white/75">
+                  {isIncluded ? (
+                    <span className="font-extended text-[10px] leading-tight tracking-[0.2px] text-neutral-500">
                       Included
                     </span>
-                  ) : quickAddId && onQuickAdd ? (
-                    <button
-                      type="button"
-                      onClick={() => onQuickAdd(quickAddId)}
-                      disabled={added}
-                      className={cn(
-                        "inline-flex w-full items-center justify-center gap-0.5 rounded-full px-2 py-1 text-[10px] leading-none tracking-[0.2px] transition-colors",
-                        added ? pdpPressableClass : pdpPressableSolidClass,
-                        added
-                          ? "bg-white/20 text-white/75"
-                          : "bg-white text-black active:bg-white/90",
-                      )}
-                    >
-                      <span className="font-extended">
-                        {added ? "Added" : `Add ${option.priceLabel}`}
-                      </span>
-                      {!added ? (
-                        <MaterialIcon name="add" size={18} className="shrink-0 text-black" />
-                      ) : null}
-                    </button>
-                  ) : null
-                ) : null}
-              </div>
-            );
-          })}
+                  ) : option.priceLabel ? (
+                    <span className="font-extended text-[10px] leading-tight tracking-[0.2px] text-neutral-500">
+                      {option.priceLabel}
+                    </span>
+                  ) : null}
+                </span>
+              </button>
+
+              {showQuickAdd && quickAddId ? (
+                <div className="flex shrink-0 items-center gap-2 self-center pr-1">
+                  <span
+                    aria-hidden
+                    className="h-6 w-px shrink-0 bg-neutral-200"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => onQuickAdd?.(quickAddId)}
+                    disabled={added}
+                    aria-label={
+                      added
+                        ? `${option.label} added to bag`
+                        : `Add ${option.label} to bag`
+                    }
+                    className={cn(
+                      "inline-flex shrink-0 items-center justify-center gap-0.5 rounded-full px-2.5 py-1.5 text-[10px] leading-none tracking-[0.2px] transition-colors",
+                      added ? pdpPressableClass : pdpPressableSolidClass,
+                      added
+                        ? "bg-neutral-100 text-neutral-500"
+                        : "bg-black text-white active:bg-neutral-800",
+                    )}
+                  >
+                    <span className="font-extended translate-y-px">
+                      {added ? "Added" : "Add"}
+                    </span>
+                    {!added ? (
+                      <MaterialIcon
+                        name="add"
+                        size={18}
+                        className="shrink-0 text-white"
+                      />
+                    ) : null}
+                  </button>
+                </div>
+              ) : null}
+            </div>
+          );
+        })}
         </div>
       </div>
     </div>
@@ -178,8 +207,9 @@ export function PdpStrapSimulationModule({
   const [activeCharmId, setActiveCharmId] = useState(charms[0]!.id);
   const [addedOptionIds, setAddedOptionIds] = useState<Set<string>>(() => new Set());
 
+  const strapOptions = useMemo(() => toStrapOptions(modes), [modes]);
+  const charmOptions = useMemo(() => toCharmOptions(charms), [charms]);
   const activeMode = modes.find((mode) => mode.id === activeStrapId) ?? modes[0]!;
-
   const preview = useMemo(
     () => resolveStrapSimulationPreview(activeMode, activeCharmId),
     [activeCharmId, activeMode],
@@ -210,24 +240,26 @@ export function PdpStrapSimulationModule({
         />
       </div>
 
-      <div className="flex shrink-0 flex-col gap-2 px-3 pt-3 pb-4">
-        <BuildPickerRow
-          label="Strap"
-          options={toStrapOptions(modes)}
-          activeId={activeStrapId}
-          onSelect={setActiveStrapId}
-          addedOptionIds={addedOptionIds}
-          onQuickAdd={onQuickAddStrap ? handleQuickAdd : undefined}
-        />
+      <div className="px-3 pt-3 pb-4">
+        <div className="flex flex-col gap-3 overflow-visible rounded-xl bg-neutral-50 p-3">
+          <BuildPickerRow
+            label="Strap"
+            options={strapOptions}
+            activeId={activeStrapId}
+            onSelect={setActiveStrapId}
+            addedOptionIds={addedOptionIds}
+            onQuickAdd={onQuickAddStrap ? handleQuickAdd : undefined}
+          />
 
-        <BuildPickerRow
-          label="Charm"
-          options={toCharmOptions(charms)}
-          activeId={activeCharmId}
-          onSelect={setActiveCharmId}
-          addedOptionIds={addedOptionIds}
-          onQuickAdd={onQuickAddStrap ? handleQuickAdd : undefined}
-        />
+          <BuildPickerRow
+            label="Charm"
+            options={charmOptions}
+            activeId={activeCharmId}
+            onSelect={setActiveCharmId}
+            addedOptionIds={addedOptionIds}
+            onQuickAdd={onQuickAddStrap ? handleQuickAdd : undefined}
+          />
+        </div>
       </div>
     </section>
   );

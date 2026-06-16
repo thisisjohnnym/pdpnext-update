@@ -13,23 +13,25 @@ import {
   isHeroOverlayVisible,
   useHeroScrollOpacity,
 } from "./use-hero-scroll-opacity";
+import { useReducedMotion } from "./use-reduced-motion";
 
 const LIKE_RED = "#FE2C55";
-const BURST_DURATION_MS = 1050;
+const BURST_DURATION_MS = 1700;
+const BURST_EASING = "cubic-bezier(0.22, 0.92, 0.24, 1)";
 const RAIL_ICON_SIZE = 26;
 
 /** Upward-floating hearts — rise distance, horizontal sway, spin, stagger */
 const HEART_BURST_PARTICLES = [
   { rise: 78, sway: -12, size: 14, delay: 0, spin: -14 },
-  { rise: 96, sway: 14, size: 12, delay: 40, spin: 16 },
-  { rise: 64, sway: -8, size: 11, delay: 70, spin: -10 },
-  { rise: 108, sway: 10, size: 10, delay: 25, spin: 12 },
-  { rise: 88, sway: -18, size: 12, delay: 95, spin: -16 },
-  { rise: 72, sway: 8, size: 9, delay: 55, spin: 10 },
-  { rise: 112, sway: -6, size: 10, delay: 115, spin: -8 },
-  { rise: 58, sway: 16, size: 8, delay: 130, spin: 18 },
-  { rise: 102, sway: -14, size: 11, delay: 85, spin: -12 },
-  { rise: 84, sway: 6, size: 9, delay: 150, spin: 8 },
+  { rise: 96, sway: 14, size: 12, delay: 60, spin: 16 },
+  { rise: 64, sway: -8, size: 11, delay: 105, spin: -10 },
+  { rise: 108, sway: 10, size: 10, delay: 40, spin: 12 },
+  { rise: 88, sway: -18, size: 12, delay: 140, spin: -16 },
+  { rise: 72, sway: 8, size: 9, delay: 85, spin: 10 },
+  { rise: 112, sway: -6, size: 10, delay: 170, spin: -8 },
+  { rise: 58, sway: 16, size: 8, delay: 195, spin: 18 },
+  { rise: 102, sway: -14, size: 11, delay: 125, spin: -12 },
+  { rise: 84, sway: 6, size: 9, delay: 220, spin: 8 },
 ] as const;
 
 function railIconStyle(filled = false): CSSProperties {
@@ -49,10 +51,11 @@ type HeartBurstParticleProps = {
 
 function HeartBurstParticle({ rise, sway, size, delay, spin }: HeartBurstParticleProps) {
   const particleRef = useRef<HTMLSpanElement>(null);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     const particle = particleRef.current;
-    if (!particle) {
+    if (!particle || reducedMotion) {
       return;
     }
 
@@ -61,20 +64,23 @@ function HeartBurstParticle({ rise, sway, size, delay, spin }: HeartBurstParticl
         {
           transform: "translate(-50%, -50%) scale(0.2) rotate(0deg)",
           opacity: 0,
+          offset: 0,
         },
         {
           transform: `translate(calc(-50% + ${sway * 0.35}px), calc(-50% - 10px)) scale(1.25) rotate(${spin * 0.25}deg)`,
           opacity: 1,
+          offset: 0.18,
         },
         {
           transform: `translate(calc(-50% + ${sway}px), calc(-50% - ${rise}px)) scale(0.55) rotate(${spin}deg)`,
           opacity: 0,
+          offset: 1,
         },
       ],
       {
         duration: BURST_DURATION_MS,
         delay,
-        easing: "cubic-bezier(0.18, 1.05, 0.32, 1)",
+        easing: BURST_EASING,
         fill: "forwards",
       },
     );
@@ -82,7 +88,7 @@ function HeartBurstParticle({ rise, sway, size, delay, spin }: HeartBurstParticl
     return () => {
       animation.cancel();
     };
-  }, [delay, rise, sway, spin]);
+  }, [delay, rise, sway, spin, reducedMotion]);
 
   return (
     <span
@@ -165,6 +171,7 @@ function LikeRailAction({
 }: LikeRailActionProps) {
   const [bursting, setBursting] = useState(false);
   const [burstKey, setBurstKey] = useState(0);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     if (!bursting) {
@@ -181,7 +188,7 @@ function LikeRailAction({
   }, [bursting]);
 
   const handleClick = () => {
-    if (!liked) {
+    if (!liked && !reducedMotion) {
       setBurstKey((key) => key + 1);
       setBursting(true);
     }
@@ -227,7 +234,7 @@ function LikeRailAction({
           className={cn(
             "relative z-10 transition-colors duration-200",
             liked ? "text-[#FE2C55]" : "text-white",
-            bursting && "animate-heart-pop",
+            bursting && !reducedMotion && "motion-safe:animate-heart-pop",
           )}
         />
       </span>

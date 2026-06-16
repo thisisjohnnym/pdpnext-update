@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { useShouldRun } from "./use-should-run";
+
 type UseWeightLiftOptions = {
   holdMs: number;
   onLift?: () => void;
@@ -12,6 +14,7 @@ const SCROLL_CANCEL_PX = 12;
 
 /** Press-and-hold lift — progress fills, haptic at completion, resets on release */
 export function useWeightLift({ holdMs, onLift }: UseWeightLiftOptions) {
+  const shouldRun = useShouldRun();
   const holdMsRef = useRef(holdMs);
   const onLiftRef = useRef(onLift);
   const isHoldingRef = useRef(false);
@@ -52,7 +55,7 @@ export function useWeightLift({ holdMs, onLift }: UseWeightLiftOptions) {
 
   const tick = useCallback(
     function runTick(now: number) {
-      if (!isHoldingRef.current || startTimeRef.current === null) {
+      if (!isHoldingRef.current || startTimeRef.current === null || !shouldRun) {
         return;
       }
 
@@ -69,7 +72,7 @@ export function useWeightLift({ holdMs, onLift }: UseWeightLiftOptions) {
         rafRef.current = requestAnimationFrame(runTick);
       }
     },
-    [],
+    [shouldRun],
   );
 
   const commitHold = useCallback(
@@ -162,6 +165,14 @@ export function useWeightLift({ holdMs, onLift }: UseWeightLiftOptions) {
     },
     [resetHold],
   );
+
+  useEffect(() => {
+    if (shouldRun) {
+      return;
+    }
+
+    resetHold();
+  }, [shouldRun, resetHold]);
 
   useEffect(() => cancelAnimation, [cancelAnimation]);
 

@@ -347,7 +347,10 @@ export function PdpLeatherAgingModule({
               isDragging ? stages[previewStageIndex]!.label : stage.label
             }
             aria-label="Leather aging over time"
-            className="relative mt-1 flex h-8 cursor-grab touch-none select-none items-center active:cursor-grabbing"
+            className={cn(
+              "relative mt-1 flex h-11 cursor-grab touch-none select-none items-center active:cursor-grabbing",
+              isDragging && "cursor-grabbing",
+            )}
             onPointerDown={handleScrubPointerDown}
             onPointerMove={handleScrubPointerMove}
             onPointerUp={endScrub}
@@ -394,8 +397,11 @@ export function PdpLeatherAgingModule({
               <span
                 aria-hidden
                 className={cn(
-                  "absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-950 shadow-[0_0_0_4px_rgba(0,0,0,0.08)] will-change-[left]",
-                  motionClass,
+                  "absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-950 will-change-[left,transform]",
+                  "shadow-[0_0_0_5px_rgba(0,0,0,0.08)]",
+                  isDragging
+                    ? "scale-125 shadow-[0_0_0_10px_rgba(0,0,0,0.14)] transition-[transform,box-shadow] duration-150 ease-out"
+                    : "transition-[left,transform,box-shadow] duration-500 ease-out",
                 )}
                 style={{ left: `${dragProgress}%` }}
               />

@@ -11,7 +11,9 @@ import { PdpGalleryView } from "./pdp-gallery-view";
 import { PdpNavMenu } from "./pdp-nav-menu";
 import { PdpOverlayHeader } from "./pdp-overlay-header";
 import { PdpReviewsSheet } from "./pdp-reviews-sheet";
+import { PdpRuntimeProvider } from "./pdp-runtime-context";
 import type { PdpBundleAddPayload } from "./pdp-data";
+import { PdpScrollProvider } from "./use-coalesced-scroll";
 
 type BagConfirmation =
   | { type: "product" }
@@ -46,44 +48,48 @@ export function PdpSocialView() {
   };
 
   return (
-    <div className="relative min-h-svh w-full overflow-x-clip bg-black">
-      <PdpBrowserChromeSync />
-      <PdpOverlayHeader
-        bagCount={bagCount}
-        onOpenMenu={() => setNavOpen(true)}
-      />
-      <SafeAreaMain className="bg-black">
-        <PdpGalleryView
-          onOpenReviews={() => setReviewsOpen(true)}
-          onAddSimilarToBag={handleQuickAddToBag}
-          onAddBundle={handleAddBundle}
-          onQuickAddStrap={() => handleQuickAddToBag()}
-          onStrapOptionsOpenChange={setStrapOptionsOpen}
-          onComparePickerOpenChange={setComparePickerOpen}
-          selectedColorId={selectedColorId}
-        />
-      </SafeAreaMain>
-      <PdpBottomActions
-        selectedColorId={selectedColorId}
-        onColorSelect={setSelectedColorId}
-        onAddToBag={handleAddToBag}
-        suppressed={
-          navOpen ||
-          reviewsOpen ||
-          bagSheetOpen ||
-          strapOptionsOpen ||
-          comparePickerOpen
-        }
-      />
-      <PdpNavMenu open={navOpen} onClose={() => setNavOpen(false)} />
-      <PdpReviewsSheet open={reviewsOpen} onClose={() => setReviewsOpen(false)} />
-      <PdpAddToBagSheet
-        open={bagSheetOpen}
-        onClose={() => setBagSheetOpen(false)}
-        selectedColorId={selectedColorId}
-        onQuickAdd={handleQuickAddToBag}
-        confirmation={bagConfirmation}
-      />
-    </div>
+    <PdpRuntimeProvider>
+      <PdpScrollProvider>
+        <div className="relative min-h-svh w-full overflow-x-clip bg-black">
+          <PdpBrowserChromeSync />
+          <PdpOverlayHeader
+            bagCount={bagCount}
+            onOpenMenu={() => setNavOpen(true)}
+          />
+          <SafeAreaMain className="bg-black">
+            <PdpGalleryView
+              onOpenReviews={() => setReviewsOpen(true)}
+              onAddSimilarToBag={handleQuickAddToBag}
+              onAddBundle={handleAddBundle}
+              onQuickAddStrap={() => handleQuickAddToBag()}
+              onStrapOptionsOpenChange={setStrapOptionsOpen}
+              onComparePickerOpenChange={setComparePickerOpen}
+              selectedColorId={selectedColorId}
+            />
+          </SafeAreaMain>
+          <PdpBottomActions
+            selectedColorId={selectedColorId}
+            onColorSelect={setSelectedColorId}
+            onAddToBag={handleAddToBag}
+            suppressed={
+              navOpen ||
+              reviewsOpen ||
+              bagSheetOpen ||
+              strapOptionsOpen ||
+              comparePickerOpen
+            }
+          />
+          <PdpNavMenu open={navOpen} onClose={() => setNavOpen(false)} />
+          <PdpReviewsSheet open={reviewsOpen} onClose={() => setReviewsOpen(false)} />
+          <PdpAddToBagSheet
+            open={bagSheetOpen}
+            onClose={() => setBagSheetOpen(false)}
+            selectedColorId={selectedColorId}
+            onQuickAdd={handleQuickAddToBag}
+            confirmation={bagConfirmation}
+          />
+        </div>
+      </PdpScrollProvider>
+    </PdpRuntimeProvider>
   );
 }

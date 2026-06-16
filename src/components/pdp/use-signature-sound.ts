@@ -2,10 +2,14 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { usePdpRuntime } from "./pdp-runtime-context";
+
 /** One product sound at a time — tap toggles play/pause */
 export function useSignatureSound() {
+  const { shouldRun, lifecycle } = usePdpRuntime();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioCacheRef = useRef<Map<string, HTMLAudioElement>>(new Map());
+  const resumeOnActiveRef = useRef(false);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -29,6 +33,7 @@ export function useSignatureSound() {
       audio.currentTime = 0;
     }
     audioRef.current = null;
+    resumeOnActiveRef.current = false;
     setActiveId(null);
     setIsPlaying(false);
   }, []);
@@ -53,6 +58,7 @@ export function useSignatureSound() {
       audio.onended = () => {
         setActiveId(null);
         setIsPlaying(false);
+        resumeOnActiveRef.current = false;
         audioRef.current = null;
       };
 
@@ -64,14 +70,47 @@ export function useSignatureSound() {
 
       audio.onplay = () => {
         setIsPlaying(true);
+        resumeOnActiveRef.current = true;
       };
+
+      if (!shouldRun) {
+        return;
+      }
 
       void audio.play().catch(() => {
         stop();
       });
     },
-    [activeId, getAudio, isPlaying, stop],
+    [activeId, getAudio, isPlaying, shouldRun, stop],
   );
+
+  useEffect(() => {
+    if (shouldRun) {
+      return;
+    }
+
+    const audio = audioRef.current;
+    if (audio && !audio.paused) {
+      resumeOnActiveRef.current = true;
+      audio.pause();
+      setIsPlaying(false);
+    }
+  }, [shouldRun]);
+
+  useEffect(() => {
+    if (!shouldRun || !lifecycle.isVisible || !resumeOnActiveRef.current) {
+      return;
+    }
+
+    const audio = audioRef.current;
+    if (!audio || !audio.paused) {
+      return;
+    }
+
+    void audio.play().catch(() => {
+      stop();
+    });
+  }, [lifecycle.isVisible, shouldRun, stop]);
 
   useEffect(() => {
     return () => {

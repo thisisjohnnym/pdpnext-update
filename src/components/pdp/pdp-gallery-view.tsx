@@ -143,7 +143,7 @@ function PdpHeroSlide({
             src={videoSrc}
             ariaLabel={alt}
             isActive={isActive}
-            preload="auto"
+            preload={isActive ? "auto" : "metadata"}
             skeletonTone="dark"
             showControls={false}
             showMuteControl={false}

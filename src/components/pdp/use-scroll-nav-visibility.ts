@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { useScrollSnapshot } from "./use-coalesced-scroll";
+
 const TOP_ALWAYS_VISIBLE = 32;
 const SCROLL_DELTA = 10;
 
@@ -9,39 +11,28 @@ const SCROLL_DELTA = 10;
 export function useScrollNavVisibility() {
   const [visible, setVisible] = useState(true);
   const lastScrollY = useRef(0);
+  const initialized = useRef(false);
+  const { scrollY } = useScrollSnapshot();
 
   useEffect(() => {
-    let frame = 0;
-    lastScrollY.current = window.scrollY;
-
-    const update = () => {
-      frame = 0;
-      const scrollY = window.scrollY;
-      const delta = scrollY - lastScrollY.current;
-
-      if (scrollY <= TOP_ALWAYS_VISIBLE) {
-        setVisible(true);
-      } else if (delta > SCROLL_DELTA) {
-        setVisible(false);
-      } else if (delta < -SCROLL_DELTA) {
-        setVisible(true);
-      }
-
+    if (!initialized.current) {
       lastScrollY.current = scrollY;
-    };
+      initialized.current = true;
+      return;
+    }
 
-    const handleScroll = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(update);
-    };
+    const delta = scrollY - lastScrollY.current;
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    if (scrollY <= TOP_ALWAYS_VISIBLE) {
+      setVisible(true);
+    } else if (delta > SCROLL_DELTA) {
+      setVisible(false);
+    } else if (delta < -SCROLL_DELTA) {
+      setVisible(true);
+    }
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, []);
+    lastScrollY.current = scrollY;
+  }, [scrollY]);
 
   return visible;
 }

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 import { GridItem, PageGrid } from "@/components/grid/page-grid";
+import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
 
 import { PdpComparePickerSheet } from "./pdp-compare-picker-sheet";
@@ -40,14 +41,19 @@ function CompareProductCard({
         />
         {showChangeAffordance ? (
           <span
-            className="absolute left-2 top-2 z-10 rounded-full border border-neutral-200 bg-white/95 px-2.5 py-1 text-black shadow-sm"
+            className="absolute left-2 top-2 z-10 inline-flex items-center justify-center gap-1 rounded-full border border-neutral-200 bg-white/95 px-3 py-1.5 text-black shadow-sm"
             aria-hidden
           >
-            <span className={pdpType.micro}>Change</span>
+            <MaterialIcon
+              name="swap_horiz"
+              size={18}
+              className="shrink-0 leading-none"
+            />
+            <span className={cn(pdpType.micro, "leading-none")}>Change</span>
           </span>
         ) : null}
       </div>
-      <div className="px-0.5 pt-1.5">
+      <div className="mb-4 px-0.5 pt-1.5">
         <p className={`font-extended line-clamp-2 text-black ${pdpType.label}`}>
           {item.name}
         </p>
@@ -177,7 +183,7 @@ export function PdpCompareModule({
               <article className="flex min-w-0 flex-col">
                 <CompareProductCard item={selected} />
                 <CompareAddButton
-                  className="mt-auto shrink-0 pt-2"
+                  className="mt-auto shrink-0"
                   label={
                     addedIds.has(selected.id)
                       ? "Added"
@@ -199,7 +205,7 @@ export function PdpCompareModule({
                   <CompareProductCard item={alternative} showChangeAffordance />
                 </button>
                 <CompareAddButton
-                  className="mt-auto shrink-0 pt-2"
+                  className="mt-auto shrink-0"
                   label={
                     addedIds.has(alternative.id)
                       ? "Added"

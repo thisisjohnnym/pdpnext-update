@@ -13,6 +13,7 @@ export function ensureGsapPlugins() {
   pluginsRegistered = true;
 }
 
+/** Sync read — prefer `useReducedMotion()` in React components for live updates */
 export function prefersReducedMotion(): boolean {
   if (typeof window === "undefined") {
     return false;

@@ -2,7 +2,9 @@
 
 import { useLayoutEffect, type RefObject } from "react";
 
-import { ensureGsapPlugins, gsap, prefersReducedMotion } from "./pdp-gsap";
+import { ensureGsapPlugins, gsap } from "./pdp-gsap";
+import { useReducedMotion } from "./use-reduced-motion";
+import { useShouldRun } from "./use-should-run";
 
 type UseAtbShimmerOptions = {
   enabled?: boolean;
@@ -19,8 +21,11 @@ export function useAtbShimmer(
   shimmerRef: RefObject<HTMLSpanElement | null>,
   { enabled = true }: UseAtbShimmerOptions = {},
 ) {
+  const shouldRun = useShouldRun();
+  const reducedMotion = useReducedMotion();
+
   useLayoutEffect(() => {
-    if (!enabled || prefersReducedMotion()) {
+    if (!enabled || reducedMotion || !shouldRun) {
       return;
     }
 
@@ -40,6 +45,10 @@ export function useAtbShimmer(
     };
 
     const runShimmer = () => {
+      if (!shouldRun) {
+        return;
+      }
+
       const buttonWidth = button.offsetWidth;
       const shimmerWidth = shimmer.offsetWidth;
       const startX = -shimmerWidth * 1.1;
@@ -85,5 +94,5 @@ export function useAtbShimmer(
       gsap.killTweensOf(shimmer);
       hideShimmer();
     };
-  }, [buttonRef, shimmerRef, enabled]);
+  }, [buttonRef, shimmerRef, enabled, reducedMotion, shouldRun]);
 }

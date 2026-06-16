@@ -13,9 +13,6 @@ const LENS_SIZE = 132;
 const MAGNIFICATION = 2.75;
 /** Lift lens above the thumb so the magnified area stays visible */
 const TOUCH_LENS_OFFSET_Y = 96;
-const HOLD_RING_SIZE = 56;
-const HOLD_RING_RADIUS = 18;
-const HOLD_RING_CIRCUMFERENCE = 2 * Math.PI * HOLD_RING_RADIUS;
 
 type PdpGalleryDragZoomImageProps = {
   src: string;
@@ -28,7 +25,7 @@ type PdpGalleryDragZoomImageProps = {
   className?: string;
 };
 
-/** Press-and-hold magnifier lens for studio product shots */
+/** Instant magnifier lens for studio product shots */
 export function PdpGalleryDragZoomImage({
   src,
   alt,
@@ -44,13 +41,11 @@ export function PdpGalleryDragZoomImage({
     lensPosition,
     containerSize,
     isZooming,
-    isHolding,
-    holdProgress,
-    holdAnchor,
     pointerType,
     handlePointerDown,
     handlePointerMove,
-    handlePointerEnd,
+    handlePointerUp,
+    handlePointerCancel,
     handleLostPointerCapture,
     handleContextMenu,
   } = useDragZoomLens();
@@ -82,8 +77,8 @@ export function PdpGalleryDragZoomImage({
       )}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerEnd}
-      onPointerCancel={handlePointerEnd}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
       onLostPointerCapture={handleLostPointerCapture}
       onContextMenu={handleContextMenu}
       role="img"
@@ -107,70 +102,14 @@ export function PdpGalleryDragZoomImage({
         draggable={false}
       />
 
-      {isHolding && holdAnchor ? (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute z-[3]"
-          style={{
-            left: holdAnchor.x,
-            top: holdAnchor.y,
-            width: HOLD_RING_SIZE,
-            height: HOLD_RING_SIZE,
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <span className="absolute inset-0 rounded-full border border-white/45 bg-black/20 shadow-[0_4px_20px_rgba(0,0,0,0.25)] backdrop-blur-[2px]" />
-          <svg
-            viewBox={`0 0 ${HOLD_RING_SIZE} ${HOLD_RING_SIZE}`}
-            className="absolute inset-0 size-full -rotate-90"
-            aria-hidden
-          >
-            <circle
-              cx={HOLD_RING_SIZE / 2}
-              cy={HOLD_RING_SIZE / 2}
-              r={HOLD_RING_RADIUS}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="text-white/35"
-            />
-            <circle
-              cx={HOLD_RING_SIZE / 2}
-              cy={HOLD_RING_SIZE / 2}
-              r={HOLD_RING_RADIUS}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              className="text-white transition-[stroke-dashoffset] duration-75"
-              strokeDasharray={HOLD_RING_CIRCUMFERENCE}
-              strokeDashoffset={HOLD_RING_CIRCUMFERENCE * (1 - holdProgress)}
-            />
-          </svg>
-          <MaterialIcon
-            name="search"
-            size={18}
-            className="absolute inset-0 m-auto text-white/95"
-          />
-        </div>
-      ) : null}
-
       {!isZooming ? (
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex items-center justify-center gap-1.5 bg-gradient-to-t from-black/55 via-black/20 to-transparent px-4 pb-4 pt-10"
         >
-          {!isHolding ? (
-            <MaterialIcon name="search" size={18} className="text-white/90" />
-          ) : null}
-          <span
-            aria-live="polite"
-            className={cn(
-              "font-extended tracking-[0.2px] text-white/90",
-              isHolding ? "text-xs" : "text-[11px]",
-            )}
-          >
-            {isHolding ? "Keep holding…" : PDP_GALLERY_DRAG_ZOOM_HINT}
+          <MaterialIcon name="search" size={18} className="text-white/90" />
+          <span className="font-extended text-[11px] tracking-[0.2px] text-white/90">
+            {PDP_GALLERY_DRAG_ZOOM_HINT}
           </span>
         </div>
       ) : null}

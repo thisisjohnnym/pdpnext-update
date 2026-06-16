@@ -5,15 +5,16 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
 
+import { videoDecoderRegistry } from "./pdp-decoder-registry";
 import { PDP_GALLERY_HERO_VIDEO } from "./pdp-data";
-
-function videoMimeType(src: string) {
-  if (src.endsWith(".webm")) {
-    return "video/webm";
-  }
-
-  return "video/mp4";
-}
+import {
+  computeShouldPlay,
+  getActiveVideoPreload,
+  getInactiveVideoPreload,
+  getManualPlaybackPreload,
+} from "./pdp-media-policy";
+import { usePdpRuntime } from "./pdp-runtime-context";
+import { resolveVideoSources } from "./pdp-video-sources";
 
 type PdpGalleryHeroVideoProps = {
   className?: string;
@@ -32,6 +33,10 @@ type PdpGalleryHeroVideoProps = {
   allowHorizontalPan?: boolean;
   /** Tap video surface to pause/play — hero immersive */
   tapToTogglePlayback?: boolean;
+  /** Stable id for decoder budget — defaults to src */
+  decoderId?: string;
+  /** Poster frame while the first video frame buffers */
+  poster?: string;
 };
 
 export function PdpGalleryHeroVideo({
@@ -47,19 +52,110 @@ export function PdpGalleryHeroVideo({
   passThroughTouch = false,
   allowHorizontalPan = false,
   tapToTogglePlayback = false,
+  decoderId,
+  poster,
 }: PdpGalleryHeroVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const userPausedRef = useRef(false);
+  const userStartedRef = useRef(false);
   const userMutedRef = useRef(true);
   const hintTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mountedRef = useRef(true);
+
+  const { lifecycle, lowPowerMode, network } = usePdpRuntime();
+  const resolvedDecoderId = decoderId ?? src;
+
+  const [autoplayRestricted, setAutoplayRestricted] = useState(false);
+  const [userStarted, setUserStarted] = useState(false);
+  const [userPaused, setUserPaused] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [isReady, setIsReady] = useState(false);
   const [playbackHint, setPlaybackHint] = useState<"play" | "pause" | null>(null);
+  const [isMounted, setIsMounted] = useState(true);
+
+  const manualPlaybackRequired =
+    lowPowerMode || autoplayRestricted || !network.autoplayAllowed || network.saveData;
+
+  const shouldPlay = computeShouldPlay({
+    isActive,
+    isVisible: lifecycle.isVisible,
+    isFrozen: lifecycle.isFrozen,
+    lowPowerMode,
+    saveData: network.saveData,
+    autoplayAllowed: network.autoplayAllowed,
+    userPaused: userPaused,
+    autoplayRestricted: manualPlaybackRequired && !userStarted,
+  });
+
+  const videoSources = resolveVideoSources(src);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     setIsReady(false);
+    setAutoplayRestricted(false);
+    userStartedRef.current = false;
+    userPausedRef.current = false;
+    setUserStarted(false);
+    setUserPaused(false);
   }, [src]);
+
+  useEffect(() => {
+    if (isActive) {
+      if (videoDecoderRegistry.register(resolvedDecoderId)) {
+        setIsMounted(true);
+        videoDecoderRegistry.setState(resolvedDecoderId, "ACTIVE");
+      } else {
+        setIsMounted(false);
+      }
+      return;
+    }
+
+    videoDecoderRegistry.setState(resolvedDecoderId, "PAUSED");
+
+    const unloadTimer = window.setTimeout(() => {
+      videoDecoderRegistry.setState(resolvedDecoderId, "UNLOADED");
+      videoDecoderRegistry.release(resolvedDecoderId);
+      setIsMounted(false);
+    }, 500);
+
+    return () => {
+      window.clearTimeout(unloadTimer);
+    };
+  }, [isActive, resolvedDecoderId]);
+
+  useEffect(() => {
+    if (isMounted || !isActive) {
+      return;
+    }
+
+    if (videoDecoderRegistry.register(resolvedDecoderId)) {
+      setIsMounted(true);
+    }
+  }, [isMounted, resolvedDecoderId, isActive]);
+
+  useEffect(() => {
+    return () => {
+      videoDecoderRegistry.release(resolvedDecoderId);
+    };
+  }, [resolvedDecoderId]);
+
+  useEffect(() => {
+    if (!lowPowerMode && network.autoplayAllowed) {
+      return;
+    }
+
+    userStartedRef.current = false;
+    userPausedRef.current = false;
+    setUserStarted(false);
+    videoRef.current?.pause();
+  }, [lowPowerMode, network.autoplayAllowed]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -78,7 +174,7 @@ export function PdpGalleryHeroVideo({
       video.removeEventListener("play", syncPlaying);
       video.removeEventListener("pause", syncPlaying);
     };
-  }, []);
+  }, [isMounted]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -105,25 +201,53 @@ export function PdpGalleryHeroVideo({
         video.removeEventListener(type, markReady);
       }
     };
-  }, [src]);
+  }, [src, isMounted]);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) {
+    if (!video || !isMounted) {
       return;
     }
 
-    if (!isActive) {
+    if (!shouldPlay) {
       video.pause();
+
+      if (!isActive) {
+        userStartedRef.current = false;
+        setUserStarted(false);
+      }
+
       return;
     }
 
-    if (!userPausedRef.current) {
-      void video.play().catch(() => {
-        /* ignored — user gesture may be required in strict browsers */
-      });
+    void video.play().catch(() => {
+      if (!mountedRef.current) {
+        return;
+      }
+
+      setAutoplayRestricted(true);
+      video.pause();
+    });
+  }, [shouldPlay, isActive, isMounted, src, userPaused]);
+
+  useEffect(() => {
+    if (!lifecycle.isVisible || !shouldPlay) {
+      return;
     }
-  }, [isActive]);
+
+    const video = videoRef.current;
+    if (!video || video.paused === false) {
+      return;
+    }
+
+    void video.play().catch(() => {
+      if (!mountedRef.current) {
+        return;
+      }
+
+      setAutoplayRestricted(true);
+    });
+  }, [lifecycle.isVisible, shouldPlay]);
 
   useEffect(() => {
     return () => {
@@ -157,14 +281,18 @@ export function PdpGalleryHeroVideo({
 
     if (video.paused) {
       userPausedRef.current = false;
+      setUserPaused(false);
+      userStartedRef.current = true;
+      setUserStarted(true);
       void video.play().catch(() => {
-        /* ignored */
+        setAutoplayRestricted(true);
       });
       flashPlaybackHint("play");
       return;
     }
 
     userPausedRef.current = true;
+    setUserPaused(true);
     video.pause();
     flashPlaybackHint("pause");
   };
@@ -186,6 +314,56 @@ export function PdpGalleryHeroVideo({
   const canTapVideo =
     !passThroughTouch && (tapToTogglePlayback || showControls);
 
+  const showPlaybackButton = showControls && !tapToTogglePlayback;
+  const showControlChrome = showMuteControl || showPlaybackButton;
+  const showFrozenPlayOverlay =
+    isActive && isReady && !isPlaying && manualPlaybackRequired;
+  const effectivePreload = (() => {
+    if (manualPlaybackRequired && !userStarted) {
+      return getManualPlaybackPreload(network);
+    }
+
+    if (isActive) {
+      if (preload === "auto") {
+        return getActiveVideoPreload(network);
+      }
+
+      return preload;
+    }
+
+    if (preload === "none") {
+      return getInactiveVideoPreload(network);
+    }
+
+    return preload;
+  })();
+
+  const playbackOverlayIcon = playbackHint ?? (showFrozenPlayOverlay ? "play" : null);
+
+  if (!isMounted) {
+    return (
+      <div
+        aria-hidden
+        className={cn(
+          "relative size-full",
+          !poster && "motion-safe:animate-pulse",
+          skeletonTone === "light" ? "bg-neutral-200" : "bg-neutral-900",
+          className,
+        )}
+        style={{
+          ...style,
+          ...(poster
+            ? {
+                backgroundImage: `url(${poster})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }
+            : undefined),
+        }}
+      />
+    );
+  }
+
   return (
     <div
       className={cn(
@@ -198,7 +376,7 @@ export function PdpGalleryHeroVideo({
         <div
           aria-hidden
           className={cn(
-            "pointer-events-none absolute inset-0 z-[1] animate-pulse",
+            "pointer-events-none absolute inset-0 z-[1] motion-safe:animate-pulse",
             skeletonTone === "light" ? "bg-neutral-200" : "bg-neutral-900",
           )}
         />
@@ -206,10 +384,12 @@ export function PdpGalleryHeroVideo({
 
       <video
         ref={videoRef}
+        key={src}
         loop
         muted
         playsInline
-        preload={preload}
+        preload={effectivePreload}
+        poster={poster}
         aria-label={ariaLabel}
         onClick={canTapVideo ? togglePlayback : undefined}
         style={style}
@@ -219,27 +399,42 @@ export function PdpGalleryHeroVideo({
           isReady ? "opacity-100" : "opacity-0",
           canTapVideo && "cursor-pointer",
           passThroughTouch && "pointer-events-none",
+          allowHorizontalPan && !passThroughTouch && "[touch-action:pan-x_pan-y]",
         )}
       >
-        <source src={src} type={videoMimeType(src)} />
+        {videoSources.map((source) => (
+          <source key={source.src} src={source.src} type={source.type} />
+        ))}
       </video>
 
-      {playbackHint ? (
+      {playbackOverlayIcon ? (
         <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center"
+          className={cn(
+            "absolute inset-0 z-[1] flex items-center justify-center",
+            showFrozenPlayOverlay && "pointer-events-auto",
+            playbackHint && "pointer-events-none",
+          )}
         >
-          <span className="flex size-[4.25rem] items-center justify-center rounded-full bg-black/40 backdrop-blur-sm animate-[pdp-playback-hint_650ms_ease-out_both]">
+          <button
+            type="button"
+            aria-label={playbackOverlayIcon === "play" ? "Play video" : "Pause video"}
+            onClick={showFrozenPlayOverlay ? togglePlayback : undefined}
+            className={cn(
+              "flex size-[4.25rem] items-center justify-center rounded-full bg-black/55 pdp-backdrop-blur-degrade",
+              playbackHint && "motion-safe:animate-[pdp-playback-hint_650ms_ease-out_both]",
+              showFrozenPlayOverlay && "transition-transform active:scale-95",
+            )}
+          >
             <MaterialIcon
-              name={playbackHint === "play" ? "play_arrow" : "pause"}
+              name={playbackOverlayIcon === "play" ? "play_arrow" : "pause"}
               size={26}
               className="text-white"
             />
-          </span>
+          </button>
         </div>
       ) : null}
 
-      {showControls ? (
+      {showControlChrome ? (
         <div className="pointer-events-auto absolute bottom-3 right-3 z-[2] flex items-center gap-1.5">
           {showMuteControl ? (
             <button
@@ -259,21 +454,23 @@ export function PdpGalleryHeroVideo({
               />
             </button>
           ) : null}
-          <button
-            type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              togglePlayback();
-            }}
-            aria-label={isPlaying ? "Pause video" : "Play video"}
-            className={controlButtonClass}
-          >
-            <MaterialIcon
-              name={isPlaying ? "pause" : "play_arrow"}
-              size={18}
-              className="text-white"
-            />
-          </button>
+          {showPlaybackButton ? (
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                togglePlayback();
+              }}
+              aria-label={isPlaying ? "Pause video" : "Play video"}
+              className={controlButtonClass}
+            >
+              <MaterialIcon
+                name={isPlaying ? "pause" : "play_arrow"}
+                size={18}
+                className="text-white"
+              />
+            </button>
+          ) : null}
         </div>
       ) : null}
     </div>
