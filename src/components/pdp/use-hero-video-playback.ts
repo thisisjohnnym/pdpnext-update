@@ -77,6 +77,7 @@ export function useHeroVideoPlayback({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [isReady, setIsReady] = useState(false);
+  const [hasRevealed, setHasRevealed] = useState(false);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [firstFrameTimedOut, setFirstFrameTimedOut] = useState(false);
   const [isClientReady, setIsClientReady] = useState(false);
@@ -136,6 +137,7 @@ export function useHeroVideoPlayback({
 
   useEffect(() => {
     setIsReady(false);
+    setHasRevealed(false);
     setPreviewVisible(false);
     setFirstFrameTimedOut(false);
     previewShownRef.current = false;
@@ -556,8 +558,20 @@ export function useHeroVideoPlayback({
   };
 
   const showBlurReveal = priorityAutoplay;
+
+  // Latch the intro blur-reveal: once the hero has un-blurred on first play,
+  // a later pause should keep the frame sharp (normal playback feel) instead
+  // of re-applying the entrance blur.
+  useEffect(() => {
+    if (showBlurReveal && isReady && isPlaying) {
+      setHasRevealed(true);
+    }
+  }, [showBlurReveal, isReady, isPlaying]);
+
   const isRevealed =
-    !showBlurReveal || reducedMotion ? isReady : isPlaying && isReady;
+    !showBlurReveal || reducedMotion
+      ? isReady
+      : hasRevealed || (isPlaying && isReady);
 
   /** The video element is actually painting a frame on screen */
   const videoFrameVisible = showBlurReveal ? previewVisible : isReady;
