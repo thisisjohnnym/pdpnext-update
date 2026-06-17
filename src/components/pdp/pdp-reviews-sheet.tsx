@@ -315,6 +315,7 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
             contained
             containedSurface="flat"
             showIcon={false}
+            clampBodyLines={2}
             className="mb-3 pb-4"
             eyebrow={PDP_REVIEWS_AI_SUMMARY.attribution}
             eyebrowPosition="below"
