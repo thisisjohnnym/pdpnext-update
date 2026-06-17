@@ -297,12 +297,14 @@ export function PdpAddToBagSheet({
                           <span className={pdpAddIconLabelClass}>
                             {added ? "Added" : "Quick add"}
                           </span>
-                          <MaterialIcon
-                            name="add"
-                            size={18}
-                            className={cn("shrink-0", added ? "invisible" : "text-black")}
-                            aria-hidden={added}
-                          />
+                          {!added ? (
+                            <MaterialIcon
+                              name="add"
+                              size={18}
+                              className="shrink-0 text-black"
+                              aria-hidden
+                            />
+                          ) : null}
                         </button>
                       </div>
                     </li>

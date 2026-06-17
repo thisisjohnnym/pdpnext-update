@@ -49,20 +49,6 @@ export function useInfiniteCenteredCarousel(
       el.scrollLeft = getCenteredScrollLeft(el, child);
     };
 
-    const getBlockWidth = () => {
-      if (itemCount < 2) {
-        return 0;
-      }
-
-      const blockStart = getChild(itemCount);
-      const nextBlockStart = getChild(2 * itemCount);
-      if (!blockStart || !nextBlockStart) {
-        return 0;
-      }
-
-      return nextBlockStart.offsetLeft - blockStart.offsetLeft;
-    };
-
     const startIndex =
       itemCount > 1 ? itemCount + initialIndex : initialIndex;
 
@@ -78,6 +64,22 @@ export function useInfiniteCenteredCarousel(
     }
 
     const edgeBuffer = 12;
+
+    // Geometry is static between resizes — cache it so the scroll handler only
+    // reads scrollLeft (one layout read) and never re-measures the rail mid-drag.
+    let blockWidth = 0;
+    let maxScrollLeft = 0;
+
+    const measure = () => {
+      const blockStart = getChild(itemCount);
+      const nextBlockStart = getChild(2 * itemCount);
+      blockWidth =
+        blockStart && nextBlockStart
+          ? nextBlockStart.offsetLeft - blockStart.offsetLeft
+          : 0;
+      maxScrollLeft = el.scrollWidth - el.clientWidth;
+    };
+
     let ticking = false;
 
     const onScroll = () => {
@@ -89,12 +91,9 @@ export function useInfiniteCenteredCarousel(
       requestAnimationFrame(() => {
         ticking = false;
 
-        const blockWidth = getBlockWidth();
         if (blockWidth <= 0) {
           return;
         }
-
-        const maxScrollLeft = el.scrollWidth - el.clientWidth;
 
         if (el.scrollLeft <= edgeBuffer) {
           el.scrollLeft += blockWidth;
@@ -104,11 +103,15 @@ export function useInfiniteCenteredCarousel(
       });
     };
 
-    const onResize = () => centerChild(itemCount + initialIndex);
+    const onResize = () => {
+      measure();
+      centerChild(itemCount + initialIndex);
+    };
 
     const ro = new ResizeObserver(onResize);
     ro.observe(el);
 
+    measure();
     el.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
@@ -116,6 +119,151 @@ export function useInfiniteCenteredCarousel(
       ro.disconnect();
     };
   }, [scrollRef, itemCount, initialIndex]);
+}
+
+/** Coverflow depth tuning — how far the side clips rotate, recede, and dim */
+const COVERFLOW = {
+  /** Peak rotation (deg) reached ~1.4 cards from center */
+  maxRotateDeg: 34,
+  rotateSaturateCards: 1.4,
+  /** How much smaller a side clip gets, saturating at 1 card away */
+  maxScaleDrop: 0.2,
+  /** Push side clips back into the scene (px) */
+  maxTranslateZ: 120,
+  /** Dim side clips so the center reads as the hero */
+  maxBrightnessDrop: 0.42,
+  /** Pull neighbours inward (fraction of card width) so they tuck like stacked pages */
+  pullRatio: 0.16,
+  pullSaturateCards: 1.6,
+} as const;
+
+function clampNumber(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
+
+/**
+ * Scroll-driven coverflow: the centered clip stays flat and bright while
+ * neighbours rotate away, recede, dim, and tuck inward — a "flipping through
+ * pages" sense of depth. Transforms are visual only and never touch layout or
+ * scroll snapping.
+ */
+export function useCarouselCoverflow(scrollRef: RefObject<HTMLDivElement | null>) {
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) {
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    const children = () => Array.from(el.children) as HTMLElement[];
+
+    const resetStyles = () => {
+      for (const child of children()) {
+        child.style.transform = "";
+        child.style.filter = "";
+        child.style.zIndex = "";
+      }
+    };
+
+    if (prefersReducedMotion) {
+      resetStyles();
+      return;
+    }
+
+    // Per-card geometry (center + width) is fixed until a resize, so we cache
+    // the elements and their measurements once. Each scroll frame then performs
+    // a single layout read (scrollLeft) followed by pure style writes — no
+    // interleaved reads — which avoids the layout thrash that made the rail
+    // feel shaky while dragging.
+    let cards: HTMLElement[] = [];
+    let geometry: { center: number; width: number }[] = [];
+    let viewportWidth = el.clientWidth;
+
+    const measure = () => {
+      cards = children();
+      viewportWidth = el.clientWidth;
+      geometry = cards.map((child) => {
+        const width = child.offsetWidth || 1;
+        return { center: child.offsetLeft + width / 2, width };
+      });
+    };
+
+    let frame = 0;
+
+    const apply = () => {
+      frame = 0;
+      const viewportCenter = el.scrollLeft + viewportWidth / 2;
+
+      for (let i = 0; i < cards.length; i += 1) {
+        const geo = geometry[i];
+        if (!geo) {
+          continue;
+        }
+
+        const offset = (geo.center - viewportCenter) / geo.width;
+        const distance = Math.abs(offset);
+        const near = Math.min(distance, 1);
+
+        const scale = 1 - near * COVERFLOW.maxScaleDrop;
+        const brightness = 1 - near * COVERFLOW.maxBrightnessDrop;
+        const translateZ = -near * COVERFLOW.maxTranslateZ;
+        const rotateY =
+          (clampNumber(
+            offset,
+            -COVERFLOW.rotateSaturateCards,
+            COVERFLOW.rotateSaturateCards,
+          ) /
+            COVERFLOW.rotateSaturateCards) *
+          COVERFLOW.maxRotateDeg;
+        const pullX =
+          -clampNumber(
+            offset,
+            -COVERFLOW.pullSaturateCards,
+            COVERFLOW.pullSaturateCards,
+          ) *
+          geo.width *
+          COVERFLOW.pullRatio;
+
+        const card = cards[i];
+        card.style.transform = `translate3d(${pullX.toFixed(2)}px, 0, ${translateZ.toFixed(
+          2,
+        )}px) rotateY(${rotateY.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+        card.style.filter = `brightness(${brightness.toFixed(3)})`;
+        card.style.zIndex = String(1000 - Math.round(distance * 100));
+      }
+    };
+
+    const onScroll = () => {
+      if (frame) {
+        return;
+      }
+      frame = requestAnimationFrame(apply);
+    };
+
+    const onResize = () => {
+      measure();
+      apply();
+    };
+
+    measure();
+    apply();
+    el.addEventListener("scroll", onScroll, { passive: true });
+
+    const ro = new ResizeObserver(onResize);
+    ro.observe(el);
+
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      ro.disconnect();
+      if (frame) {
+        cancelAnimationFrame(frame);
+      }
+      resetStyles();
+    };
+  }, [scrollRef]);
 }
 
 /** Maps center-snapped scroll position to the active source item index */

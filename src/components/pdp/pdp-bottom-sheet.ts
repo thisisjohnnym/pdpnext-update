@@ -18,21 +18,45 @@ export function pdpBottomSheetBackdropClass() {
 
 type PdpBottomSheetPanelOptions = PdpBottomSheetOpen & {
   maxHeight?: "85dvh" | "88dvh" | "92dvh";
+  /** Cap to parent height — for sheets inside a visual-viewport frame (keyboard-safe) */
+  fitViewportFrame?: boolean;
 };
+
+const PDP_BOTTOM_SHEET_MAX_HEIGHT_CLASS = {
+  "85dvh": "max-h-[85dvh]",
+  "88dvh": "max-h-[88dvh]",
+  "92dvh": "max-h-[92dvh]",
+} as const;
+
+const PDP_BOTTOM_SHEET_VIEWPORT_FRAME_MAX_HEIGHT_CLASS = {
+  "85dvh": "max-h-[min(85dvh,100%)]",
+  "88dvh": "max-h-[min(88dvh,100%)]",
+  "92dvh": "max-h-[min(92dvh,100%)]",
+} as const;
+
+/** Soft upward lift — spread keeps the top edge from reading as a hairline stroke */
+const PDP_BOTTOM_SHEET_PANEL_SHADOW =
+  "shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.05),0_-12px_28px_-4px_rgba(0,0,0,0.08)]";
 
 /** Edge-to-edge on mobile; capped and centered from lg */
 export function pdpBottomSheetPanelClass({
   open,
   maxHeight = "85dvh",
+  fitViewportFrame = false,
 }: PdpBottomSheetPanelOptions) {
   return cn(
-    "font-extended relative flex w-full max-w-none flex-col overflow-hidden rounded-t-[20px] bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out lg:mx-auto lg:max-w-[430px]",
-    maxHeight === "85dvh" && "max-h-[85dvh]",
-    maxHeight === "88dvh" && "max-h-[88dvh]",
-    maxHeight === "92dvh" && "max-h-[92dvh]",
+    "font-extended relative flex w-full max-w-none flex-col overflow-hidden rounded-t-[20px] bg-white transition-transform duration-300 ease-out lg:mx-auto lg:max-w-[430px]",
+    PDP_BOTTOM_SHEET_PANEL_SHADOW,
+    fitViewportFrame
+      ? PDP_BOTTOM_SHEET_VIEWPORT_FRAME_MAX_HEIGHT_CLASS[maxHeight]
+      : PDP_BOTTOM_SHEET_MAX_HEIGHT_CLASS[maxHeight],
     open ? "translate-y-0" : "translate-y-full",
   );
 }
+
+/** Visual-viewport wrapper — keeps a visible gap above the tray */
+export const pdpBottomSheetViewportFrameClass =
+  "absolute flex flex-col justify-end pt-10";
 
 /** Shared tray chrome — grab handle + close button placement */
 export const pdpBottomSheetHeaderClass = "relative shrink-0 px-2.5 pb-0 pt-2.5";

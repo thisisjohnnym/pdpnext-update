@@ -11,6 +11,7 @@ import {
   pdpBottomSheetGrabHandleClass,
   pdpBottomSheetHeaderClass,
   pdpBottomSheetPanelClass,
+  pdpBottomSheetViewportFrameClass,
   PDP_BOTTOM_SHEET_CLOSE_ICON_SIZE,
 } from "./pdp-bottom-sheet";
 
@@ -245,7 +246,7 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
       <div className="absolute inset-0 bg-black/45" aria-hidden />
 
       <div
-        className="absolute flex flex-col justify-end"
+        className={pdpBottomSheetViewportFrameClass}
         style={{
           top: viewportFrame.top,
           left: viewportFrame.left,
@@ -266,8 +267,8 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
           aria-modal="true"
           aria-labelledby={titleId}
           className={cn(
-            pdpBottomSheetPanelClass({ open, maxHeight: "92dvh" }),
-            "relative z-[1] max-h-full min-h-0",
+            pdpBottomSheetPanelClass({ open, fitViewportFrame: true }),
+            "relative z-[1] min-h-0",
           )}
         >
         <div className={pdpBottomSheetHeaderClass}>
@@ -314,7 +315,7 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
             contained
             containedSurface="flat"
             showIcon={false}
-            className="pb-4"
+            className="mb-3 pb-4"
             eyebrow={PDP_REVIEWS_AI_SUMMARY.attribution}
             eyebrowPosition="below"
             title={PDP_REVIEWS_AI_SUMMARY.headline}

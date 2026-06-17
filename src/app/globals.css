@@ -90,7 +90,7 @@ body {
 /* Inline with Material add icon — cancel extended face nudge */
 .pdp-add-icon-label {
   top: 0;
-  transform: translateY(-2px);
+  transform: translateY(0.5px);
   line-height: 1;
 }
 
@@ -491,6 +491,32 @@ html.font-extended {
 .pdp-ugc-video-card video {
   pointer-events: none;
 }
+
+/* UGC video rail — coverflow depth: center clip flat, side clips angle back like flipping pages */
+.pdp-ugc-coverflow {
+  perspective: 1500px;
+  perspective-origin: 50% 46%;
+}
+
+.pdp-ugc-coverflow > * {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, filter;
+  border-radius: 14px;
+  box-shadow: 0 18px 44px -18px rgba(0, 0, 0, 0.55);
+  /* transform tracks scroll per-frame for crisp depth; only soften the brightness shift */
+  transition: filter 140ms ease-out, box-shadow 140ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pdp-ugc-coverflow > * {
+    transform: none !important;
+    filter: none !important;
+    box-shadow: none;
+    transition: none;
+  }
+}
+
 .pdp-material-explore {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -680,7 +706,7 @@ html.pdp-drag-zoom-scroll-lock {
     opacity: 1;
   }
 
-  .pdp-atb-shimmer {
+  .pdp-atb-flash {
     display: none;
   }
 

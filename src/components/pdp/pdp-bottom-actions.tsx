@@ -11,7 +11,7 @@ import { PdpColorSelector } from "./pdp-color-selector";
 import { PDP_COLORS } from "./pdp-data";
 import { BOTTOM_CHROME_OFFSET } from "./pdp-viewport-chrome";
 import { pdpPressableSolidClass } from "./pdp-type";
-import { useAtbShimmer } from "./use-atb-shimmer";
+import { useAtbFlash } from "./use-atb-flash";
 import { useBottomBarDocked } from "./use-bottom-bar-docked";
 
 type PdpBottomActionsProps = {
@@ -33,9 +33,12 @@ export function PdpBottomActions({
   const [colorSheetOpen, setColorSheetOpen] = useState(false);
   const { docked, frostOpacity } = useBottomBarDocked();
   const atbRef = useRef<HTMLButtonElement>(null);
-  const shimmerRef = useRef<HTMLSpanElement>(null);
+  const flashRef = useRef<HTMLSpanElement>(null);
+  const atbContentRef = useRef<HTMLSpanElement>(null);
 
-  useAtbShimmer(atbRef, shimmerRef, { enabled: !suppressed && !colorSheetOpen });
+  useAtbFlash(atbRef, flashRef, atbContentRef, {
+    enabled: !suppressed && !colorSheetOpen,
+  });
 
   useEffect(() => {
     setMounted(true);
@@ -69,26 +72,29 @@ export function PdpBottomActions({
         type="button"
         onClick={onAddToBag}
         className={cn(
-          "font-extended relative isolate flex min-w-0 items-center justify-center gap-2 overflow-hidden border border-blue-600 bg-blue-600 text-center leading-none text-white transition-[border-radius,background-color,color,box-shadow,transform] duration-300 active:bg-blue-700 active:border-blue-700",
+          "font-extended relative isolate flex min-w-0 items-center justify-center gap-2 overflow-hidden border border-neutral-200 bg-white text-center leading-none text-neutral-900 transition-[border-radius,background-color,color,box-shadow,transform] duration-300 active:bg-neutral-100",
           pdpPressableSolidClass,
           docked
-            ? "h-[54px] w-full rounded-none border-y-0 border-r-0 border-l-neutral-200 px-4 shadow-none"
-            : "h-12 w-full rounded-full border-blue-600 px-3 shadow-[0_4px_24px_rgba(37,99,235,0.35)]",
+            ? "h-[54px] w-full rounded-none border-0 px-4 shadow-none"
+            : "h-12 w-full rounded-full border-neutral-200 px-3 shadow-[0_4px_20px_rgba(0,0,0,0.12)]",
         )}
       >
         <span
-          ref={shimmerRef}
+          ref={flashRef}
           aria-hidden
-          className="pdp-atb-shimmer pointer-events-none absolute inset-y-[-25%] left-0 w-[36%] -skew-x-[20deg] bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 will-change-transform"
+          className="pdp-atb-flash pointer-events-none absolute inset-0 z-0 bg-blue-600 opacity-0 will-change-[opacity]"
         />
-        <MaterialIcon
-          name="shopping_bag"
-          size={18}
-          className="relative z-[1] shrink-0 -translate-y-px text-white"
-          aria-hidden
-        />
-        <span className="relative z-[1] translate-y-px text-[12px] text-white">
-          Add to bag
+        <span
+          ref={atbContentRef}
+          className="relative z-[1] flex min-w-0 items-center justify-center gap-2"
+        >
+          <MaterialIcon
+            name="shopping_bag"
+            size={18}
+            className="shrink-0 -translate-y-px"
+            aria-hidden
+          />
+          <span className="translate-y-px text-[12px]">Add to bag</span>
         </span>
       </button>
     </div>

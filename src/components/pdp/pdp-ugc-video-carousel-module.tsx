@@ -18,6 +18,7 @@ import { PdpTextLinkCta } from "./pdp-text-link-cta";
 import { PdpTextReveal } from "./pdp-text-reveal";
 import {
   loopCarouselItems,
+  useCarouselCoverflow,
   useInfiniteCenteredCarousel,
 } from "./use-infinite-centered-carousel";
 
@@ -29,6 +30,7 @@ export function PdpUgcVideoCarouselModule() {
   const loopedVideos = useMemo(() => loopCarouselItems(videos), [videos]);
 
   useInfiniteCenteredCarousel(scrollRef, videos.length);
+  useCarouselCoverflow(scrollRef);
 
   useEffect(() => {
     setScrollRoot(scrollRef.current);
@@ -38,7 +40,7 @@ export function PdpUgcVideoCarouselModule() {
     <section
       data-header-surface="light"
       aria-label={title}
-      className="relative w-full shrink-0 overflow-x-clip bg-white pt-9"
+      className="relative w-full shrink-0 overflow-x-clip bg-white pt-9 pb-5"
     >
       <PageGrid fullWidth>
         <GridItem mobile={12} desktop={24} className="min-w-0">
@@ -60,7 +62,10 @@ export function PdpUgcVideoCarouselModule() {
           <div className={cn(pdpCarouselScrollWrapClass, "relative mt-3")}>
             <div
               ref={scrollRef}
-              className={cn("flex gap-2", pdpUgcVideoInfiniteScrollClass)}
+              className={cn(
+                "flex gap-2 pdp-ugc-coverflow pb-8",
+                pdpUgcVideoInfiniteScrollClass,
+              )}
               aria-label="TikTok videos"
             >
               {loopedVideos.map((video, index) => (

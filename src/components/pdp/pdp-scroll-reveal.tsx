@@ -15,7 +15,7 @@ import {
   syncRevealIfAlreadyInView,
   type RevealLayout,
 } from "./pdp-gsap";
-import { PDP_PANEL_SCROLL } from "./pdp-panel-scroll";
+import { PDP_SCROLL_REVEAL } from "./pdp-panel-scroll";
 import { ScrollRevealSectionContext } from "./scroll-reveal-section-context";
 import { useLazyNearView } from "./use-lazy-near-view";
 import { useReducedMotion } from "./use-reduced-motion";
@@ -57,7 +57,7 @@ export function PdpScrollReveal({
   const nearView = useLazyNearView(triggerRef, lazyMount);
   const reducedMotion = useReducedMotion();
   const [sectionVisible, setSectionVisible] = useState(
-    () => reducedMotion || !PDP_PANEL_SCROLL,
+    () => reducedMotion || !PDP_SCROLL_REVEAL,
   );
   const layout: RevealLayout = variant === "subtle" ? "stack" : "module";
   const resolvedSurface =
@@ -76,7 +76,7 @@ export function PdpScrollReveal({
 
     const targets = queryRevealTargets(inner);
 
-    if (reducedMotion || !PDP_PANEL_SCROLL) {
+    if (reducedMotion || !PDP_SCROLL_REVEAL) {
       clearRevealTargets(inner, ...targets);
       setSectionVisible(true);
       return;

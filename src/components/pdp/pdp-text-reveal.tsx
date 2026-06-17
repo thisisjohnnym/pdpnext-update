@@ -17,7 +17,7 @@ import {
   REVEAL_EASE,
   REVEAL_MODULE_START,
 } from "./pdp-gsap";
-import { PDP_PANEL_SCROLL } from "./pdp-panel-scroll";
+import { PDP_SCROLL_REVEAL } from "./pdp-panel-scroll";
 import { useScrollRevealSection } from "./scroll-reveal-section-context";
 import { useReducedMotion } from "./use-reduced-motion";
 
@@ -56,7 +56,7 @@ export function PdpTextReveal<T extends ElementType = "div">({
 
     ensureGsapPlugins();
 
-    if (reducedMotion || !PDP_PANEL_SCROLL) {
+    if (reducedMotion || !PDP_SCROLL_REVEAL) {
       clearRevealTargets(node);
       return;
     }

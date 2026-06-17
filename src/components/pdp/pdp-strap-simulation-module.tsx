@@ -152,12 +152,14 @@ function BuildPickerRow({
                     <span className={pdpAddIconLabelClass}>
                       {added ? "Added" : "Add"}
                     </span>
-                    <MaterialIcon
-                      name="add"
-                      size={18}
-                      className={cn("shrink-0", added ? "invisible" : "text-white")}
-                      aria-hidden={added}
-                    />
+                    {!added ? (
+                      <MaterialIcon
+                        name="add"
+                        size={18}
+                        className="shrink-0 text-white"
+                        aria-hidden
+                      />
+                    ) : null}
                   </button>
                 </div>
               ) : null}

@@ -666,9 +666,6 @@ export function PdpGalleryView({
       <PdpScrollReveal className="w-full shrink-0" surface="muted" lazyMount reserveMinHeight="40dvh">
         <PdpShoppingDiscoveryModule onAddToBag={() => onAddSimilarToBag?.()} />
       </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="muted" lazyMount reserveMinHeight="32dvh">
-        <PdpFaqModule />
-      </PdpScrollReveal>
       <PdpScrollReveal className="w-full shrink-0" surface="light" lazyMount reserveMinHeight="40dvh">
         <PdpReviewsModule
           onReadAll={onOpenReviews}
@@ -681,7 +678,10 @@ export function PdpGalleryView({
       <PdpScrollReveal className="w-full shrink-0" surface="light" lazyMount reserveMinHeight="28dvh">
         <PdpCoachPremiumModule />
       </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="muted" lazyMount reserveMinHeight="20dvh">
+      <PdpScrollReveal className="w-full shrink-0" surface="muted" lazyMount reserveMinHeight="32dvh">
+        <PdpFaqModule />
+      </PdpScrollReveal>
+      <PdpScrollReveal className="w-full shrink-0" surface="light" lazyMount reserveMinHeight="20dvh">
         <PdpSiteFooter />
       </PdpScrollReveal>
     </div>
