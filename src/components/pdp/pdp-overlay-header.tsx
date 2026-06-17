@@ -113,7 +113,7 @@ export function PdpOverlayHeader({
                     key={bagCount}
                     aria-hidden
                     className={cn(
-                      "font-extended animate-bag-badge-pop pointer-events-none absolute inset-x-0 bottom-0 top-[42%] flex items-center justify-center text-[8px] font-medium leading-none tracking-[0.1px] transition-colors duration-300",
+                      "font-extended animate-bag-badge-pop pointer-events-none absolute inset-0 flex items-center justify-center pt-[30%] text-[9px] font-semibold leading-none tracking-[0.1px] transition-colors duration-300",
                       isLight ? "text-black" : "text-white",
                     )}
                   >
