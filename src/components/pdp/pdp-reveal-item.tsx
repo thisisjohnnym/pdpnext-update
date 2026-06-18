@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  useLayoutEffect,
-  useRef,
   type ComponentPropsWithoutRef,
   type ElementType,
   type ReactNode,
@@ -14,27 +12,22 @@ type PdpRevealItemProps<T extends ElementType> = {
   as?: T;
   children: ReactNode;
   className?: string;
-  /** Stagger offset in ms — same rhythm as FAQ rows */
+  /** @deprecated No-op — kept for call-site compatibility during scroll animation refactor */
   delay?: number;
 } & Omit<ComponentPropsWithoutRef<T>, "as" | "children" | "className">;
 
-/** Block target for parent section GSAP stagger (cards, rows, rails) */
+/** Layout block — pass-through wrapper (scroll reveal removed) */
 export function PdpRevealItem<T extends ElementType = "div">({
   as,
   children,
   className,
-  delay = 0,
+  delay: _delay,
   ...props
 }: PdpRevealItemProps<T>) {
   const Tag = as ?? "div";
 
   return (
-    <Tag
-      data-pdp-reveal-item=""
-      data-pdp-text-delay={delay > 0 ? delay : undefined}
-      className={cn("pdp-reveal-item", className)}
-      {...props}
-    >
+    <Tag className={cn(className)} {...props}>
       {children}
     </Tag>
   );

@@ -10,7 +10,6 @@ import { cn } from "@/lib/cn";
 import { PDP_SIGNATURE_SOUNDS, type PdpSignatureSound } from "./pdp-data";
 import { PdpModuleHeading } from "./pdp-module-heading";
 import { useSignatureSound } from "./use-signature-sound";
-import { useScrollRevealSection } from "./scroll-reveal-section-context";
 
 const SOUND_WAVE_HEIGHTS = [38, 68, 100, 58, 34];
 
@@ -111,7 +110,6 @@ const SignatureSoundHeroCard = memo(function SignatureSoundHeroCard({
 export function PdpSignatureSoundsModule() {
   const { title, sounds } = PDP_SIGNATURE_SOUNDS;
   const { toggle, isActive } = useSignatureSound();
-  const { sectionVisible } = useScrollRevealSection() ?? { sectionVisible: false };
 
   const handleToggle = useCallback(
     (id: string, audioSrc: string) => {
@@ -137,7 +135,7 @@ export function PdpSignatureSoundsModule() {
                 <SignatureSoundHeroCard
                   sound={sound}
                   active={isActive(sound.id)}
-                  priority={sectionVisible && index === 0}
+                  priority={index === 0}
                   onToggle={() => handleToggle(sound.id, sound.audioSrc)}
                 />
               </li>

@@ -72,25 +72,36 @@ const GALLERY_SCROLL_PAD = {
   paddingBottom: BOTTOM_CTA_OFFSET,
 } as const;
 
-/** Stacked gallery frames — gap removed so scroll-reveal shells do not expose page chrome */
-const GALLERY_MEDIA_STACK_CLASS = PDP_PANEL_SCROLL
-  ? "flex flex-col bg-white"
-  : "flex flex-col bg-white";
+/** Stacked gallery frames */
+const GALLERY_MEDIA_STACK_CLASS = "flex flex-col bg-white";
 
-type GalleryRevealSurface = "dark" | "light" | "muted" | "transparent";
+/**
+ * Bottom-of-page ecommerce modules — each is a gentle scroll-snap target so a
+ * scroll settles cleanly on the next module's top. Modules size to their own
+ * content (no forced viewport-fill) so short modules don't open up dead space.
+ */
+const ECOMM_MODULE_CLASS = "pdp-snap-module w-full shrink-0";
 
-function galleryScrollReveal(
+/**
+ * Continuous-scroll media height — each full-bleed photo/video owns nearly the
+ * whole screen so the gallery reads "one thing at a time" instead of a dense
+ * stack of half-height frames peeking past each other. Sits above the aspect
+ * ratio (which acts as a floor) and lets object-cover fill the taller frame.
+ */
+const GALLERY_MEDIA_MIN_H = "min-h-[90svh]";
+
+type GallerySectionSurface = "dark" | "light" | "muted" | "transparent";
+
+function gallerySection(
   key: string,
   child: ReactNode,
   options: {
-    variant?: "rise" | "subtle";
-    surface?: GalleryRevealSurface;
+    surface?: GallerySectionSurface;
   } = {},
 ) {
   return (
     <PdpScrollReveal
       key={key}
-      variant={options.variant ?? "rise"}
       surface={options.surface ?? "transparent"}
       lazyMount
     >
@@ -208,6 +219,7 @@ function portraitBackgroundClass(
   return insetMargins ? "bg-white p-3" : "bg-white";
 }
 
+// fallow-ignore-next-line complexity
 function portraitFrameClass(
   panel: boolean,
   aspect: "4/5" | "9/16",
@@ -216,10 +228,19 @@ function portraitFrameClass(
   if (panel) {
     return PANEL_MEDIA_FRAME_CLASS;
   }
+  // Inset (white-framed) slides keep their compact aspect; full-bleed immersive
+  // media grows to own the screen.
+  if (insetMargins) {
+    return cn(
+      "relative w-full overflow-hidden bg-white",
+      aspect === "9/16" ? "aspect-[9/16]" : "aspect-[4/5]",
+    );
+  }
   return cn(
     "relative w-full overflow-hidden",
     aspect === "9/16" ? "aspect-[9/16]" : "aspect-[4/5]",
-    insetMargins ? "bg-white" : PDP_STUDIO_BACKDROP_CLASS,
+    GALLERY_MEDIA_MIN_H,
+    PDP_STUDIO_BACKDROP_CLASS,
   );
 }
 
@@ -547,6 +568,7 @@ function PdpGalleryVideoSlide({
             : cn(
                 "relative w-full overflow-hidden bg-white",
                 aspect === "9/16" ? "aspect-[9/16]" : "aspect-[4/5]",
+                GALLERY_MEDIA_MIN_H,
               ),
         )}
       >
@@ -639,7 +661,7 @@ export function PdpGalleryView({
 
           if (slide.type === "editorial") {
             return [
-              galleryScrollReveal(
+              gallerySection(
                 `editorial-${index}-${slide.videoSrc ?? slide.src}`,
                 <PdpGalleryEditorialSlide
                   src={slide.src}
@@ -657,37 +679,37 @@ export function PdpGalleryView({
                   panelScroll={PDP_PANEL_SCROLL}
                   isLastPanel={isLastPanel}
                 />,
-                { surface: "light", variant: "rise" },
+                { surface: "light" },
               ),
             ];
           }
 
           if (slide.type === "signature-sounds") {
             return [
-              galleryScrollReveal(
+              gallerySection(
                 `signature-sounds-${index}`,
                 <PdpSignatureSoundsModule />,
-                { surface: "muted", variant: "rise" },
+                { surface: "muted" },
               ),
             ];
           }
 
           if (slide.type === "leather-aging") {
             return [
-              galleryScrollReveal(
+              gallerySection(
                 `leather-aging-${index}`,
                 <PdpLeatherAgingModule
                   isLastPanel={isLastPanel}
                   onQuickAdd={() => onAddSimilarToBag?.()}
                 />,
-                { variant: "rise" },
+                {}
               ),
             ];
           }
 
           if (slide.type === "weight-feel") {
             return [
-              galleryScrollReveal(
+              gallerySection(
                 `weight-feel-${index}`,
                 <PdpWeightFeelModule isLastPanel={isLastPanel} />,
               ),
@@ -696,7 +718,7 @@ export function PdpGalleryView({
 
           if (slide.type === "bag-stories") {
             return [
-              galleryScrollReveal(
+              gallerySection(
                 `bag-stories-${index}`,
                 <PdpBagStoriesModule isLastPanel={isLastPanel} />,
               ),
@@ -705,7 +727,7 @@ export function PdpGalleryView({
 
           if (slide.type === "strap-simulation") {
             return [
-              galleryScrollReveal(
+              gallerySection(
                 `strap-simulation-${index}`,
                 <PdpStrapSimulationModule
                   isLastPanel={isLastPanel}
@@ -717,7 +739,7 @@ export function PdpGalleryView({
 
           if (slide.type === "product-collage") {
             return [
-              galleryScrollReveal(
+              gallerySection(
                 `product-collage-${index}`,
                 <PdpGalleryProductCollage isLastPanel={isLastPanel} />,
               ),
@@ -726,7 +748,7 @@ export function PdpGalleryView({
 
           if (slide.type === "video") {
             return [
-              galleryScrollReveal(
+              gallerySection(
                 `video-${index}-${slide.src}`,
                 <PdpGalleryVideoSlide
                   src={slide.src}
@@ -737,27 +759,27 @@ export function PdpGalleryView({
                   caption={slide.caption}
                   isLastPanel={isLastPanel}
                 />,
-                { surface: "light", variant: "rise" },
+                { surface: "light" },
               ),
             ];
           }
 
           if (slide.type === "ugc-videos") {
             return [
-              galleryScrollReveal(
+              gallerySection(
                 `ugc-videos-${index}`,
                 <PdpUgcVideoCarouselModule />,
-                { surface: "light", variant: "rise" },
+                { surface: "light" },
               ),
             ];
           }
 
           if (slide.type === "as-seen-on") {
             return [
-              galleryScrollReveal(
+              gallerySection(
                 `as-seen-on-${index}`,
                 <PdpAsSeenOnModule isLastPanel={isLastPanel} />,
-                { surface: "light", variant: "rise" },
+                { surface: "light" },
               ),
             ];
           }
@@ -767,7 +789,7 @@ export function PdpGalleryView({
           }
 
           return [
-            galleryScrollReveal(
+            gallerySection(
               `immersive-${index}-${slide.src}`,
               <PdpGalleryPortraitSlide
                 src={slide.src}
@@ -801,39 +823,41 @@ export function PdpGalleryView({
           ];
         })}
         <div ref={galleryEndRef} aria-hidden className="h-px w-full shrink-0" />
-        {galleryScrollReveal(
+        {gallerySection(
           "view-more-photos",
           <PdpGalleryViewMorePhotos onOpen={() => setPhotosOpen(true)} />,
-          { surface: "muted", variant: "rise" },
+          { surface: "muted" },
         )}
       </div>
 
-      {/* Ecommerce — after desire + function gallery scroll */}
-      <PdpScrollReveal className="w-full shrink-0" surface="muted" lazyMount reserveMinHeight="40dvh">
+      {/* Ecommerce — after desire + function gallery scroll.
+          Each module is a snap target sized to ~one viewport so a scroll lands
+          cleanly on the next module (see .pdp-snap-module in globals.css). */}
+      <PdpScrollReveal className={ECOMM_MODULE_CLASS} surface="muted" lazyMount reserveMinHeight="40dvh">
         <PdpCompareModule
           onAddToBag={() => onAddSimilarToBag?.()}
           onPickerOpenChange={onComparePickerOpenChange}
         />
       </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="light" lazyMount reserveMinHeight="40dvh">
+      <PdpScrollReveal className={ECOMM_MODULE_CLASS} surface="light" lazyMount reserveMinHeight="40dvh">
         <PdpReviewsModule
           onReadAll={onOpenReviews}
           onWriteReview={onOpenReviews}
         />
       </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="muted" lazyMount reserveMinHeight="40dvh">
+      <PdpScrollReveal className={ECOMM_MODULE_CLASS} surface="muted" lazyMount reserveMinHeight="40dvh">
         <PdpBundleModule onAddBundle={(payload) => onAddBundle?.(payload)} />
       </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="light" lazyMount reserveMinHeight="40dvh">
+      <PdpScrollReveal className={ECOMM_MODULE_CLASS} surface="light" lazyMount reserveMinHeight="40dvh">
         <PdpShoppingDiscoveryModule onAddToBag={() => onAddSimilarToBag?.()} />
       </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="muted" lazyMount reserveMinHeight="24dvh">
+      <PdpScrollReveal className={ECOMM_MODULE_CLASS} surface="muted" lazyMount reserveMinHeight="24dvh">
         <PdpRecentlyViewedCarousel />
       </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="light" lazyMount reserveMinHeight="28dvh">
+      <PdpScrollReveal className={ECOMM_MODULE_CLASS} surface="light" lazyMount reserveMinHeight="28dvh">
         <PdpCoachPremiumModule />
       </PdpScrollReveal>
-      <PdpScrollReveal className="w-full shrink-0" surface="muted" lazyMount reserveMinHeight="32dvh">
+      <PdpScrollReveal className={ECOMM_MODULE_CLASS} surface="muted" lazyMount reserveMinHeight="32dvh">
         <PdpFaqModule />
       </PdpScrollReveal>
       <PdpScrollReveal className="w-full shrink-0" surface="light" lazyMount reserveMinHeight="20dvh">

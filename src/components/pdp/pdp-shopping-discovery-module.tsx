@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { MaterialIcon } from "@/components/icons/material-icon";
 import { GridItem, PageGrid } from "@/components/grid/page-grid";
@@ -23,7 +23,7 @@ import { PdpRevealItem } from "./pdp-reveal-item";
 import { pdpModuleSectionClass } from "./pdp-module-section";
 import { PdpAiConciergePanel } from "./pdp-product-search-module";
 import { PdpAiInsightCard } from "./pdp-ai-insight-card";
-import { pdpType, pdpPressableClass, pdpPressableSolidClass } from "./pdp-type";
+import { pdpType, pdpPressableSolidClass } from "./pdp-type";
 import { PdpTextLinkCta } from "./pdp-text-link-cta";
 
 type PdpShoppingDiscoveryModuleProps = {
@@ -35,17 +35,40 @@ export function PdpShoppingDiscoveryModule({
   onAddToBag,
 }: PdpShoppingDiscoveryModuleProps) {
   const [assistantOpen, setAssistantOpen] = useState(false);
-  const [addedIds, setAddedIds] = useState<Set<string>>(new Set());
+  const [confirmedIds, setConfirmedIds] = useState<Set<string>>(new Set());
+  const timeoutsRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(
+    new Map(),
+  );
+
+  useEffect(() => {
+    const timeouts = timeoutsRef.current;
+    return () => {
+      timeouts.forEach((timeout) => clearTimeout(timeout));
+      timeouts.clear();
+    };
+  }, []);
 
   const handleAdd = (id: string) => {
-    setAddedIds((current) => {
-      if (current.has(id)) {
-        return current;
-      }
+    onAddToBag?.();
 
-      onAddToBag?.();
-      return new Set(current).add(id);
-    });
+    setConfirmedIds((current) => new Set(current).add(id));
+
+    const existing = timeoutsRef.current.get(id);
+    if (existing) {
+      clearTimeout(existing);
+    }
+
+    timeoutsRef.current.set(
+      id,
+      setTimeout(() => {
+        timeoutsRef.current.delete(id);
+        setConfirmedIds((current) => {
+          const next = new Set(current);
+          next.delete(id);
+          return next;
+        });
+      }, 1400),
+    );
   };
 
   return (
@@ -68,7 +91,7 @@ export function PdpShoppingDiscoveryModule({
                   aria-label="More like this"
                 >
                   {PDP_MORE_LIKE_THIS.items.map((item) => {
-                    const added = addedIds.has(item.id);
+                    const confirmed = confirmedIds.has(item.id);
 
                     return (
                       <li
@@ -98,25 +121,22 @@ export function PdpShoppingDiscoveryModule({
                         <button
                           type="button"
                           onClick={() => handleAdd(item.id)}
-                          disabled={added}
+                          aria-label={`Add ${item.name} to bag`}
                           className={cn(
                             "mt-2 inline-flex w-full items-center justify-center gap-1 rounded-full py-2.5 transition-colors",
                             pdpType.micro,
-                            added
-                              ? cn("bg-neutral-100 text-neutral-500", pdpPressableClass)
-                              : cn("bg-black text-white", pdpPressableSolidClass),
+                            "bg-black text-white",
+                            pdpPressableSolidClass,
                           )}
                         >
-                          {!added ? (
-                            <MaterialIcon
-                              name="shopping_bag"
-                              size={18}
-                              className="shrink-0 text-white"
-                              aria-hidden
-                            />
-                          ) : null}
+                          <MaterialIcon
+                            name={confirmed ? "check" : "shopping_bag"}
+                            size={18}
+                            className="shrink-0 text-white"
+                            aria-hidden
+                          />
                           <span className="font-extended -translate-y-px">
-                            {added ? "Added" : "Add to bag"}
+                            {confirmed ? "Added" : "Add to bag"}
                           </span>
                         </button>
                       </li>

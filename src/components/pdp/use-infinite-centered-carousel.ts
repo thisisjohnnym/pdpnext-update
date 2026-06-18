@@ -65,7 +65,7 @@ export function useInfiniteCenteredCarousel(
 
     const edgeBuffer = 12;
 
-    // Geometry is static between resizes — cache it so the scroll handler only
+    // Geometry is static between resizes — cache it so the idle check only
     // reads scrollLeft (one layout read) and never re-measures the rail mid-drag.
     let blockWidth = 0;
     let maxScrollLeft = 0;
@@ -80,27 +80,41 @@ export function useInfiniteCenteredCarousel(
       maxScrollLeft = el.scrollWidth - el.clientWidth;
     };
 
-    let ticking = false;
+    // The loop teleport (shifting scrollLeft by one full block) must only run
+    // once the rail has come to rest. Mutating scrollLeft while an iOS momentum
+    // fling is still animating cancels the fling — the carousel "sticks" — and
+    // mandatory snap then re-snaps, which reads as a jump. The destination is a
+    // pixel-identical snap point one block away, so the recenter is invisible.
+    let pointerDown = false;
+    let idleTimer = 0;
 
-    const onScroll = () => {
-      if (ticking) {
+    // fallow-ignore-next-line complexity
+    const recenterIfAtEdge = () => {
+      if (blockWidth <= 0 || pointerDown) {
         return;
       }
 
-      ticking = true;
-      requestAnimationFrame(() => {
-        ticking = false;
+      if (el.scrollLeft <= edgeBuffer) {
+        el.scrollLeft += blockWidth;
+      } else if (el.scrollLeft >= maxScrollLeft - edgeBuffer) {
+        el.scrollLeft -= blockWidth;
+      }
+    };
 
-        if (blockWidth <= 0) {
-          return;
-        }
+    const scheduleIdleCheck = () => {
+      if (idleTimer) {
+        window.clearTimeout(idleTimer);
+      }
+      idleTimer = window.setTimeout(recenterIfAtEdge, 90);
+    };
 
-        if (el.scrollLeft <= edgeBuffer) {
-          el.scrollLeft += blockWidth;
-        } else if (el.scrollLeft >= maxScrollLeft - edgeBuffer) {
-          el.scrollLeft -= blockWidth;
-        }
-      });
+    const onPointerDown = () => {
+      pointerDown = true;
+    };
+
+    const onPointerUp = () => {
+      pointerDown = false;
+      scheduleIdleCheck();
     };
 
     const onResize = () => {
@@ -112,118 +126,24 @@ export function useInfiniteCenteredCarousel(
     ro.observe(el);
 
     measure();
-    el.addEventListener("scroll", onScroll, { passive: true });
+    el.addEventListener("scroll", scheduleIdleCheck, { passive: true });
+    el.addEventListener("scrollend", recenterIfAtEdge);
+    el.addEventListener("touchstart", onPointerDown, { passive: true });
+    el.addEventListener("touchend", onPointerUp, { passive: true });
+    el.addEventListener("touchcancel", onPointerUp, { passive: true });
 
     return () => {
-      el.removeEventListener("scroll", onScroll);
+      if (idleTimer) {
+        window.clearTimeout(idleTimer);
+      }
+      el.removeEventListener("scroll", scheduleIdleCheck);
+      el.removeEventListener("scrollend", recenterIfAtEdge);
+      el.removeEventListener("touchstart", onPointerDown);
+      el.removeEventListener("touchend", onPointerUp);
+      el.removeEventListener("touchcancel", onPointerUp);
       ro.disconnect();
     };
   }, [scrollRef, itemCount, initialIndex]);
-}
-
-/**
- * Single-swipe paging assist for the center-snapped rail.
- *
- * `scroll-snap-stop: always` on near-full-width tiles makes a gentle thumb
- * swipe feel sticky: if the flick doesn't carry enough momentum past the snap
- * threshold the browser rubber-bands back to the current card, so the next clip
- * only half slides in and the user has to swipe twice. This watches each touch
- * gesture and, on release, commits to the adjacent card with a smooth
- * programmatic scroll whenever the swipe shows clear horizontal intent — even a
- * short, slow one — so one swipe always advances exactly one card.
- */
-export function useCarouselSwipeAssist(
-  scrollRef: RefObject<HTMLDivElement | null>,
-) {
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) {
-      return;
-    }
-
-    // Distance (px) or velocity (px/ms) at which a swipe counts as intentional.
-    const DISTANCE_THRESHOLD = 20;
-    const VELOCITY_THRESHOLD = 0.18;
-
-    const cardStep = () => {
-      const first = el.children[0] as HTMLElement | undefined;
-      const second = el.children[1] as HTMLElement | undefined;
-      if (!first || !second) {
-        return 0;
-      }
-      return Math.abs(second.offsetLeft - first.offsetLeft);
-    };
-
-    let tracking = false;
-    let startX = 0;
-    let startY = 0;
-    let startScrollLeft = 0;
-    let startTime = 0;
-
-    const onTouchStart = (event: TouchEvent) => {
-      if (event.touches.length !== 1) {
-        tracking = false;
-        return;
-      }
-      tracking = true;
-      startX = event.touches[0].clientX;
-      startY = event.touches[0].clientY;
-      startScrollLeft = el.scrollLeft;
-      startTime = event.timeStamp;
-    };
-
-    const onTouchEnd = (event: TouchEvent) => {
-      if (!tracking) {
-        return;
-      }
-      tracking = false;
-
-      const touch = event.changedTouches[0];
-      if (!touch) {
-        return;
-      }
-
-      const dx = touch.clientX - startX;
-      const dy = touch.clientY - startY;
-
-      // Defer to the page for vertical scrolls and ignore taps.
-      if (Math.abs(dx) <= Math.abs(dy)) {
-        return;
-      }
-
-      const elapsed = Math.max(event.timeStamp - startTime, 1);
-      const velocity = Math.abs(dx) / elapsed;
-      if (Math.abs(dx) < DISTANCE_THRESHOLD && velocity < VELOCITY_THRESHOLD) {
-        return;
-      }
-
-      const step = cardStep();
-      if (step <= 0) {
-        return;
-      }
-
-      // Swipe left (dx < 0) reveals the next clip → scroll right by one card.
-      const direction = dx < 0 ? 1 : -1;
-      const maxScrollLeft = el.scrollWidth - el.clientWidth;
-      const target = clampNumber(
-        startScrollLeft + direction * step,
-        0,
-        maxScrollLeft,
-      );
-
-      el.scrollTo({ left: target, behavior: "smooth" });
-    };
-
-    el.addEventListener("touchstart", onTouchStart, { passive: true });
-    el.addEventListener("touchend", onTouchEnd, { passive: true });
-    el.addEventListener("touchcancel", onTouchEnd, { passive: true });
-
-    return () => {
-      el.removeEventListener("touchstart", onTouchStart);
-      el.removeEventListener("touchend", onTouchEnd);
-      el.removeEventListener("touchcancel", onTouchEnd);
-    };
-  }, [scrollRef]);
 }
 
 /** Coverflow depth tuning — how far the side clips rotate, recede, and dim */
@@ -265,11 +185,19 @@ export function useCarouselCoverflow(scrollRef: RefObject<HTMLDivElement | null>
 
     const children = () => Array.from(el.children) as HTMLElement[];
 
+    // The visual transform must ride an inner layer, never the snap target
+    // itself: a transformed snap card shifts its own snap area every frame, so
+    // mandatory snap can never converge and the rail rests between cards.
+    const layerOf = (card: HTMLElement) =>
+      (card.querySelector("[data-coverflow-layer]") as HTMLElement | null) ??
+      card;
+
     const resetStyles = () => {
-      for (const child of children()) {
-        child.style.transform = "";
-        child.style.filter = "";
-        child.style.zIndex = "";
+      for (const card of children()) {
+        card.style.zIndex = "";
+        const layer = layerOf(card);
+        layer.style.transform = "";
+        layer.style.filter = "";
       }
     };
 
@@ -284,11 +212,13 @@ export function useCarouselCoverflow(scrollRef: RefObject<HTMLDivElement | null>
     // interleaved reads — which avoids the layout thrash that made the rail
     // feel shaky while dragging.
     let cards: HTMLElement[] = [];
+    let layers: HTMLElement[] = [];
     let geometry: { center: number; width: number }[] = [];
     let viewportWidth = el.clientWidth;
 
     const measure = () => {
       cards = children();
+      layers = cards.map(layerOf);
       viewportWidth = el.clientWidth;
       geometry = cards.map((child) => {
         const width = child.offsetWidth || 1;
@@ -330,10 +260,15 @@ export function useCarouselCoverflow(scrollRef: RefObject<HTMLDivElement | null>
           COVERFLOW.pullRatio;
 
         const card = cards[i];
-        card.style.transform = `translate3d(${pullX.toFixed(2)}px, 0, ${translateZ.toFixed(
+        const layer = layers[i];
+        if (!layer) {
+          continue;
+        }
+
+        layer.style.transform = `translate3d(${pullX.toFixed(2)}px, 0, ${translateZ.toFixed(
           2,
         )}px) rotateY(${rotateY.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
-        card.style.filter = `brightness(${brightness.toFixed(3)})`;
+        layer.style.filter = `brightness(${brightness.toFixed(3)})`;
         card.style.zIndex = String(1000 - Math.round(distance * 100));
       }
     };

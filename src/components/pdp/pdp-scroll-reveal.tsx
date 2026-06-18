@@ -1,21 +1,9 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/cn";
 
-import {
-  buildRevealTimeline,
-  clearRevealTargets,
-  ensureGsapPlugins,
-  markRevealComplete,
-  markTargetsComplete,
-  queryRevealTargets,
-  scheduleScrollTriggerRefresh,
-  syncRevealIfAlreadyInView,
-  type RevealLayout,
-} from "./pdp-gsap";
-import { PDP_SCROLL_REVEAL } from "./pdp-panel-scroll";
 import { ScrollRevealSectionContext } from "./scroll-reveal-section-context";
 import { useLazyNearView } from "./use-lazy-near-view";
 import { useReducedMotion } from "./use-reduced-motion";
@@ -23,9 +11,7 @@ import { useReducedMotion } from "./use-reduced-motion";
 type PdpScrollRevealProps = {
   children: React.ReactNode;
   className?: string;
-  /** rise — modules below gallery · subtle — stacked gallery frames */
-  variant?: "rise" | "subtle";
-  /** Opaque shell color — prevents color flashes during opacity fade */
+  /** Opaque shell color */
   surface?: "dark" | "light" | "muted" | "transparent";
   /** Defer mounting children until the section is near the viewport */
   lazyMount?: boolean;
@@ -33,94 +19,91 @@ type PdpScrollRevealProps = {
   reserveMinHeight?: string;
 };
 
-function finishReveal(
-  inner: HTMLElement,
-  targets: NodeListOf<HTMLElement>,
-  onVisible: () => void,
-) {
-  markRevealComplete(inner);
-  markTargetsComplete(targets);
-  onVisible();
+/**
+ * One reveal for the whole page — every section fades and lifts in the same way
+ * as it scrolls into view. Keeping a single, uniform motion (rather than
+ * per-element staggers) is what calms the "lots happening at once" feeling on a
+ * media-dense scroll.
+ */
+function RevealContent({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reducedMotion = useReducedMotion();
+  const [revealed, setRevealed] = useState(reducedMotion);
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setRevealed(true);
+      return;
+    }
+
+    const node = ref.current;
+    if (!node) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setRevealed(true);
+          observer.disconnect();
+        }
+      },
+      // Trigger as the section begins entering from the bottom of the viewport.
+      { threshold: 0, rootMargin: "0px 0px -12% 0px" },
+    );
+
+    observer.observe(node);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [reducedMotion]);
+
+  return (
+    <div
+      ref={ref}
+      data-revealed={revealed}
+      className={cn(
+        "motion-safe:transition-[opacity,transform] motion-safe:duration-700 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)]",
+        revealed
+          ? "opacity-100 translate-y-0"
+          : "motion-safe:opacity-0 motion-safe:translate-y-4",
+      )}
+    >
+      {children}
+    </div>
+  );
 }
 
-/** GSAP section reveal — stack layout preserves gallery spacing */
+/** Section shell — lazy-mount + one consistent scroll-in reveal */
+// fallow-ignore-next-line complexity
 export function PdpScrollReveal({
   children,
   className,
-  variant = "rise",
-  surface,
+  surface = "light",
   lazyMount = false,
   reserveMinHeight = "70dvh",
 }: PdpScrollRevealProps) {
   const triggerRef = useRef<HTMLDivElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
   const nearView = useLazyNearView(triggerRef, lazyMount);
-  const reducedMotion = useReducedMotion();
-  const [sectionVisible, setSectionVisible] = useState(
-    () => reducedMotion || !PDP_SCROLL_REVEAL,
-  );
-  const layout: RevealLayout = variant === "subtle" ? "stack" : "module";
-  const resolvedSurface =
-    surface ?? (layout === "stack" ? "transparent" : "light");
   const shouldMount = !lazyMount || nearView;
-
-  useLayoutEffect(() => {
-    const trigger = triggerRef.current;
-    const inner = innerRef.current;
-
-    if (!shouldMount || !trigger || !inner) {
-      return;
-    }
-
-    ensureGsapPlugins();
-
-    const targets = queryRevealTargets(inner);
-
-    if (reducedMotion || !PDP_SCROLL_REVEAL) {
-      clearRevealTargets(inner, ...targets);
-      setSectionVisible(true);
-      return;
-    }
-
-    const finish = () => finishReveal(inner, targets, () => setSectionVisible(true));
-
-    const timeline = buildRevealTimeline({
-      trigger,
-      inner,
-      targets,
-      layout,
-      onRevealStart: () => setSectionVisible(true),
-      onRevealComplete: finish,
-    });
-
-    syncRevealIfAlreadyInView(timeline, finish);
-    scheduleScrollTriggerRefresh();
-
-    return () => {
-      timeline.kill();
-    };
-  }, [shouldMount, layout, reducedMotion]);
 
   return (
     <div
       ref={triggerRef}
       className={cn(
-        "pdp-scroll-reveal w-full shrink-0",
-        layout === "stack" && "pdp-scroll-reveal--stack",
-        layout === "module" && "pdp-scroll-reveal--module",
-        resolvedSurface === "dark" && "bg-black",
-        resolvedSurface === "light" && "bg-white",
-        resolvedSurface === "muted" && "bg-neutral-100",
-        resolvedSurface === "transparent" && "bg-transparent",
+        "w-full shrink-0",
+        surface === "dark" && "bg-black",
+        surface === "light" && "bg-white",
+        surface === "muted" && "bg-neutral-100",
+        surface === "transparent" && "bg-transparent",
         className,
       )}
       style={!shouldMount ? { minHeight: reserveMinHeight } : undefined}
     >
       {shouldMount ? (
-        <ScrollRevealSectionContext.Provider value={{ sectionVisible }}>
-          <div ref={innerRef} className="pdp-scroll-reveal__inner">
-            {children}
-          </div>
+        <ScrollRevealSectionContext.Provider value={{ sectionVisible: true }}>
+          <RevealContent>{children}</RevealContent>
         </ScrollRevealSectionContext.Provider>
       ) : null}
     </div>

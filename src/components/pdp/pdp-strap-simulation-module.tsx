@@ -12,10 +12,19 @@ import {
   type PdpStrapSimulationMode,
 } from "./pdp-data";
 import { resolveStrapSimulationPreview } from "./pdp-strap-simulation-preview";
-import { pdpAddIconLabelClass, pdpPressableClass, pdpPressableSolidClass } from "./pdp-type";
-import { experiencePanelSectionProps } from "./pdp-experience-panel";
+import {
+  pdpAddIconLabelClass,
+  pdpPressableClass,
+  pdpPressableSolidClass,
+} from "./pdp-type";
+import { galleryPanelClassName } from "./pdp-gallery-panel";
+import { BOTTOM_CTA_OFFSET, SCREEN_HEIGHT_STYLE } from "./pdp-viewport-chrome";
 
-const STRAP_PREVIEW_MEDIA_CLASS = "relative aspect-[4/3] w-full overflow-hidden";
+/** Picker sits above the fixed CTA bar with a little breathing room */
+const STRAP_PICKER_BOTTOM = `calc(0.75rem + ${BOTTOM_CTA_OFFSET})`;
+
+/** Scrim fades the lower half of the panel so the glass card reads as floating */
+const STRAP_SCRIM_HEIGHT = `calc(22rem + ${BOTTOM_CTA_OFFSET})`;
 
 const BUILD_ROW_SCROLL_CLASS = cn(
   "pdp-carousel-scroll pdp-build-picker-scroll flex items-center gap-2",
@@ -280,8 +289,7 @@ export function PdpStrapSimulationModule({
   isLastPanel?: boolean;
   onQuickAddStrap?: (optionId: string) => void;
 }) {
-  const { modes, charms } = PDP_STRAP_SIMULATION;
-  const panel = experiencePanelSectionProps(isLastPanel);
+  const { modes, charms, title } = PDP_STRAP_SIMULATION;
   const [activeStrapId, setActiveStrapId] = useState(modes[0]!.id);
   const [activeCharmId, setActiveCharmId] = useState(charms[0]!.id);
   const [addedOptionIds, setAddedOptionIds] = useState<Set<string>>(() => new Set());
@@ -304,23 +312,45 @@ export function PdpStrapSimulationModule({
   };
 
   return (
-    <section data-header-surface="light" className={panel.className} style={panel.style}>
-      <div className={cn(STRAP_PREVIEW_MEDIA_CLASS, "bg-neutral-100")}>
-        <Image
-          key={preview.src}
-          src={preview.src}
-          alt={preview.alt}
-          fill
-          className="object-cover object-center transition-opacity duration-500 ease-out"
-          style={{ objectPosition: preview.objectPosition ?? "center center" }}
-          sizes="100vw"
-          priority
-          draggable={false}
-        />
-      </div>
+    <section
+      data-header-surface="light"
+      className={cn(
+        "relative w-full shrink-0 overflow-hidden bg-neutral-100",
+        galleryPanelClassName(isLastPanel),
+      )}
+      style={SCREEN_HEIGHT_STYLE}
+    >
+      <Image
+        key={preview.src}
+        src={preview.src}
+        alt={preview.alt}
+        fill
+        className="object-cover object-center transition-opacity duration-500 ease-out"
+        style={{ objectPosition: preview.objectPosition ?? "center 42%" }}
+        sizes="100vw"
+        priority
+        draggable={false}
+      />
 
-      <div className="px-3 pt-3 pb-4">
-        <div className="flex flex-col gap-3 overflow-visible rounded-xl bg-neutral-50 p-3">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-10"
+        style={{
+          height: STRAP_SCRIM_HEIGHT,
+          background:
+            "linear-gradient(to top, rgb(245 245 245 / 0.94) 28%, rgb(245 245 245 / 0.55) 62%, rgb(245 245 245 / 0) 100%)",
+        }}
+      />
+
+      <div
+        className="absolute inset-x-0 bottom-0 z-20 px-3"
+        style={{ paddingBottom: STRAP_PICKER_BOTTOM }}
+      >
+        <div className="flex flex-col gap-3 overflow-visible rounded-2xl border border-white/70 bg-white/80 p-3 shadow-[0_12px_40px_rgba(0,0,0,0.14)] backdrop-blur-xl">
+          <p className="font-extended px-0.5 text-[13px] leading-tight tracking-[0.2px] text-black">
+            {title}
+          </p>
+
           <BuildPickerRow
             label="Strap"
             options={strapOptions}

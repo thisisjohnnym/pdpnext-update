@@ -69,13 +69,13 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
           <div className="flex w-full flex-col gap-8">
             <PdpRevealItem className="flex flex-col gap-4">
               <div className="flex items-center justify-between gap-3">
-                <PdpModuleHeading spacing="none">Reviews</PdpModuleHeading>
+                <PdpModuleHeading spacing="none">Comments</PdpModuleHeading>
                 <PdpTextLinkCta
                   type="button"
                   onClick={onWriteReview}
                   className={cn("shrink-0", pdpType.label)}
                 >
-                  Write a review
+                  Write a comment
                 </PdpTextLinkCta>
               </div>
 
@@ -87,7 +87,7 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
                 <div className="flex flex-col gap-1">
                   <PdpStarRating rating={average} />
                   <p className="font-extended m-0 text-sm tracking-[0.2px] text-black">
-                    {PDP_COMMENTS_SUMMARY.count} reviews
+                    {PDP_COMMENTS_SUMMARY.count} comments
                   </p>
                 </div>
               </div>
@@ -150,7 +150,7 @@ export function PdpReviewsModule({ onReadAll, onWriteReview }: PdpReviewsModuleP
                 onClick={onReadAll}
                 className={cn("self-start", pdpType.body)}
               >
-                Read all {PDP_COMMENTS_SUMMARY.count} reviews
+                Read all {PDP_COMMENTS_SUMMARY.count} comments
               </PdpTextLinkCta>
             </PdpRevealItem>
           </div>

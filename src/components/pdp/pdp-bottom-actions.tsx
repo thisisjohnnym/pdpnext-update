@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { MaterialIcon } from "@/components/icons/material-icon";
@@ -11,7 +11,6 @@ import { PdpColorSelector } from "./pdp-color-selector";
 import { PDP_COLORS } from "./pdp-data";
 import { BOTTOM_CHROME_OFFSET } from "./pdp-viewport-chrome";
 import { pdpPressableSolidClass } from "./pdp-type";
-import { useAtbFlash } from "./use-atb-flash";
 import { useBottomBarDocked } from "./use-bottom-bar-docked";
 
 type PdpBottomActionsProps = {
@@ -32,13 +31,6 @@ export function PdpBottomActions({
   const [mounted, setMounted] = useState(false);
   const [colorSheetOpen, setColorSheetOpen] = useState(false);
   const { docked, frostOpacity } = useBottomBarDocked();
-  const atbRef = useRef<HTMLButtonElement>(null);
-  const flashRef = useRef<HTMLSpanElement>(null);
-  const atbContentRef = useRef<HTMLSpanElement>(null);
-
-  useAtbFlash(atbRef, flashRef, atbContentRef, {
-    enabled: !suppressed && !colorSheetOpen,
-  });
 
   useEffect(() => {
     setMounted(true);
@@ -68,7 +60,6 @@ export function PdpBottomActions({
       />
 
       <button
-        ref={atbRef}
         type="button"
         onClick={onAddToBag}
         className={cn(
@@ -80,12 +71,6 @@ export function PdpBottomActions({
         )}
       >
         <span
-          ref={flashRef}
-          aria-hidden
-          className="pdp-atb-flash pointer-events-none absolute inset-0 z-0 bg-blue-600 opacity-0 will-change-[opacity]"
-        />
-        <span
-          ref={atbContentRef}
           className="relative z-[1] flex min-w-0 items-center justify-center gap-2"
         >
           <MaterialIcon

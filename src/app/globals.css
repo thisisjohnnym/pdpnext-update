@@ -497,24 +497,25 @@ html.font-extended {
   pointer-events: none;
 }
 
-/* UGC video rail — coverflow depth: center clip flat, side clips angle back like flipping pages */
-.pdp-ugc-coverflow {
+/* UGC video rail — coverflow depth: center clip flat, side clips angle back like flipping pages.
+   Perspective sits on the snap target; the per-frame transform rides an inner [data-coverflow-layer]
+   so the snap area stays fixed and scroll-snap can always settle on center. */
+.pdp-ugc-coverflow > * {
   perspective: 1500px;
   perspective-origin: 50% 46%;
 }
 
-.pdp-ugc-coverflow > * {
+.pdp-ugc-coverflow [data-coverflow-layer] {
   transform-style: preserve-3d;
   backface-visibility: hidden;
   will-change: transform, filter;
-  border-radius: 14px;
   box-shadow: 0 18px 44px -18px rgba(0, 0, 0, 0.55);
   /* transform tracks scroll per-frame for crisp depth; only soften the brightness shift */
   transition: filter 140ms ease-out, box-shadow 140ms ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pdp-ugc-coverflow > * {
+  .pdp-ugc-coverflow [data-coverflow-layer] {
     transform: none !important;
     filter: none !important;
     box-shadow: none;
@@ -698,39 +699,14 @@ html.pdp-drag-zoom-scroll-lock {
     transform: none;
   }
 
-  .pdp-scroll-reveal__inner,
-  .pdp-text-reveal,
-  .pdp-reveal-item {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-
   .pdp-pressable:active:not(:disabled) {
     transform: none;
     opacity: 1;
   }
 
-  .pdp-atb-flash {
-    display: none;
-  }
-
   .pdp-toast {
     transform: none !important;
   }
-}
-
-/* Scroll reveal — inner shell stays in document flow; only targets fade in */
-.pdp-scroll-reveal__inner {
-  backface-visibility: hidden;
-}
-
-.pdp-scroll-reveal--module .pdp-scroll-reveal__inner:not(.pdp-scroll-reveal__inner--revealed) {
-  opacity: 0;
-}
-
-.pdp-scroll-reveal__inner--revealed {
-  opacity: 1;
 }
 
 /* Floating bottom pills — heavy frosted glass */
@@ -893,6 +869,20 @@ html.pdp-panel-scroll {
   scroll-snap-type: y mandatory;
 }
 
+/* Ecommerce stack — "one module per scroll."
+   Proximity snap on the window scroller only acts on elements that opt in via
+   .pdp-snap-module, so the continuous gallery above is left untouched. */
+html {
+  scroll-snap-type: y proximity;
+  scroll-padding-top: var(--pdp-safe-area-top);
+}
+
+.pdp-snap-module {
+  scroll-snap-align: start;
+  /* Gentle — fast flicks can pass straight through instead of catching on every module */
+  scroll-snap-stop: normal;
+}
+
 .pdp-gallery-panel {
   scroll-snap-align: start;
   scroll-snap-stop: always;
@@ -961,21 +951,6 @@ html.pdp-panel-scroll {
 /* Last photo — allow momentum to carry into free scroll below */
 .pdp-gallery-panel--last {
   scroll-snap-stop: normal;
-}
-
-/* Scroll text + blocks — GSAP-driven; hidden until timeline runs */
-.pdp-text-reveal,
-.pdp-reveal-item {
-  opacity: 0;
-  transform: translate3d(0, 1rem, 0);
-  filter: blur(5px);
-  backface-visibility: hidden;
-}
-
-.pdp-reveal-target--revealed {
-  opacity: 1;
-  transform: none;
-  filter: none;
 }
 
 /* Comment composer — 16px input prevents iOS Safari focus zoom */

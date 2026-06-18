@@ -18,6 +18,7 @@ import {
   PDP_FAMILY_COMPARE_ALTERNATIVES,
   type PdpCompareDifferenceRow,
   type PdpCompareItem,
+  type PdpCompareScale,
   type PdpFamilyCompareAlternative,
 } from "./pdp-data";
 import { pdpType, pdpStrokeCtaClass, pdpStrokeCtaMutedClass } from "./pdp-type";
@@ -63,13 +64,6 @@ function CompareProductCard({
   );
 }
 
-function getCompareDifferenceRows(rows: PdpCompareDifferenceRow[]) {
-  const price = rows.find((row) => row.variant === "price");
-  const rest = rows.filter((row) => row.variant !== "price");
-
-  return price ? [...rest, price] : rest;
-}
-
 function DifferenceRow({ row }: { row: PdpCompareDifferenceRow }) {
   const isSelectedWin = row.advantage === "selected";
 
@@ -80,10 +74,45 @@ function DifferenceRow({ row }: { row: PdpCompareDifferenceRow }) {
         className={cn(
           "font-extended text-right tracking-[0.2px]",
           pdpType.micro,
-          isSelectedWin ? "text-black" : "text-neutral-600",
+          isSelectedWin ? "text-black" : "text-neutral-400",
         )}
       >
         {row.display}
+      </span>
+    </div>
+  );
+}
+
+const SCALE_IDS = new Set(["size", "carry-capacity", "weight"]);
+
+/** Relative delta vs the pinned bag — arrow + one word, no legend to decode */
+// fallow-ignore-next-line complexity
+function CompareDeltaRow({ scale }: { scale: PdpCompareScale }) {
+  const diff = scale.alternative - scale.selected;
+  const isSame = Math.abs(diff) < 0.02;
+  const isHigher = diff > 0;
+  const word = isSame ? "Same" : isHigher ? scale.highLabel : scale.lowLabel;
+
+  return (
+    <div className="flex items-baseline justify-between gap-3 py-2">
+      <span className={cn("text-neutral-500", pdpType.micro)}>
+        {scale.label}
+      </span>
+      <span
+        className={cn(
+          "font-extended inline-flex items-center gap-1 tracking-[0.2px]",
+          pdpType.micro,
+          isSame ? "text-neutral-400" : "text-black",
+        )}
+      >
+        {isSame ? null : (
+          <MaterialIcon
+            name={isHigher ? "arrow_upward" : "arrow_downward"}
+            size={14}
+            className="shrink-0 leading-none"
+          />
+        )}
+        {word}
       </span>
     </div>
   );
@@ -137,6 +166,7 @@ export function PdpCompareModule({
   const [pickerOpen, setPickerOpen] = useState(false);
   const [addedIds, setAddedIds] = useState<Set<string>>(new Set());
   const [insightDismissed, setInsightDismissed] = useState(false);
+  const [showAllDifferences, setShowAllDifferences] = useState(false);
 
   const handlePickerOpenChange = (open: boolean) => {
     setPickerOpen(open);
@@ -146,6 +176,7 @@ export function PdpCompareModule({
   const handleAlternativeSelect = (index: number) => {
     setAlternativeIndex(index);
     setInsightDismissed(false);
+    setShowAllDifferences(false);
   };
 
   const selected = PDP_COMPARE_SELECTED;
@@ -153,7 +184,12 @@ export function PdpCompareModule({
   const alternative =
     PDP_FAMILY_COMPARE_ALTERNATIVES[alternativeIndex] ??
     PDP_FAMILY_COMPARE_ALTERNATIVES[0];
-  const keyDifferences = getCompareDifferenceRows(alternative.differences);
+  const priceRow = alternative.differences.find(
+    (row) => row.variant === "price",
+  );
+  const verbalRows = alternative.differences.filter(
+    (row) => row.variant !== "price" && !SCALE_IDS.has(row.id),
+  );
 
   const handleAdd = (id: string) => {
     setAddedIds((current) => {
@@ -219,11 +255,67 @@ export function PdpCompareModule({
             </PdpRevealItem>
 
             <PdpRevealItem delay={140}>
-            <div className="flex flex-col divide-y divide-neutral-200 border-y border-neutral-200">
-              {keyDifferences.map((row) => (
-                <DifferenceRow key={row.id} row={row} />
-              ))}
-            </div>
+              <div className="flex flex-col gap-3">
+                <p
+                  className={cn(
+                    "font-extended text-black",
+                    pdpType.body,
+                  )}
+                >
+                  {alternative.summary}
+                </p>
+
+                <div className="flex flex-col border-y border-neutral-200 py-2">
+                  <span
+                    className={cn("pb-1 text-neutral-500", pdpType.micro)}
+                  >
+                    {alternative.shortName} vs {selectedShortName}
+                  </span>
+                  <div className="flex flex-col">
+                    {alternative.scales.map((scale) => (
+                      <CompareDeltaRow key={scale.id} scale={scale} />
+                    ))}
+                  </div>
+                </div>
+
+                {priceRow ? (
+                  <div className="border-b border-neutral-200">
+                    <DifferenceRow row={priceRow} />
+                  </div>
+                ) : null}
+
+                {verbalRows.length > 0 ? (
+                  <div className="flex flex-col">
+                    <button
+                      type="button"
+                      onClick={() => setShowAllDifferences((open) => !open)}
+                      aria-expanded={showAllDifferences}
+                      className={cn(
+                        "flex items-center justify-between gap-2 py-1 text-left text-neutral-500 transition-colors active:text-black",
+                        pdpType.micro,
+                      )}
+                    >
+                      <span className="font-extended">
+                        {showAllDifferences
+                          ? "Hide details"
+                          : "Show all differences"}
+                      </span>
+                      <MaterialIcon
+                        name={showAllDifferences ? "expand_less" : "expand_more"}
+                        size={18}
+                        className="shrink-0 leading-none"
+                      />
+                    </button>
+                    {showAllDifferences ? (
+                      <div className="flex flex-col divide-y divide-neutral-200 border-t border-neutral-200">
+                        {verbalRows.map((row) => (
+                          <DifferenceRow key={row.id} row={row} />
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
+              </div>
             </PdpRevealItem>
 
             {/* Temporarily hidden — "Based on your browsing" insight card */}

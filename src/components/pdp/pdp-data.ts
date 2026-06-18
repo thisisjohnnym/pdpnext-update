@@ -285,8 +285,29 @@ export type PdpCompareDifferenceRow = {
   variant?: "price";
 };
 
+/**
+ * Comparative axis — read as a relative delta vs the pinned bag. Direction is
+ * derived from the two 0..1 positions; the words describe each direction.
+ */
+export type PdpCompareScale = {
+  id: string;
+  label: string;
+  /** 0..1 position of the pinned (selected) bag */
+  selected: number;
+  /** 0..1 position of the alternative bag */
+  alternative: number;
+  /** Word when the alternative sits higher, e.g. "Larger" */
+  highLabel: string;
+  /** Word when the alternative sits lower, e.g. "Lighter" */
+  lowLabel: string;
+};
+
 export type PdpFamilyCompareAlternative = PdpCompareItem & {
   shortName: string;
+  /** One-line takeaway shown above the scales */
+  summary: string;
+  /** Glanceable axes (Size / Capacity / Weight) rendered as comparative tracks */
+  scales: PdpCompareScale[];
   differences: PdpCompareDifferenceRow[];
   aiInsight: {
     title: string;
@@ -368,6 +389,12 @@ export const PDP_FAMILY_COMPARE_ALTERNATIVES: PdpFamilyCompareAlternative[] = [
       objectPosition: "center 85%",
     },
     closure: "C clasp turn-lock",
+    summary: "Bigger, roomier & lighter — built for weekends.",
+    scales: [
+      { id: "size", label: "Size", selected: 0.45, alternative: 0.62, highLabel: "Larger", lowLabel: "Smaller" },
+      { id: "carry-capacity", label: "Capacity", selected: 0.4, alternative: 0.66, highLabel: "Roomier", lowLabel: "Less room" },
+      { id: "weight", label: "Weight", selected: 0.58, alternative: 0.36, highLabel: "Heavier", lowLabel: "Lighter" },
+    ],
     differences: [
       {
         id: "size",
@@ -434,6 +461,12 @@ export const PDP_FAMILY_COMPARE_ALTERNATIVES: PdpFamilyCompareAlternative[] = [
       objectPosition: "center 85%",
     },
     closure: "C clasp turn-lock",
+    summary: "Same size, dressier quilting — made for evenings out.",
+    scales: [
+      { id: "size", label: "Size", selected: 0.5, alternative: 0.5, highLabel: "Larger", lowLabel: "Smaller" },
+      { id: "carry-capacity", label: "Capacity", selected: 0.5, alternative: 0.5, highLabel: "Roomier", lowLabel: "Less room" },
+      { id: "weight", label: "Weight", selected: 0.5, alternative: 0.5, highLabel: "Heavier", lowLabel: "Lighter" },
+    ],
     differences: [
       {
         id: "size",
@@ -500,6 +533,12 @@ export const PDP_FAMILY_COMPARE_ALTERNATIVES: PdpFamilyCompareAlternative[] = [
       objectPosition: "center 72%",
     },
     closure: "C clasp turn-lock",
+    summary: "Same shape, beaded for events — a statement piece.",
+    scales: [
+      { id: "size", label: "Size", selected: 0.5, alternative: 0.5, highLabel: "Larger", lowLabel: "Smaller" },
+      { id: "carry-capacity", label: "Capacity", selected: 0.5, alternative: 0.5, highLabel: "Roomier", lowLabel: "Less room" },
+      { id: "weight", label: "Weight", selected: 0.46, alternative: 0.58, highLabel: "Heavier", lowLabel: "Lighter" },
+    ],
     differences: [
       {
         id: "size",
@@ -566,6 +605,12 @@ export const PDP_FAMILY_COMPARE_ALTERNATIVES: PdpFamilyCompareAlternative[] = [
       objectPosition: "center 75%",
     },
     closure: "C clasp turn-lock",
+    summary: "The same Tabby 26 — pre-styled with charms to gift.",
+    scales: [
+      { id: "size", label: "Size", selected: 0.5, alternative: 0.5, highLabel: "Larger", lowLabel: "Smaller" },
+      { id: "carry-capacity", label: "Capacity", selected: 0.5, alternative: 0.5, highLabel: "Roomier", lowLabel: "Less room" },
+      { id: "weight", label: "Weight", selected: 0.5, alternative: 0.5, highLabel: "Heavier", lowLabel: "Lighter" },
+    ],
     differences: [
       {
         id: "size",
@@ -1330,7 +1375,6 @@ const PDP_GALLERY_DESIRE_SLIDES: PdpGallerySlide[] = [
     alt: "Model wearing Tabby Shoulder Bag 26 with a tan trench coat over the shoulder",
     shopTheLookId: "trench-daytime",
   },
-  { type: "ugc-videos" },
 ];
 
 /** 360 spin — editorial inset after material detail */
@@ -1353,6 +1397,7 @@ const PDP_GALLERY_FUNCTION_SLIDES: PdpGallerySlide[] = [
   { type: "leather-aging" },
   { type: "signature-sounds" },
   { type: "weight-feel" },
+  { type: "ugc-videos" },
   { type: "strap-simulation" },
 ];
 
@@ -2728,7 +2773,7 @@ export const PDP_CUSTOMER_REVIEWS: PdpFeaturedReview[] = [
     photos: [
       {
         src: "/images/reviews/comment-cat.webp",
-        alt: "Nyan Cat uploaded with review",
+        alt: "Nyan Cat uploaded with comment",
       },
     ],
   },

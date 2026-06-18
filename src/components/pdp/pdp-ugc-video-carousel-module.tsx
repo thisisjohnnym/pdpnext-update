@@ -15,7 +15,6 @@ import { PdpUgcVideoCard } from "./pdp-ugc-video-card";
 import {
   loopCarouselItems,
   useCarouselCoverflow,
-  useCarouselSwipeAssist,
   useInfiniteCenteredCarousel,
 } from "./use-infinite-centered-carousel";
 
@@ -27,7 +26,6 @@ export function PdpUgcVideoCarouselModule() {
   const loopedVideos = useMemo(() => loopCarouselItems(videos), [videos]);
 
   useInfiniteCenteredCarousel(scrollRef, videos.length);
-  useCarouselSwipeAssist(scrollRef);
   useCarouselCoverflow(scrollRef);
 
   useEffect(() => {

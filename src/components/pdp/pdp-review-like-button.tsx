@@ -36,8 +36,8 @@ export function PdpReviewLikeButton({
         aria-pressed={liked}
         aria-label={
           liked
-            ? `Remove like from review, ${count} likes`
-            : `Like review, ${count} likes`
+            ? `Remove like from comment, ${count} likes`
+            : `Like comment, ${count} likes`
         }
         className={cn(
           "inline-flex shrink-0 items-center gap-1 py-1 pl-1 pr-2 transition-colors active:bg-neutral-100",
@@ -69,8 +69,8 @@ export function PdpReviewLikeButton({
         aria-pressed={liked}
         aria-label={
           liked
-            ? `Remove like from review, ${count} likes`
-            : `Like review, ${count} likes`
+            ? `Remove like from comment, ${count} likes`
+            : `Like comment, ${count} likes`
         }
         className={cn(
           "flex size-7 items-center justify-center transition-colors active:opacity-70",

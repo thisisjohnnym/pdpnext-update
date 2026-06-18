@@ -17,7 +17,7 @@ type PdpModuleHeadingProps = {
   spacing?: "lead" | "none";
 };
 
-/** Module H2 with scroll-triggered text reveal */
+/** Module H2 */
 export function PdpModuleHeading({
   children,
   size = "lg",

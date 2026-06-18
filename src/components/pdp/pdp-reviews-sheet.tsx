@@ -256,7 +256,7 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
       >
         <button
           type="button"
-          aria-label="Close reviews"
+          aria-label="Close comments"
           className="absolute inset-0"
           onClick={onClose}
           tabIndex={open ? 0 : -1}
@@ -301,7 +301,7 @@ export function PdpReviewsSheet({ open, onClose }: PdpReviewsSheetProps) {
                 <PdpStarRating rating={average} />
                 <div className="flex items-center gap-1">
                   <p className="font-extended text-sm tracking-[0.2px] text-black">
-                    {reviewCount} Reviews
+                    {reviewCount} Comments
                   </p>
                   <RatingBreakdownInfo active={open} />
                 </div>

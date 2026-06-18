@@ -56,7 +56,7 @@ function PrimaryBundleCard({ item }: { item: PdpBundleItem }) {
           </p>
         </div>
 
-        <p className="font-extended shrink-0 text-base tracking-[0.2px] text-black">
+        <p className="font-extended shrink-0 text-sm tracking-[0.2px] text-neutral-500">
           {formatPrice(item.price)}
         </p>
       </div>
@@ -72,7 +72,7 @@ function AddonBundleRow({ item, selected, onToggle }: BundleRowProps) {
       disabled={item.locked}
       aria-pressed={selected}
       className={cn(
-        "flex w-full items-center gap-3 px-3.5 py-3.5 text-left transition-colors",
+        "flex w-full items-center gap-3 px-3.5 py-2.5 text-left transition-colors",
         selected ? "bg-neutral-50" : "bg-white",
         item.locked ? "cursor-default" : "active:bg-neutral-100",
       )}
@@ -106,7 +106,7 @@ function AddonBundleRow({ item, selected, onToggle }: BundleRowProps) {
         </span>
       </span>
 
-      <span className={`font-extended shrink-0 text-black ${pdpType.label}`}>
+      <span className={`font-extended shrink-0 text-neutral-500 ${pdpType.label}`}>
         {formatPrice(item.price)}
       </span>
     </button>
@@ -185,14 +185,7 @@ export function PdpBundleModule({ onAddBundle }: PdpBundleModuleProps) {
               {primaryItem ? <PrimaryBundleCard item={primaryItem} /> : null}
 
               {addonItems.length ? (
-                <div className="flex flex-col gap-2">
-                  <p
-                    className={cn(
-                      "font-extended m-0 text-[10px] uppercase tracking-[0.6px] text-neutral-500",
-                    )}
-                  >
-                    Add to your bundle
-                  </p>
+                <div className="flex flex-col">
                   <div className="flex flex-col divide-y divide-neutral-200 border border-neutral-200">
                     {addonItems.map((item, index) => (
                       <PdpRevealItem

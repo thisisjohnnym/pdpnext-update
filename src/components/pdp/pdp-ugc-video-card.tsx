@@ -54,11 +54,14 @@ export function PdpUgcVideoCard({
     <article
       ref={cardRef}
       className={cn(
-        "pdp-ugc-video-card relative flex shrink-0 flex-col overflow-hidden bg-black",
+        "pdp-ugc-video-card relative flex shrink-0 flex-col",
         className,
       )}
     >
-      <div className="relative aspect-[9/16] w-full overflow-hidden bg-black">
+      <div
+        data-coverflow-layer
+        className="pdp-ugc-coverflow-layer relative aspect-[9/16] w-full overflow-hidden rounded-[14px] bg-black"
+      >
         {mounted ? (
           <PdpGalleryHeroVideo
             decoderId={video.id}
