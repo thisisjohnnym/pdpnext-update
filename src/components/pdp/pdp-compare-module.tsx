@@ -108,7 +108,7 @@ function CompareDeltaRow({ scale }: { scale: PdpCompareScale }) {
         {isSame ? null : (
           <MaterialIcon
             name={isHigher ? "arrow_upward" : "arrow_downward"}
-            size={14}
+            size={18}
             className="shrink-0 leading-none"
           />
         )}
