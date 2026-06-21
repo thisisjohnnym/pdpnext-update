@@ -272,7 +272,7 @@ export function PdpHeroGallery({
       <div
         aria-hidden
         data-hero-immersive="editorial"
-        className="pointer-events-none absolute inset-0 z-[5] overflow-hidden"
+        className="pointer-events-none absolute inset-0 z-[5] hidden overflow-hidden"
       >
         {/* "26" — 64px padding from top; text right-aligned in 83px slot, bleeds ~27px off left */}
         <div

@@ -388,7 +388,7 @@
 }
 
 .pdp-color-sheet-panel {
-  --pdp-color-sheet-stagger-step: calc(var(--pdp-duration) * 0.05);
+  --pdp-color-sheet-stagger-step: calc(var(--pdp-duration) * 0.09);
   transition-property: transform, translate;
   transition-duration: calc(var(--pdp-duration) * 1.2);
   transition-timing-function: var(--pdp-ease);
@@ -407,7 +407,7 @@
   opacity: 0;
   transform: translateY(6px);
   transition-property: opacity, transform;
-  transition-duration: calc(var(--pdp-duration) * 0.34);
+  transition-duration: calc(var(--pdp-duration) * 0.38);
   transition-timing-function: var(--pdp-ease);
   will-change: opacity, transform;
 }
