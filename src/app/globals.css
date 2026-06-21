@@ -20,6 +20,10 @@
   --pdp-fixed-bottom-offset: calc(
     var(--pdp-safe-area-bottom) + var(--pdp-browser-bottom-inset, 0px)
   );
+  --pdp-browser-bottom-inset: var(--pdp-browser-bottom-inset, 0px);
+  --pdp-fixed-bottom-offset: calc(
+    var(--pdp-safe-area-bottom) + var(--pdp-browser-bottom-inset, 0px)
+  );
   --pdp-immersive-top-bleed: var(--pdp-safe-area-top);
   --pdp-immersive-height: 100svh;
   --pdp-screen-height: 100svh;

@@ -1,5 +1,5 @@
-import { PdpSocialView } from "@/components/pdp/pdp-social-view";
+import { PdpView } from "@/pdp/pdp-view";
 
 export default function Home() {
-  return <PdpSocialView />;
+  return <PdpView />;
 }

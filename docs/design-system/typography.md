@@ -4,14 +4,16 @@ All UI copy uses **Helvetica Neue LT Pro** — no Inter, Arial, or system sans f
 
 ## Weights in use
 
-| Weight | File | CSS | Use |
-|--------|------|-----|-----|
-| Roman | `helvetica-neue-lt-pro-roman.woff2` | `400` | Body, labels, nav |
-| Bold | `helvetica-neue-lt-pro-bold.woff2` | `700` | Emphasis, buttons |
-| Extended | `helvetica-neue-lt-pro-extended.woff2` | `400` | Display / wordmarks |
-| Extended Bold | `helvetica-neue-lt-pro-extended-bold.woff2` | `700` | Display headlines |
+| Weight | File | Source asset | CSS | Use |
+|--------|------|--------------|-----|-----|
+| Light | `helvetica-neue-lt-pro-light.woff2` | `HelveticaNeueLTPro-Lt.woff2` | `300` | Optional light UI |
+| Roman | `helvetica-neue-lt-pro-roman.woff2` | `HelveticaNeueLTPro-Roman.woff2` | `400` | Body, labels, nav |
+| Medium | `helvetica-neue-lt-pro-bold.woff2` | `HelveticaNeueLTPro-Md.woff2` | `500` | Emphasis (no separate Bold in asset set) |
+| Light Extended | `helvetica-neue-lt-pro-light-extended.woff2` | `HelveticaNeueLTPro-LtEx.woff2` | `300` | Light display |
+| Extended | `helvetica-neue-lt-pro-extended.woff2` | `HelveticaNeueLTPro-Ex.woff2` | `400` | All PDP UI (`font-extended`) |
+| Extended (700 slot) | `helvetica-neue-lt-pro-extended-bold.woff2` | `HelveticaNeueLTPro-Ex.woff2` | `700` | Extended bold requests (same Ex file) |
 
-Source: Coach 2026 Font Set → `Helvetica LT Pro (Coach & CO)/WOFF/`
+Source: `Coach/_assets/fonts/` (Coach 2026 Font Set)
 
 ## Code
 
