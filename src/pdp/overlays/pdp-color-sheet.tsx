@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { type CSSProperties, useEffect, useId, useState } from "react";
+import { type CSSProperties, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { MaterialIcon } from "@/components/icons/material-icon";
@@ -28,6 +28,59 @@ const SIZE_LABELS: Record<(typeof PDP_SIZES)[number], string> = {
   26: "Medium",
   33: "Large",
   36: "XL",
+};
+
+// The 3 sizes shown in the visual picker — XL is intentionally omitted per design
+const PICKER_SIZES = [20, 26, 33] as const;
+type PickerSize = (typeof PICKER_SIZES)[number];
+
+// Dedicated size-reference bag images exported from the design file
+const SIZE_IMAGES: Record<PickerSize, string> = {
+  20: "/img/tabby25/size-selector/tabby-mini.png",
+  26: "/img/tabby25/size-selector/tabby-medium.png",
+  33: "/img/tabby25/size-selector/tabby-large.png",
+};
+
+// ---------------------------------------------------------------------------
+// Availability — combos encoded as "styleId|size|colorId"
+// "notify"       → out of stock, user can request a notification
+// "discontinued" → not offered, hard unavailable
+// ---------------------------------------------------------------------------
+
+const NOTIFY_COMBOS: ReadonlySet<string> = new Set([
+  "classic|26|canyon",
+  "quilted|20|mustard",
+  "signature|33|tan",
+]);
+
+const DISCONTINUED_COMBOS: ReadonlySet<string> = new Set([
+  "classic|26|chalk",
+  "quilted|20|olive",
+  "pillow|26|oxblood",
+]);
+
+type ComboStatus = "available" | "notify" | "discontinued";
+
+const getComboStatus = (styleId: string, size: PdpSize, colorId: string): ComboStatus => {
+  const key = `${styleId}|${size}|${colorId}`;
+  if (NOTIFY_COMBOS.has(key)) return "notify";
+  if (DISCONTINUED_COMBOS.has(key)) return "discontinued";
+  return "available";
+};
+
+const isComboUnavailable = (styleId: string, size: PdpSize, colorId: string) =>
+  getComboStatus(styleId, size, colorId) !== "available";
+
+// Card layout constants — must match the rendered button dimensions
+// Card outer width = 88px image + 2×6px padding (p-1.5) = 100px; gap-1 = 4px
+const PILL_CARD_W = 100;
+const PILL_GAP = 4;
+const PILL_TRACK_W = PICKER_SIZES.length * PILL_CARD_W + (PICKER_SIZES.length - 1) * PILL_GAP;
+
+/** Returns the % position (0–100) for the pill centre over card at `index` */
+const pillCenterPct = (index: number): number => {
+  const centerPx = index * (PILL_CARD_W + PILL_GAP) + PILL_CARD_W / 2;
+  return (centerPx / PILL_TRACK_W) * 100;
 };
 
 type PdpColorSheetProps = {
@@ -76,6 +129,50 @@ export function PdpColorSheet({
   const [localColorId, setLocalColorId] = useState(selectedColorId);
   const [localStyleId, setLocalStyleId] = useState(selectedStyleId);
   const [localSize, setLocalSize] = useState<PdpSize>(selectedSize);
+
+  // Slider drag state
+  const trackRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+
+  // Map localSize to a picker index (0–2). XL (36) is clamped to Large (index 2).
+  const localPickerIndex = Math.max(
+    0,
+    PICKER_SIZES.indexOf(localSize as PickerSize),
+  );
+
+  // Whether an option is visually dimmed (unavailable in any way with current selections)
+  const isSizeDimmed = (size: PickerSize) =>
+    isComboUnavailable(localStyleId, size, localColorId);
+  const isColorDimmed = (colorId: string) =>
+    isComboUnavailable(localStyleId, localSize as PickerSize, colorId);
+  const isStyleDimmed = (styleId: string) =>
+    isComboUnavailable(styleId, localSize as PickerSize, localColorId);
+
+  // CTA state for the currently staged combo
+  const stagedComboStatus = getComboStatus(localStyleId, localSize, localColorId);
+
+  const resolveIndexFromClientX = (clientX: number) => {
+    if (!trackRef.current) return;
+    const rect = trackRef.current.getBoundingClientRect();
+    const fraction = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    const idx = Math.round(fraction * (PICKER_SIZES.length - 1));
+    setLocalSize(PICKER_SIZES[idx]);
+  };
+
+  const handleTrackPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    isDragging.current = true;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    resolveIndexFromClientX(e.clientX);
+  };
+
+  const handleTrackPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDragging.current) return;
+    resolveIndexFromClientX(e.clientX);
+  };
+
+  const handleTrackPointerUp = () => {
+    isDragging.current = false;
+  };
 
   // Sync staged state from parent whenever the sheet opens
   useEffect(() => {
@@ -180,6 +277,7 @@ export function PdpColorSheet({
             >
               {styles.map((style) => {
                 const isSelected = style.id === localStyleId;
+                const dimmed = isStyleDimmed(style.id);
                 return (
                   <button
                     key={style.id}
@@ -187,23 +285,26 @@ export function PdpColorSheet({
                     role="option"
                     aria-selected={isSelected}
                     onClick={() => setLocalStyleId(style.id)}
-                    className={cn("flex flex-col items-center gap-1.5", pdpPressableClass)}
+                    className={cn(
+                      "flex flex-col items-center gap-1.5",
+                      dimmed ? "opacity-40" : "",
+                      pdpPressableClass,
+                    )}
                   >
                     <div
                       className={cn(
-                        "relative w-full overflow-hidden rounded-md transition-[outline,box-shadow]",
+                        "relative w-full overflow-hidden rounded-md bg-[#f0f0f0] transition-[outline,box-shadow]",
                         isSelected
                           ? "outline outline-2 outline-black outline-offset-[3px]"
                           : "shadow-[inset_0_0_0_1px_rgba(0,0,0,0.1)]",
                       )}
-                      style={{ height: 96 }}
+                      style={{ height: 72 }}
                     >
                       <Image
                         src={style.imageSrc}
                         alt={style.name}
                         fill
-                        className="object-cover"
-                        style={{ objectPosition: "center center" }}
+                        className="object-contain scale-[1.2]"
                         sizes="25vw"
                       />
                     </div>
@@ -223,45 +324,90 @@ export function PdpColorSheet({
             className="pdp-color-sheet-stagger-item pt-3.5"
             style={stagger(STAGGER.sizeSection)}
           >
-            <p className={cn("px-3 pb-2.5 text-neutral-400", pdpType.micro)}>size</p>
-            {/* Grid fills full width — 4 equal columns, same as style */}
-            <div
-              role="listbox"
-              aria-label="Select size"
-              className="grid grid-cols-4 gap-2 px-3"
-            >
-              {PDP_SIZES.map((size) => {
-                const isSelected = size === localSize;
-                return (
-                  <button
-                    key={size}
-                    type="button"
-                    role="option"
-                    aria-selected={isSelected}
-                    onClick={() => setLocalSize(size)}
-                    className={cn(
-                      "flex flex-col items-center gap-1.5",
-                      pdpPressableClass,
-                    )}
-                  >
-                    <div
+            <p className={cn("px-3 pb-3 text-neutral-400", pdpType.micro)}>size</p>
+
+            {/* Cards + slider share a fit-width container so the track spans exactly the cards */}
+            <div className="flex flex-col w-fit mx-auto">
+              <div
+                role="listbox"
+                aria-label="Select size"
+                className="flex items-end gap-1"
+              >
+                {PICKER_SIZES.map((size) => {
+                  const isSelected = size === localSize;
+                  const dimmed = isSizeDimmed(size);
+                  return (
+                    <button
+                      key={size}
+                      type="button"
+                      role="option"
+                      aria-selected={isSelected}
+                      onClick={() => setLocalSize(size)}
                       className={cn(
-                        "flex w-full items-center justify-center rounded-md py-3 transition-colors",
-                        isSelected
-                          ? "bg-black text-white"
-                          : "border border-neutral-200 bg-white text-black",
+                        "flex flex-col items-center gap-1.5 rounded-[15px] p-1.5",
+                        isSelected ? "bg-[#F1EFF2]" : "bg-transparent",
+                        dimmed ? "opacity-40" : "",
+                        pdpPressableClass,
                       )}
                     >
-                      <span className="translate-y-px font-extended text-[18px] leading-none tracking-tight">
-                        {size}
+                      {/* Fixed image container — concentric radius: 15 - 6 = 9px */}
+                      <div
+                        className="relative overflow-hidden rounded-[9px] shrink-0"
+                        style={{ width: 88, height: 110 }}
+                      >
+                      <Image
+                        src={SIZE_IMAGES[size]}
+                        alt={`${SIZE_LABELS[size]} bag`}
+                        fill
+                        className="object-contain scale-[1.4]"
+                        sizes="88px"
+                      />
+                      </div>
+                      {/* Label — visible only on selected item */}
+                      <span
+                        className={cn(
+                          pdpType.micro,
+                          "transition-opacity duration-200",
+                          isSelected ? "opacity-100 text-black" : "opacity-0",
+                        )}
+                        aria-hidden={!isSelected}
+                      >
+                        {SIZE_LABELS[size]}
                       </span>
-                    </div>
-                    <span className={cn("text-neutral-600", pdpType.micro)}>
-                      {SIZE_LABELS[size]}
-                    </span>
-                  </button>
-                );
-              })}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Draggable slider — width = cards row, pill snaps to 3 positions */}
+              <div className="w-full pt-4 pb-0.5">
+                <div
+                  ref={trackRef}
+                  role="slider"
+                  aria-label="Select size"
+                  aria-valuemin={0}
+                  aria-valuemax={PICKER_SIZES.length - 1}
+                  aria-valuenow={localPickerIndex}
+                  aria-valuetext={SIZE_LABELS[localSize]}
+                  className="relative flex h-0.5 w-full items-center rounded-full bg-neutral-200 cursor-pointer touch-none"
+                  onPointerDown={handleTrackPointerDown}
+                  onPointerMove={handleTrackPointerMove}
+                  onPointerUp={handleTrackPointerUp}
+                >
+                  <div
+                    aria-hidden
+                    className="absolute top-1/2 flex items-center justify-center gap-[3px] rounded-full bg-black px-[13px] py-[5px]"
+                    style={{
+                      left: `${pillCenterPct(localPickerIndex)}%`,
+                      transform: "translateX(-50%) translateY(-50%)",
+                      transition: "left 380ms cubic-bezier(0.34, 1.3, 0.64, 1)",
+                    }}
+                  >
+                    <span className="h-1.5 w-px rounded-full bg-white/30 shrink-0" />
+                    <span className="h-1.5 w-px rounded-full bg-white/30 shrink-0" />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -277,7 +423,7 @@ export function PdpColorSheet({
               <div
                 role="listbox"
                 aria-label="Select color"
-                className={cn(scrollRowClass, "gap-2 pb-1")}
+                className={cn(scrollRowClass, "gap-2 py-[5px]")}
               >
                 {colors.map((color) => {
                   const isSelected = color.id === localColorId;
@@ -290,24 +436,24 @@ export function PdpColorSheet({
                       onClick={() => setLocalColorId(color.id)}
                       className={cn(
                         "snap-start shrink-0 flex flex-col items-center gap-1.5",
+                        isColorDimmed(color.id) ? "opacity-40" : "",
                         pdpPressableClass,
                       )}
                     >
                       <div
                         className={cn(
-                          "relative overflow-hidden rounded-md transition-[outline,box-shadow]",
+                          "relative overflow-hidden rounded-md bg-[#f0f0f0] transition-[outline,box-shadow]",
                           isSelected
                             ? "outline outline-2 outline-black outline-offset-[3px]"
                             : "shadow-[inset_0_0_0_1px_rgba(0,0,0,0.1)]",
                         )}
-                        style={{ width: 96, height: 96 }}
+                        style={{ width: 96, height: 72 }}
                       >
-                        <Image
+                          <Image
                           src={getPdpColorSwatch(color.id)}
                           alt=""
                           fill
-                          className="object-cover"
-                          style={{ objectPosition: "center center" }}
+                          className="object-contain scale-[1.2]"
                           sizes="96px"
                         />
                       </div>
@@ -339,21 +485,47 @@ export function PdpColorSheet({
             </div>
           </div>
 
-          {/* Footer — Confirm / Cancel */}
+          {/* Footer — CTA adapts to staged combo availability */}
           <div
             className="pdp-color-sheet-stagger-item shrink-0 border-t border-neutral-100 px-3 pb-[max(16px,var(--pdp-safe-area-bottom))] pt-3 flex flex-col gap-2"
             style={stagger(STAGGER.footer)}
           >
-            <button
-              type="button"
-              onClick={handleConfirm}
-              className={cn(
-                "font-extended flex h-12 w-full items-center justify-center rounded-full bg-black text-sm tracking-[0.2px] text-white",
-                pdpPressableSolidClass,
-              )}
-            >
-              <span className="translate-y-px">Confirm changes</span>
-            </button>
+            {stagedComboStatus === "available" && (
+              <button
+                type="button"
+                onClick={handleConfirm}
+                className={cn(
+                  "font-extended flex h-12 w-full items-center justify-center rounded-full bg-black text-sm tracking-[0.2px] text-white",
+                  pdpPressableSolidClass,
+                )}
+              >
+                <span className="translate-y-px">Confirm changes</span>
+              </button>
+            )}
+
+            {stagedComboStatus === "notify" && (
+              <button
+                type="button"
+                className={cn(
+                  "font-extended flex h-12 w-full items-center justify-center gap-2 rounded-full bg-black text-sm tracking-[0.2px] text-white",
+                  pdpPressableSolidClass,
+                )}
+              >
+                <MaterialIcon name="mail" size={18} className="shrink-0" aria-hidden />
+                <span className="translate-y-px">Notify me</span>
+              </button>
+            )}
+
+            {stagedComboStatus === "discontinued" && (
+              <button
+                type="button"
+                disabled
+                className="font-extended flex h-12 w-full cursor-not-allowed items-center justify-center rounded-full bg-neutral-100 text-sm tracking-[0.2px] text-neutral-400"
+              >
+                <span className="translate-y-px">Not available</span>
+              </button>
+            )}
+
             <button
               type="button"
               onClick={onClose}
