@@ -19,7 +19,10 @@ export const PDP_MEDIA = {
   spinVideo: "/video/spin-tabby25.mp4",
   spinPoster: "/img/tabby25/ccx04_b4bk_a0.webp",
   hotspotsImage: "/img/tabby25/ccx04_b4bk_a88.webp",
+  scrubbedVideo: "/video/coach-hand-detail.mp4",
 } as const;
+
+export const PDP_SCRUBBED_VIDEO_SRC = PDP_MEDIA.scrubbedVideo;
 
 /** Hero gallery stills — slides 2–14 (slide 1 is video; poster is separate) */
 export const PDP_HERO_GALLERY_STILLS = [

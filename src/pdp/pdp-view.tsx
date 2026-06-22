@@ -40,6 +40,12 @@ export function PdpView() {
         <PdpGsapSmoother>
           <PdpScroll bagCount={bagCount} onOpenMenu={() => setNavOpen(true)} />
         </PdpGsapSmoother>
+        {/*
+         * Portal slot for scroll-scrubbed overlays.
+         * Sits OUTSIDE the ScrollSmoother wrapper so position:fixed children
+         * are viewport-relative and not affected by the smoother's translateY.
+         */}
+        <div id="pdp-scrubbed-video-portal" />
         <PdpBottomBlur suppressed={chromeSuppressed} />
         <PdpBottomBar
           selectedColorId={selectedColorId}

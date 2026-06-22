@@ -5,6 +5,7 @@ import { PdpAssetsParallax } from "./sections/pdp-assets-parallax";
 import { PdpHero } from "./sections/pdp-hero";
 import { PdpHotspots } from "./sections/pdp-hotspots";
 import { PdpHotspotTicker } from "./sections/pdp-hotspot-ticker";
+import { PdpScrubbedVideo } from "./sections/pdp-scrubbed-video";
 import { PdpUgc } from "./sections/pdp-ugc";
 import { PdpWaysToWear } from "./sections/pdp-ways-to-wear";
 
@@ -21,6 +22,7 @@ export function PdpScroll({ bagCount = 0, onOpenMenu }: PdpScrollProps) {
       <PdpAssetsParallax />
       <PdpWaysToWear />
       <PdpUgc />
+      <PdpScrubbedVideo />
       <PdpCapacity />
       <PdpHotspotTicker />
       <PdpHotspots />

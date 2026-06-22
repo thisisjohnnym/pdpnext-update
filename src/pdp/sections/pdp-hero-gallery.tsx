@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 
 import { cn } from "@/lib/cn";
 
@@ -207,19 +207,37 @@ export function PdpHeroGallery({
     };
   }, [reducedMotion]);
 
-  const handleFrameClick = (event: MouseEvent<HTMLDivElement>) => {
-    if (
-      (event.target as HTMLElement).closest("button, a, [data-pdp-no-toggle]")
-    ) {
+  const pointerDownPos = useRef<{ x: number; y: number } | null>(null);
+
+  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    pointerDownPos.current = { x: event.clientX, y: event.clientY };
+  };
+
+  const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
+    const down = pointerDownPos.current;
+    pointerDownPos.current = null;
+
+    if (!down) return;
+
+    const dx = event.clientX - down.x;
+    const dy = event.clientY - down.y;
+    const moved = Math.sqrt(dx * dx + dy * dy);
+
+    // Ignore if user moved more than 10px — treat as scroll/swipe, not tap
+    if (moved > 10) return;
+
+    if ((event.target as HTMLElement).closest("button, a, [data-pdp-no-toggle]")) {
       return;
     }
+
     onToggleImmersive?.();
   };
 
   return (
     <div
       ref={frameRef}
-      onClick={handleFrameClick}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
       className={cn("pdp-hero-gallery-frame relative w-full overflow-visible bg-black", className)}
     >
       <div className="pdp-hero-gallery-bleed absolute inset-x-0 bottom-0 z-0 overflow-hidden">

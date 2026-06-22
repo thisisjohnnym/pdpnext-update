@@ -93,6 +93,68 @@
   min-height: max(85svh, calc(640 * var(--pdp-scale) * 1px));
 }
 
+/* Scroll-scrubbed video — 600svh section provides scroll travel. The visible
+   video + callouts live in a position:fixed overlay that is portalled OUTSIDE
+   the ScrollSmoother content wrapper. This avoids the iOS Safari jitter caused
+   by conflicting translateY transforms (smoother content vs. ScrollTrigger pin).
+   The overlay is shown/hidden by ScrollTrigger's onEnter/onLeave callbacks. */
+.pdp-scrubbed-video-section {
+  position: relative;
+  width: 100%;
+  height: 600svh;
+  background: #fff;
+}
+
+.pdp-scrubbed-video-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100svh;
+  width: min(100vw, var(--pdp-max-width));
+  margin-inline: auto;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.pdp-scrubbed-video-stage {
+  position: absolute;
+  inset: 0;
+  transform-origin: center center;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.pdp-scrubbed-video-callout {
+  position: absolute;
+  background: #fff;
+  color: #000;
+  padding: calc(16 * var(--pdp-scale) * 1px);
+  font-size: calc(16 * var(--pdp-scale) * 1px);
+  line-height: 1.2;
+  white-space: nowrap;
+  will-change: opacity;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pdp-scrubbed-video-section {
+    height: 100svh;
+  }
+
+  .pdp-scrubbed-video-overlay {
+    position: relative;
+    height: auto;
+    aspect-ratio: 430 / 619;
+    display: block !important;
+  }
+
+  .pdp-scrubbed-video-stage {
+    transform: none !important;
+  }
+}
+
 .pdp-caption-wrap {
   will-change: opacity;
 }
