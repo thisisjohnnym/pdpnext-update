@@ -1,5 +1,49 @@
 import { PDP_PRODUCT_CARD } from "../pdp-media";
 
+// ---------------------------------------------------------------------------
+// Variant dimensions
+// ---------------------------------------------------------------------------
+
+export type PdpStyle = {
+  id: string;
+  name: string;
+  /** Product image used as texture preview in the style card */
+  imageSrc: string;
+};
+
+export const PDP_STYLES: PdpStyle[] = [
+  {
+    id: "classic",
+    name: "Classic",
+    imageSrc: "/img/tabby25/thumbnails/ccx04_b4bk_a0.webp",
+  },
+  {
+    id: "quilted",
+    name: "Quilted",
+    imageSrc: "/img/tabby25/thumbnails/ccw91_b4bk_a0.webp",
+  },
+  {
+    id: "pillow",
+    name: "Pillow",
+    imageSrc: "/img/tabby25/thumbnails/cen52_b4il_a0.webp",
+  },
+  {
+    id: "signature",
+    name: "Signature",
+    imageSrc: "/img/tabby25/thumbnails/ceg40_b4bk_a0.webp",
+  },
+];
+
+export const PDP_SIZES = [20, 26, 33, 36] as const;
+export type PdpSize = (typeof PDP_SIZES)[number];
+
+export const DEFAULT_STYLE_ID = "classic";
+export const DEFAULT_SIZE: PdpSize = 26;
+
+// ---------------------------------------------------------------------------
+// Colors — pure color dimension only, no style/material conflated in
+// ---------------------------------------------------------------------------
+
 export type PdpColor = {
   id: string;
   name: string;
@@ -13,7 +57,7 @@ export const PDP_COLORS: PdpColor[] = [
   {
     id: "black",
     name: "Black",
-    swatch: "/img/tabby25/ccx04_b4bk_a0.webp",
+    swatch: "/img/tabby25/thumbnails/ccx04_b4bk_a0.webp",
     hero: "/img/tabby25/ccx04_b4bk_a0.webp",
     heroAlt: "Tabby Shoulder Bag 26 in black leather",
     chromeSample: "#1a1a1a",
@@ -21,55 +65,39 @@ export const PDP_COLORS: PdpColor[] = [
   {
     id: "canyon",
     name: "Canyon",
-    swatch: "/img/tabby25/ccx04_b4bk_a10.webp",
+    swatch: "/img/tabby25/thumbnails/ccx04_b4nd7_a0.webp",
     hero: "/img/tabby25/ccx04_b4bk_a10.webp",
-    heroAlt: "Tabby Shoulder Bag 26 in canyon suede",
+    heroAlt: "Tabby Shoulder Bag 26 in canyon leather",
     chromeSample: "#a34e3d",
   },
   {
     id: "oxblood",
     name: "Oxblood",
-    swatch: "/img/tabby25/ccx04_b4bk_a21.webp",
+    swatch: "/img/tabby25/thumbnails/ccx04_b4mpl_a0.webp",
     hero: "/img/tabby25/ccx04_b4bk_a21.webp",
     heroAlt: "Tabby Shoulder Bag 26 in oxblood leather",
     chromeSample: "#6b2c32",
   },
   {
-    id: "black-charm",
-    name: "Black Charm",
-    swatch: "/img/tabby25/ccx04_b4bk_a3.webp",
-    hero: "/img/tabby25/ccx04_b4bk_a3.webp",
-    heroAlt: "Tabby Shoulder Bag 26 in black with bag charms",
-    chromeSample: "#1a1a1a",
-  },
-  {
-    id: "beaded",
-    name: "Beaded Floral",
-    swatch: "/img/tabby25/ccx04_b4bk_a5.webp",
-    hero: "/img/tabby25/ccx04_b4bk_a5.webp",
-    heroAlt: "Tabby Shoulder Bag 26 in beaded floral",
-    chromeSample: "#8a7a6a",
-  },
-  {
-    id: "tan-fringe",
-    name: "Tan Fringe",
-    swatch: "/img/tabby25/ccx04_b4bk_a6.webp",
+    id: "tan",
+    name: "Tan",
+    swatch: "/img/tabby25/thumbnails/ccx04_b4bic_a0.webp",
     hero: "/img/tabby25/ccx04_b4bk_a6.webp",
-    heroAlt: "Tabby Shoulder Bag 26 in tan suede with fringe",
+    heroAlt: "Tabby Shoulder Bag 26 in tan suede",
     chromeSample: "#c4a06a",
   },
   {
-    id: "black-fringe",
-    name: "Black Fringe",
-    swatch: "/img/tabby25/ccx04_b4bk_a61.webp",
-    hero: "/img/tabby25/ccx04_b4bk_a61.webp",
-    heroAlt: "Tabby Shoulder Bag 26 in black suede with fringe",
-    chromeSample: "#1a1a1a",
+    id: "chalk",
+    name: "Chalk",
+    swatch: "/img/tabby25/thumbnails/ccx04_b4ha_a0.webp",
+    hero: "/img/tabby25/ccx04_b4bk_a0.webp",
+    heroAlt: "Tabby Shoulder Bag 26 in chalk leather",
+    chromeSample: "#e8e4df",
   },
   {
     id: "olive",
     name: "Olive",
-    swatch: "/img/tabby25/ccx04_b4bk_a62.webp",
+    swatch: "/img/tabby25/thumbnails/cen52_b4z0g_a0.webp",
     hero: "/img/tabby25/ccx04_b4bk_a62.webp",
     heroAlt: "Tabby Shoulder Bag 26 in olive suede",
     chromeSample: "#556847",

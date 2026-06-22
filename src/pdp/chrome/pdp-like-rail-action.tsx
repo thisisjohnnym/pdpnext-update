@@ -13,6 +13,13 @@ const BURST_DURATION_MS = 1700;
 const BURST_EASING = "cubic-bezier(0.22, 0.92, 0.24, 1)";
 const RAIL_ICON_SIZE = 24;
 
+// Fill-toggle cross-fade — both hearts stay in the DOM and swap via CSS
+// transitions (scale 0.25→1, opacity 0→1, blur 4px→0) on the skill's curve.
+const FILL_TOGGLE_TRANSITION =
+  "transition-[opacity,transform,filter] duration-300 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none";
+const FILL_TOGGLE_SHOWN = "opacity-100 scale-100 blur-0";
+const FILL_TOGGLE_HIDDEN = "opacity-0 scale-[0.25] blur-[4px]";
+
 const HEART_BURST_PARTICLES = [
   { rise: 78, sway: -12, size: 14, delay: 0, spin: -14 },
   { rise: 96, sway: 14, size: 12, delay: 60, spin: 16 },
@@ -147,15 +154,48 @@ export function PdpLikeRailAction({
       aria-label={ariaLabel}
       aria-pressed={liked}
       className={cn(
-        "flex flex-col items-center gap-0.5 text-white",
+        "flex min-w-10 flex-col items-center gap-0.5 text-white",
         pdpPressableIconClass,
         className,
       )}
     >
       <span className="relative flex size-8 items-center justify-center overflow-visible">
+        <span
+          key="like-icon-unliked"
+          aria-hidden
+          className={cn(
+            "absolute inset-0 z-10 flex items-center justify-center",
+            FILL_TOGGLE_TRANSITION,
+            liked ? FILL_TOGGLE_HIDDEN : FILL_TOGGLE_SHOWN,
+          )}
+        >
+          <MaterialIcon
+            name="favorite"
+            size={RAIL_ICON_SIZE}
+            style={railIconStyle(false)}
+            className="text-white"
+          />
+        </span>
+        <span
+          key="like-icon-liked"
+          aria-hidden
+          className={cn(
+            "absolute inset-0 z-10 flex items-center justify-center",
+            FILL_TOGGLE_TRANSITION,
+            liked ? FILL_TOGGLE_SHOWN : FILL_TOGGLE_HIDDEN,
+          )}
+        >
+          <MaterialIcon
+            name="favorite"
+            size={RAIL_ICON_SIZE}
+            filled
+            style={railIconStyle(true)}
+            className="text-[#FE2C55]"
+          />
+        </span>
         {bursting ? (
           <span
-            key={burstKey}
+            key={`burst-${burstKey}`}
             aria-hidden
             className="pointer-events-none absolute inset-0 overflow-visible"
           >
@@ -171,17 +211,6 @@ export function PdpLikeRailAction({
             ))}
           </span>
         ) : null}
-        <MaterialIcon
-          name="favorite"
-          size={RAIL_ICON_SIZE}
-          filled={liked}
-          style={railIconStyle(liked)}
-          className={cn(
-            "relative z-10 transition-colors duration-200",
-            liked ? "text-[#FE2C55]" : "text-white",
-            bursting && !reducedMotion && "motion-safe:animate-heart-pop",
-          )}
-        />
       </span>
       <span className="font-extended text-[10px] leading-none tracking-[0.2px] text-white">
         {label}

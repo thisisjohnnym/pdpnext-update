@@ -7,12 +7,14 @@ import { MaterialIcon } from "@/components/icons/material-icon";
 import { cn } from "@/lib/cn";
 
 import { getPdpColorSwatch } from "../pdp-color-swatch";
-import { PDP_COLORS } from "../data/pdp-product-data";
+import { PDP_COLORS, PDP_STYLES, type PdpSize } from "../data/pdp-product-data";
 import { pdpPressableSolidClass } from "../chrome/pdp-type";
 import { useBodyPortalTarget } from "../hooks/use-body-portal-target";
 
 type PdpBottomBarProps = {
   selectedColorId: string;
+  selectedStyleId: string;
+  selectedSize: PdpSize;
   onOpenColorSheet: () => void;
   onAddToBag: () => void;
   suppressed?: boolean;
@@ -23,6 +25,8 @@ const BAR_HEIGHT_CSS = "var(--pdp-cta-height)";
 /** Design 4SZ-0 — always floating inset CTA stack */
 export function PdpBottomBar({
   selectedColorId,
+  selectedStyleId,
+  selectedSize,
   onOpenColorSheet,
   onAddToBag,
   suppressed = false,
@@ -30,7 +34,8 @@ export function PdpBottomBar({
   const portalTarget = useBodyPortalTarget();
   const selectedColor =
     PDP_COLORS.find((color) => color.id === selectedColorId) ?? PDP_COLORS[0]!;
-  const moreColors = Math.max(0, PDP_COLORS.length - 1);
+  const selectedStyle =
+    PDP_STYLES.find((s) => s.id === selectedStyleId) ?? PDP_STYLES[0]!;
 
   if (!portalTarget) {
     return null;
@@ -65,14 +70,14 @@ export function PdpBottomBar({
               sizes="32px"
             />
           </span>
-          <span className="min-w-0 flex-1">
-            <span className="block font-extended text-[12px] leading-none tracking-[0.2px] text-white">
-              {selectedColor.name}
+            <span className="min-w-0 flex-1">
+              <span className="block font-extended text-[12px] leading-none tracking-[0.2px] text-white">
+                {selectedColor.name}
+              </span>
+              <span className="mt-1 block font-extended text-[10px] leading-none text-white/70">
+                {selectedStyle.name} · {selectedSize}
+              </span>
             </span>
-            <span className="mt-1 block font-extended text-[10px] leading-none text-white/70">
-              {moreColors} more colors
-            </span>
-          </span>
           <MaterialIcon
             name="expand_less"
             size={18}

@@ -43,7 +43,6 @@
 
 .pdp-bottom-chrome {
   transition: bottom 320ms var(--pdp-ease);
-  will-change: bottom;
 }
 
 .pdp-motion {

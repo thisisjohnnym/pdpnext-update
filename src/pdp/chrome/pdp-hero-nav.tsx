@@ -65,11 +65,10 @@ export function PdpHeroNav({ bagCount = 0, onOpenMenu, className }: PdpHeroNavPr
           aria-label="Open menu"
           onClick={onOpenMenu}
           className={cn(
-            "flex items-center justify-self-start text-white transition-opacity duration-300",
+            "-m-2 flex items-center justify-center justify-self-start p-2 text-white transition-opacity duration-300",
             pdpPressableIconClass,
             iconsVisible ? "opacity-100" : "pointer-events-none opacity-0",
           )}
-          style={{ width: NAV_ICON_SIZE, height: NAV_ICON_SIZE }}
         >
           <MaterialIcon name="menu" size={NAV_ICON_SIZE} className="text-white" />
         </button>
@@ -80,18 +79,19 @@ export function PdpHeroNav({ bagCount = 0, onOpenMenu, className }: PdpHeroNavPr
           type="button"
           aria-label={bagCount > 0 ? `Bag, ${bagCount} items` : "Bag"}
           className={cn(
-            "relative flex items-center justify-self-end text-white transition-opacity duration-300",
+            "-m-2 flex items-center justify-center justify-self-end p-2 text-white transition-opacity duration-300",
             pdpPressableIconClass,
             iconsVisible ? "opacity-100" : "pointer-events-none opacity-0",
           )}
-          style={{ width: NAV_ICON_SIZE, height: NAV_ICON_SIZE }}
         >
-          <MaterialIcon name="shopping_bag" size={NAV_ICON_SIZE} className="text-white" />
-          {bagCount > 0 ? (
-            <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-white text-[9px] font-medium text-black">
-              {bagCount}
-            </span>
-          ) : null}
+          <span className="relative flex items-center justify-center">
+            <MaterialIcon name="shopping_bag" size={NAV_ICON_SIZE} className="text-white" />
+            {bagCount > 0 ? (
+              <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-white text-[9px] font-medium tabular-nums text-black">
+                {bagCount}
+              </span>
+            ) : null}
+          </span>
         </button>
       </div>
     </div>

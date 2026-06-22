@@ -451,7 +451,7 @@ html.font-extended {
   }
 
   .pdp-pressable--icon:active:not(:disabled) {
-    transform: scale(0.94);
+    transform: scale(0.96);
     opacity: 1;
   }
 }

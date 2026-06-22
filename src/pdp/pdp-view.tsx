@@ -5,7 +5,14 @@ import { useState } from "react";
 import { PdpAddToBagSheet } from "./overlays/pdp-add-to-bag-sheet";
 import { PdpBrowserChromeSync } from "./chrome/pdp-browser-chrome-sync";
 import { PdpColorSheet } from "./overlays/pdp-color-sheet";
-import { DEFAULT_COLOR_ID, PDP_COLORS } from "./data/pdp-product-data";
+import {
+  DEFAULT_COLOR_ID,
+  DEFAULT_SIZE,
+  DEFAULT_STYLE_ID,
+  PDP_COLORS,
+  PDP_STYLES,
+  type PdpSize,
+} from "./data/pdp-product-data";
 import { PdpNavMenu } from "./overlays/pdp-nav-menu";
 import { PdpScrollProvider } from "./hooks/use-coalesced-scroll";
 
@@ -17,6 +24,8 @@ import "./pdp.css";
 
 export function PdpView() {
   const [selectedColorId, setSelectedColorId] = useState(DEFAULT_COLOR_ID);
+  const [selectedStyleId, setSelectedStyleId] = useState(DEFAULT_STYLE_ID);
+  const [selectedSize, setSelectedSize] = useState<PdpSize>(DEFAULT_SIZE);
   const [navOpen, setNavOpen] = useState(false);
   const [colorSheetOpen, setColorSheetOpen] = useState(false);
   const [bagSheetOpen, setBagSheetOpen] = useState(false);
@@ -49,6 +58,8 @@ export function PdpView() {
         <PdpBottomBlur suppressed={chromeSuppressed} />
         <PdpBottomBar
           selectedColorId={selectedColorId}
+          selectedStyleId={selectedStyleId}
+          selectedSize={selectedSize}
           onOpenColorSheet={() => setColorSheetOpen(true)}
           onAddToBag={handleAddToBag}
           suppressed={chromeSuppressed}
@@ -56,13 +67,15 @@ export function PdpView() {
         <PdpNavMenu open={navOpen} onClose={() => setNavOpen(false)} />
         <PdpColorSheet
           colors={PDP_COLORS}
-          selectedId={selectedColorId}
+          styles={PDP_STYLES}
+          selectedColorId={selectedColorId}
+          selectedStyleId={selectedStyleId}
+          selectedSize={selectedSize}
           open={colorSheetOpen}
           onClose={() => setColorSheetOpen(false)}
-          onSelect={(id) => {
-            setSelectedColorId(id);
-            setColorSheetOpen(false);
-          }}
+          onSelectColor={setSelectedColorId}
+          onSelectStyle={setSelectedStyleId}
+          onSelectSize={setSelectedSize}
         />
         <PdpAddToBagSheet
           open={bagSheetOpen}
